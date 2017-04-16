@@ -61,6 +61,7 @@ gem 'whatlanguage'
 gem 'react-rails'
 gem 'browserify-rails'
 gem 'autoprefixer-rails'
+gem 'omniauth'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -100,4 +101,9 @@ group :production do
   gem 'rails_12factor'
   gem 'redis-rails'
   gem 'lograge'
+end
+
+gem 'omniauth-niconico'
+group :development do
+  gem 'capistrano3-puma'
 end

@@ -71,6 +71,14 @@
           = fa_icon('li check-square')
           = t 'about.features.api'
 
+  %h3 ルール
+  %ul
+    %li 法律に違反する行為や犯罪行為は禁止です
+    %li 他者の権利を侵害する行為は禁止です
+    %li 公序良俗に反する行為はおやめください
+    %li ルールを守れない人はBANされる場合があります
+    %li みんながニコニコできるトゥートを心がけましょう
+
   - unless @instance_presenter.site_description.blank?
     %h3= t('about.description_headline', domain: site_hostname)
     %p= @instance_presenter.site_description.html_safe
@@ -81,6 +89,6 @@
       ·
       = link_to t('about.apps'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/Apps.md'
       ·
-      = link_to t('about.source_code'), 'https://github.com/tootsuite/mastodon'
+      = link_to t('about.source_code'), 'https://github.com/dwango/mastodon/tree/friends.nico'
       ·
       = link_to t('about.other_instances'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/List-of-Mastodon-instances.md'

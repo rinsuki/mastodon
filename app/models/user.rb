@@ -6,6 +6,7 @@ class User < ApplicationRecord
   devise :registerable, :recoverable,
          :rememberable, :trackable, :validatable, :confirmable,
          :two_factor_authenticatable, :two_factor_backupable,
+         :omniauthable,
          otp_secret_encryption_key: ENV['OTP_SECRET'],
          otp_number_of_backup_codes: 10
 
@@ -33,5 +34,25 @@ class User < ApplicationRecord
 
   def setting_auto_play_gif
     settings.auto_play_gif
+  end
+
+  def self.find_from_oauth(auth)
+    user = User.where(uid: auth.uid, provider: auth.provider).first
+    unless user
+      password = SecureRandom.base64
+      user = User.create(
+        uid: auth.uid,
+        provider: auth.provider,
+        email: "#{auth.provider}-#{auth.uid}-dummy@example.com",
+        password: password,
+        password_confirmation: password,
+        account_attributes: {
+          username: auth.info.nickname
+        }
+      )
+      user.confirm
+    end
+
+    user
   end
 end

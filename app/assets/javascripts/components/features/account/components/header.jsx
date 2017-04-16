@@ -4,6 +4,7 @@ import emojify from '../../../emoji';
 import escapeTextContentForBrowser from 'escape-html';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import IconButton from '../../../components/icon_button';
+import AccountButton from '../../niconico/components/account_button';
 import { Motion, spring } from 'react-motion';
 import { connect } from 'react-redux';
 
@@ -51,21 +52,24 @@ const Avatar = React.createClass({
     const { isHovered } = this.state;
 
     return (
-      <Motion defaultStyle={{ radius: 90 }} style={{ radius: spring(isHovered ? 30 : 90, { stiffness: 180, damping: 12 }) }}>
-        {({ radius }) =>
-          <a
-            href={account.get('url')}
-            className='account__header__avatar'
-            target='_blank'
-            rel='noopener'
-            style={{ display: 'block', width: '90px', height: '90px', margin: '0 auto', marginBottom: '10px', borderRadius: `${radius}px`, overflow: 'hidden', backgroundSize: '90px 90px', backgroundImage: `url(${autoPlayGif || isHovered ? account.get('avatar') : account.get('avatar_static')})` }}
-            onMouseOver={this.handleMouseOver}
-            onMouseOut={this.handleMouseOut}
-            onFocus={this.handleMouseOver}
-            onBlur={this.handleMouseOut}
-          />
-        }
-      </Motion>
+      <div style={{ position: 'relative' }}>
+        <Motion defaultStyle={{ radius: 90 }} style={{ radius: spring(isHovered ? 30 : 90, { stiffness: 180, damping: 12 }) }}>
+          {({ radius }) =>
+            <a
+              href={account.get('url')}
+              className='account__header__avatar'
+              target='_blank'
+              rel='noopener'
+              style={{ display: 'block', width: '90px', height: '90px', margin: '0 auto', marginBottom: '10px', borderRadius: `${radius}px`, overflow: 'hidden', backgroundSize: '90px 90px', backgroundImage: `url(${autoPlayGif || isHovered ? account.get('avatar') : account.get('avatar_static')})` }}
+              onMouseOver={this.handleMouseOver}
+              onMouseOut={this.handleMouseOut}
+              onFocus={this.handleMouseOver}
+              onBlur={this.handleMouseOut}
+            />
+          }
+        </Motion>
+        <AccountButton account={account} />
+      </div>
     );
   }
 
@@ -130,7 +134,6 @@ const Header = React.createClass({
       <div className='account__header' style={{ backgroundImage: `url(${account.get('header')})` }}>
         <div style={{ padding: '20px 10px' }}>
           <Avatar account={account} autoPlayGif={this.props.autoPlayGif} />
-
           <span style={{ display: 'inline-block', fontSize: '20px', lineHeight: '27px', fontWeight: '500' }} className='account__header__display-name' dangerouslySetInnerHTML={displayNameHTML} />
           <span className='account__header__username' style={{ fontSize: '14px', fontWeight: '400', display: 'block', marginBottom: '10px' }}>@{account.get('acct')} {lockedIcon}</span>
           <div style={{ fontSize: '14px' }} className='account__header__content' dangerouslySetInnerHTML={content} />
