@@ -11,10 +11,10 @@ $icon-size--nico--large: 36px;
   display: block;
   width: $size;
   height: $size;
-  background: image-url('icon_niconico.svg');
+  background-image: image-url('icon_niconico.svg');
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
 
 /**
@@ -23,6 +23,41 @@ $icon-size--nico--large: 36px;
 .fa-nico {
   @include icon--nico(16px);
   display: inline-block;
+}
+
+.fa-nicoru {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-image: image-url('nicoru.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  &.fa-fw {
+    width: 22px;
+    height: 16px;
+  }
+
+  &.active {
+    background-image: image-url('nicoru.svg');
+  }
+
+  &--column {
+    @extend .fa-nicoru;
+    background-image: image-url('nicoru-column.svg');
+  }
+
+  &--status {
+    @extend .fa-nicoru;
+    background-image: image-url('nicoru-status.svg');
+  }
+
+  &--detailed {
+    @extend .fa-nicoru;
+    background-image: image-url('nicoru-detailed.svg');
+    vertical-align: middle;
+  }
 }
 
 /**
