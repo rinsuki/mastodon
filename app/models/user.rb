@@ -37,7 +37,7 @@ class User < ApplicationRecord
   end
 
   def self.find_from_oauth(auth)
-    user = User.find_by(uid: auth.uid, provider: auth.provider)
+    user = User.find_by(provider: auth.provider, uid: auth.uid)
     unless user
       password = SecureRandom.base64
       user = User.create(
