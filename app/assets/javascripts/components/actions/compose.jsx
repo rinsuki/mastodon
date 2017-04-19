@@ -78,9 +78,9 @@ export function submitCompose() {
       return;
     }
 
-    if (status.match(/\A\s*[@＠]ピザ\s*/) {
+    if (status.match(/^\s*[@＠]ピザ\s*/)) {
       window.open('http://info.nicovideo.jp/pizza/', null);
-      return:
+      return;
     }
 
     dispatch(submitComposeRequest());
