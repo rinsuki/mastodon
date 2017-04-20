@@ -10,7 +10,7 @@ defaults: &defaults
   site_title: 'friends.nico'
   site_description: ''
   site_extended_description: ''
-  site_contact_username: ''
+  site_contact_username: '@friends_nico'
   site_contact_email: ''
   open_registrations: true
   closed_registrations_message: ''
