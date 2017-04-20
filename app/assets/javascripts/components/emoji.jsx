@@ -1,6 +1,6 @@
 import emojione from 'emojione';
 
-const toImage = str => shortnameToImage(unicodeToImage(str));
+const toImage = str => nicoruToImage(shortnameToImage(unicodeToImage(str)));
 
 const unicodeToImage = str => {
   const mappedUnicode = emojione.mapUnicodeToShort();
@@ -28,6 +28,11 @@ const shortnameToImage = str => str.replace(emojione.regShortNames, shortname =>
   const alt     = emojione.convert(unicode.toUpperCase());
 
   return `<img draggable="false" class="emojione" alt="${alt}" src="/emoji/${unicode}.svg" />`;
+});
+
+const nicoruToImage = str => str.replace(/:nicoru(\d*):/, (nicoru, deg) => {
+  deg = deg ? deg : 0;
+  return `<i class="fa-nicoru" style="transform:rotate(${deg}deg);"></i>`;
 });
 
 export default function emojify(text) {
