@@ -30,7 +30,7 @@ const shortnameToImage = str => str.replace(emojione.regShortNames, shortname =>
   return `<img draggable="false" class="emojione" alt="${alt}" src="/emoji/${unicode}.svg" />`;
 });
 
-const nicoruToImage = str => str.replace(/:nicoru(\d*):/, (nicoru, deg) => {
+const nicoruToImage = str => str.replace(/:nicoru(\d*):/g, (nicoru, deg) => {
   deg = deg ? deg : 0;
   return `<i class="fa-nicoru" style="transform:rotate(${deg}deg);"></i>`;
 });
