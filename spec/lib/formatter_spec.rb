@@ -4,6 +4,8 @@ RSpec.describe Formatter do
   let(:account)       { Fabricate(:account, username: 'alice') }
   let(:local_status)  { Fabricate(:status, text: 'Hello world http://google.com', account: account) }
   let(:remote_status) { Fabricate(:status, text: '<script>alert("Hello")</script> Beep boop', uri: 'beepboop', account: account) }
+  let(:nicolink_status) { Fabricate(:status, text: 'Hello world sm9', account: account) }
+  let(:temporal_nicolink_status) { Fabricate(:status, text: 'Hello world sm9#1:30', account: account) }
 
   describe '#format' do
     subject { Formatter.instance.format(local_status) }
@@ -18,6 +20,22 @@ RSpec.describe Formatter do
 
     it 'contains a link' do
       expect(subject).to match('<a href="http://google.com" rel="nofollow noopener" target="_blank"><span class="invisible">http://</span><span class="">google.com</span><span class="invisible"></span></a>')
+    end
+
+    describe 'nicolink format' do
+      subject { Formatter.instance.format(nicolink_status) }
+
+      it 'contains a link to sm9' do
+        expect(subject).to match('Hello world <a href="https://nico.ms/sm9" rel="nofollow noopener" target="_blank"><span>sm9</span></a>')
+      end
+    end
+
+    describe 'temporal nicolink format' do
+      subject { Formatter.instance.format(temporal_nicolink_status) }
+
+      it 'contains a link to sm9 with correct seconds and text' do
+        expect(subject).to match('Hello world <a href="https://nico.ms/sm9\?from=90" rel="nofollow noopener" target="_blank"><span>sm9#1:30</span></a>')
+      end
     end
 
 =begin

@@ -17,6 +17,7 @@ class Formatter
     html = simple_format(html, {}, sanitize: false)
     html = html.delete("\n")
     html = link_urls(html)
+    html = link_nicolinks(html)
     html = link_mentions(html, status.mentions)
     html = link_hashtags(html)
 
@@ -37,6 +38,7 @@ class Formatter
 
     html = encode(account.note)
     html = link_urls(html)
+    html = link_nicolinks(html)
     html = link_accounts(html)
     html = link_hashtags(html)
 
@@ -78,6 +80,14 @@ class Formatter
   def link_hashtags(html)
     html.gsub(Tag::HASHTAG_RE) do |match|
       hashtag_html(match)
+    end
+  end
+
+  def link_nicolinks(html)
+    html.gsub(NicoLink::NICOLINK_RE) do |match|
+      nl = NicoLink.parse(match)
+
+      %(#{nl.prefix}<a href="#{nl.to_href}" rel="nofollow noopener" target="_blank"><span>#{nl.text}</span></a>)
     end
   end
 
