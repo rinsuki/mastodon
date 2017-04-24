@@ -1,3 +1,4 @@
+# coding: utf-8
 # frozen_string_literal: true
 
 SimpleNavigation::Configuration.run do |navigation|
@@ -12,9 +13,7 @@ SimpleNavigation::Configuration.run do |navigation|
       settings.item :import, safe_join([fa_icon('cloud-upload fw'), t('settings.import')]), settings_import_url
       settings.item :export, safe_join([fa_icon('cloud-download fw'), t('settings.export')]), settings_export_url
       settings.item :authorized_apps, safe_join([fa_icon('list fw'), t('settings.authorized_apps')]), oauth_authorized_applications_url
-      if current_user.uid?
-        settings.item :nico_account, safe_join([fa_icon('nico'), 'niconicoアカウント再連携']), user_niconico_omniauth_authorize_path
-      end
+      settings.item :nico_account, safe_join([fa_icon('nico'), 'niconicoアカウント連携']), settings_oauth_url
     end
 
     primary.item :admin, safe_join([fa_icon('cogs fw'), t('admin.title')]), admin_reports_url, if: proc { current_user.admin? } do |admin|

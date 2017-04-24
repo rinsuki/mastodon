@@ -33,6 +33,7 @@ ja:
         severity: 重大性
         type: インポートする項目
         username: ユーザー名
+        hide_oauth: niconico連携を隠す
       interactions:
         must_be_follower: フォロワー以外からの通知をブロック
         must_be_following: フォローしていないユーザーからの通知をブロック
