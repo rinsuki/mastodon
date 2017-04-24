@@ -55,4 +55,8 @@ class User < ApplicationRecord
 
     user
   end
+
+  def nico_url
+    uid && !hide_oauth ? "http://www.nicovideo.jp/user/#{uid}" : nil
+  end
 end

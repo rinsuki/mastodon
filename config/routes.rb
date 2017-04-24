@@ -68,6 +68,8 @@ Rails.application.routes.draw do
         post :recovery_codes
       end
     end
+
+    resource :oauth, only: [:show, :update, :destroy]
   end
 
   resources :media, only: [:show]
