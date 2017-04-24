@@ -80,7 +80,6 @@ export function submitCompose() {
 
     if (status.match(/^\s*[@＠]ピザ\s*/)) {
       window.open('http://info.nicovideo.jp/pizza/', null);
-      return;
     }
 
     dispatch(submitComposeRequest());
