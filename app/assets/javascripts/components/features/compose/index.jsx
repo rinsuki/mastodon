@@ -10,6 +10,7 @@ import { injectIntl, defineMessages } from 'react-intl';
 import SearchContainer from './containers/search_container';
 import { Motion, spring } from 'react-motion';
 import SearchResultsContainer from './containers/search_results_container';
+import Announcements from './components/announcements';
 
 const messages = defineMessages({
   start: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
@@ -70,6 +71,7 @@ const Compose = React.createClass({
             <NavigationContainer />
             <ConnectAccountContainer />
             <ComposeFormContainer />
+            <Announcements />
           </div>
 
           <Motion defaultStyle={{ x: -100 }} style={{ x: spring(showSearch ? 0 : -100, { stiffness: 210, damping: 20 }) }}>
