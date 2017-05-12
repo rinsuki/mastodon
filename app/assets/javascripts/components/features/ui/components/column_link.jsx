@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-const ColumnLink = ({ icon, text, to, href, method, hideOnMobile }) => {
+const ColumnLink = ({ icon, text, to, href, method, hideOnMobile, external }) => {
   if (href) {
     const opts = external ? { target: '_blank', rel: 'noopener' } : {};
     return (
