@@ -102,4 +102,10 @@ group :production do
   gem 'redis-rails', '~> 5.0'
 end
 
+
+# for friends
 gem 'omniauth-niconico'
+group :production do
+  gem 'exception_notification'
+  gem 'slack-notifier'
+end
