@@ -8,7 +8,7 @@
         %h2= site_hostname
 
         - unless @instance_presenter.site_description.blank?
-          %p= @instance_presenter.site_description.html_safe
+          %p!= @instance_presenter.site_description
 
       .information-board
         .section
@@ -29,7 +29,7 @@
           %strong= number_with_delimiter @instance_presenter.niconico_associated_count
           %span= t 'about.user_count_after'
       - unless @instance_presenter.site_extended_description.blank?
-        .panel= @instance_presenter.site_extended_description.html_safe
+        .panel!= @instance_presenter.site_extended_description
 
     .sidebar
       = render 'contact', contact: @instance_presenter
