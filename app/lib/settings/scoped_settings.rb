@@ -6,6 +6,7 @@ module Settings
       @object = object
     end
 
+    # rubocop:disable Style/MethodMissing
     def method_missing(method, *args)
       method_name = method.to_s
       # set a value for a variable
@@ -18,12 +19,17 @@ module Settings
         self[method_name]
       end
     end
+    # rubocop:enable Style/MethodMissing
+
+    def respond_to_missing?(*)
+      true
+    end
 
     def all_as_records
-      vars    = thing_scoped
+      vars = thing_scoped
       records = vars.map { |r| [r.var, r] }.to_h
 
-      Setting.send(:default_settings).each do |key, default_value|
+      Setting.default_settings.each do |key, default_value|
         next if records.key?(key) || default_value.is_a?(Hash)
         records[key] = Setting.new(var: key, value: default_value)
       end
@@ -33,10 +39,8 @@ module Settings
 
     def []=(key, value)
       key = key.to_s
-
-      record = thing_scoped.find_by(var: key) || thing_scoped.new(var: key)
-      record.value = value
-      record.save!
+      record = thing_scoped.find_or_initialize_by(var: key)
+      record.update!(value: value)
 
       Rails.cache.write(Setting.cache_key(key, @object), value)
       value
@@ -46,19 +50,19 @@ module Settings
       Rails.cache.fetch(Setting.cache_key(key, @object)) do
         db_val = thing_scoped.find_by(var: key.to_s)
         if db_val
-          default_value = Setting.send(:default_settings)[key]
-
+          default_value = Setting.default_settings[key]
           return default_value.with_indifferent_access.merge!(db_val.value) if default_value.is_a?(Hash)
           db_val.value
         else
-          Setting.send(:default_settings)[key]
+          Setting.default_settings[key]
         end
       end
     end
 
+    protected
+
     def thing_scoped
-      Setting.unscoped.where(thing_type: @object.class.base_class.to_s,
-                             thing_id: @object.id)
+      Setting.unscoped.where(thing_type: @object.class.base_class.to_s, thing_id: @object.id)
     end
   end
 end
