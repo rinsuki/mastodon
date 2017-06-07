@@ -5,8 +5,6 @@ RSpec.describe Formatter do
   let(:local_text)    { 'Hello world http://google.com' }
   let(:local_status)  { Fabricate(:status, text: local_text, account: account) }
   let(:remote_status) { Fabricate(:status, text: '<script>alert("Hello")</script> Beep boop', uri: 'beepboop', account: account) }
-  let(:nicolink_status) { Fabricate(:status, text: 'Hello world sm9', account: account) }
-  let(:temporal_nicolink_status) { Fabricate(:status, text: 'Hello world sm9#1:30', account: account) }
 
   let(:local_text_with_mention) { "@#{account.username} @#{account.username}@example.com #{local_text}?x=@#{account.username} #hashtag" }
 
@@ -65,18 +63,23 @@ RSpec.describe Formatter do
     end
 
     describe 'nicolink format' do
+      let(:nicolink_status) { Fabricate(:status, text: text, account: account) }
       subject { Formatter.instance.format(nicolink_status) }
 
-      it 'contains a link to sm9' do
-        expect(subject).to match('Hello world <a href="https://nico.ms/sm9" rel="nofollow noopener" target="_blank"><span>sm9</span></a>')
+      context 'plain' do
+        let(:text) { 'Hello world sm9' }
+        it { is_expected.to include 'https://nico.ms/sm9' }
       end
-    end
 
-    describe 'temporal nicolink format' do
-      subject { Formatter.instance.format(temporal_nicolink_status) }
+      context 'temporal nicolink format' do
+        let(:text) { 'Hello world sm9#1:30' }
 
-      it 'contains a link to sm9 with correct seconds and text' do
-        expect(subject).to match('Hello world <a href="https://nico.ms/sm9\?from=90" rel="nofollow noopener" target="_blank"><span>sm9#1:30</span></a>')
+        it { is_expected.to include 'https://nico.ms/sm9?from=90' }
+      end
+
+      context 'sm9 in url' do
+        let(:text) { 'https://google.com/?q=sm9' }
+        it { is_expected.not_to include 'https://nico.ms/sm9' }
       end
     end
 
