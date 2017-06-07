@@ -30,7 +30,6 @@ class Formatter
     html = encode_and_link_urls(html, linkable_accounts)
     html = simple_format(html, {}, sanitize: false) if paragraphize
     html = html.delete("\n")
-    html = link_nicolinks(html)
 
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
@@ -50,7 +49,6 @@ class Formatter
     html = encode_and_link_urls(account.note)
     html = simple_format(html, {}, sanitize: false)
     html = html.delete("\n")
-    html = link_nicolinks(html)
 
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
@@ -75,6 +73,8 @@ class Formatter
         link_to_hashtag(entity)
       elsif entity[:screen_name]
         link_to_mention(entity, accounts)
+      elsif entity[:niconico_link]
+        link_to_niconico(entity)
       end
     end
   end
@@ -133,12 +133,10 @@ class Formatter
     hashtag_html(entity[:hashtag])
   end
 
-  def link_nicolinks(html)
-    html.gsub(NicoLink::NICOLINK_RE) do |match|
-      nl = NicoLink.parse(match)
+  def link_to_niconico(entity)
+    nl = NicoLink.parse(entity[:niconico_link])
 
-      %(#{nl.prefix}<a href="#{nl.to_href}" rel="nofollow noopener" target="_blank"><span>#{nl.text}</span></a>)
-    end
+    "<a href=\"#{nl.to_href}\" rel=\"nofollow noopener\" target=\"_blank\"><span>#{nl.text}</span></a>"
   end
 
   def link_html(url)

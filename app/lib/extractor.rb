@@ -57,7 +57,24 @@ module Extractor
     tags
   end
 
-  def extract_cashtags_with_indices(_text)
-    [] # always returns empty array
+  def extract_cashtags_with_indices(text)
+    extract_niconico_links_with_indices(text)
+  end
+
+  def extract_niconico_links_with_indices(text)
+    return [] unless text =~ NicoLink::NICOLINK_RE
+
+    possible_entries = []
+
+    text.to_s.scan(NicoLink::NICOLINK_RE) do |url, _|
+      match_data = $LAST_MATCH_INFO
+      start_position = match_data.char_begin(2)
+      end_position = match_data.char_end(2)
+      possible_entries << {
+        niconico_link: match_data[2],
+        indices: [start_position, end_position]
+      }
+    end
+    possible_entries
   end
 end
