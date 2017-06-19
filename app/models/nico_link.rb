@@ -3,7 +3,12 @@
 class NicoLink
   BASE_URI = URI.parse('https://nico.ms')
 
-  TEMPORAL_TYPES = %w(lv sm so).freeze
+  VIDEO_TYPES = %w(sm so).freeze
+  LIVE_TYPES  = %w(lv).freeze
+  TEMPORAL_TYPES = VIDEO_TYPES + LIVE_TYPES
+
+  VIDEO_RE = %r{#{VIDEO_TYPES.join('|')}}
+  LIVE_RE  = %r{#{LIVE_TYPES.join('|')}}
   NON_TEMPORAL_TYPES = %w(co ch im mg bk td kn gm nc).freeze
 
   NICO_ID_RE = %r{(#{[].concat([TEMPORAL_TYPES, NON_TEMPORAL_TYPES]).join('|')})(\d+)}
