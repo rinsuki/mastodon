@@ -88,30 +88,6 @@ class User < ApplicationRecord
     settings.auto_play_gif
   end
 
-  def self.find_from_oauth(auth)
-    user = User.find_by(provider: auth.provider, uid: auth.uid)
-    unless user
-      password = SecureRandom.base64
-      user = User.create(
-        uid: auth.uid,
-        provider: auth.provider,
-        email: "#{auth.provider}-#{auth.uid}-dummy@example.com",
-        password: password,
-        password_confirmation: password,
-        account_attributes: {
-          username: auth.info.nickname
-        }
-      )
-      user.confirm
-    end
-
-    user
-  end
-
-  def nico_url
-    uid && !hide_oauth ? "http://www.nicovideo.jp/user/#{uid}" : nil
-  end
-
   private
 
   def sanitize_languages
