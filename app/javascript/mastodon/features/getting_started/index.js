@@ -50,8 +50,8 @@ class GettingStarted extends ImmutablePureComponent {
           <ColumnSubheading text={intl.formatMessage(messages.navigation_subheading)}/>
           <ColumnLink icon='users' hideOnMobile={true} text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />
           <ColumnLink icon='nico' hideOnMobile={false} text='ニコニコ形式' href='/nicomment' external={true} />
-          <ColumnLink icon='nico' hideOnMobile={true} text='動画タイムライン' to='/timelines/tag/smlink' />
-          <ColumnLink icon='nico' hideOnMobile={true} text='生放送タイムライン' to='/timelines/tag/lvlink' />
+          <ColumnLink icon='nico' hideOnMobile={false} text='動画タイムライン' to='/timelines/tag/smlink' />
+          <ColumnLink icon='nico' hideOnMobile={false} text='生放送タイムライン' to='/timelines/tag/lvlink' />
           <ColumnLink icon='globe' hideOnMobile={true} text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
           <ColumnLink icon='nicoru--column' text={intl.formatMessage(messages.favourites)} to='/favourites' />
           {followRequests}
