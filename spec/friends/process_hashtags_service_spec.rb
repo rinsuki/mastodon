@@ -40,4 +40,14 @@ describe Friends::ProcessHashtagsService do
       expect { subject }.to change { Tag.count }.by(1)
     end
   end
+
+  describe 'remote status' do
+    let(:account) { Fabricate(:account, domain: 'test.com') }
+    let(:status) { Fabricate(:status, account: account, uri: 'a', text: text) }
+    let(:text) { 'sm9' }
+
+    it do
+      expect { subject }.not_to change { Tag.count }
+    end
+  end
 end

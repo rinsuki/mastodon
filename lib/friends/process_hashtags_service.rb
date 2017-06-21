@@ -4,6 +4,7 @@ module Friends
 
     def call(status, tags = [])
       super(status, tags)
+      return unless status.local?
 
       nicolinks = Extractor.extract_niconico_links_with_indices(status.text)
       tags = nicolinks.reduce([]) do |res, link|
