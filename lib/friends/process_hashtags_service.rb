@@ -1,3 +1,4 @@
+# coding: utf-8
 module Friends
   module ProcessHashtagsService
     extend ActiveSupport::Concern
@@ -10,9 +11,9 @@ module Friends
       tags = nicolinks.reduce([]) do |res, link|
         res << case link[:niconico_link]
                when NicoLink::VIDEO_RE
-                 'smlink'
+                 'ニコニコ動画タイムライン'
                when NicoLink::LIVE_RE
-                 'lvlink'
+                 'ニコニコ生放送タイムライン'
                end
       end
       (tags.uniq - status.tags.map(&:name)).each do |tag|

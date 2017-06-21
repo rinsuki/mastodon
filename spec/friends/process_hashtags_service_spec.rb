@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'rails_helper'
 
 describe Friends::ProcessHashtagsService do
@@ -11,7 +12,7 @@ describe Friends::ProcessHashtagsService do
     let(:text) { 'sm9' }
     it do
       subject
-      expect(status.tags.map(&:name)).to include 'smlink'
+      expect(status.tags.map(&:name)).to include 'ニコニコ動画タイムライン'
     end
   end
 
@@ -19,7 +20,7 @@ describe Friends::ProcessHashtagsService do
     let(:text) { 'sm9 sm9' }
     it do
       expect { subject }.to change { Tag.count }.by(1)
-      expect(status.tags.map(&:name)).to include 'smlink'
+      expect(status.tags.map(&:name)).to include 'ニコニコ動画タイムライン'
     end
   end
 
@@ -28,14 +29,14 @@ describe Friends::ProcessHashtagsService do
     it do
       subject
       status.tags.map(&:name).tap do |tags|
-        expect(tags).to include 'smlink'
-        expect(tags).to include 'lvlink'
+        expect(tags).to include 'ニコニコ動画タイムライン'
+        expect(tags).to include 'ニコニコ生放送タイムライン'
       end
     end
   end
 
   describe 'with string' do
-    let(:text) { 'sm9 #smlink' }
+    let(:text) { 'sm9 #ニコニコ動画タイムライン' }
     it do
       expect { subject }.to change { Tag.count }.by(1)
     end
