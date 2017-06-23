@@ -16,7 +16,7 @@ module Friends
                  'ニコニコ生放送タイムライン'
                end
       end
-      (tags.uniq - status.tags.map(&:name)).each do |tag|
+      (tags.compact.uniq - status.tags.map(&:name)).each do |tag|
         status.tags << Tag.where(name: tag).first_or_initialize(name: tag)
       end
     end
