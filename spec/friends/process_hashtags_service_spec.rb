@@ -42,6 +42,13 @@ describe Friends::ProcessHashtagsService do
     end
   end
 
+  describe 'not listed' do
+    let(:text) { 'bk1' }
+    it do
+      subject
+    end
+  end
+
   describe 'remote status' do
     let(:account) { Fabricate(:account, domain: 'test.com') }
     let(:status) { Fabricate(:status, account: account, uri: 'a', text: text) }
