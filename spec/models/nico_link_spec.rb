@@ -1,10 +1,11 @@
+# coding: utf-8
 # frozen_string_literal: true
 
 require 'rails_helper'
 
 RSpec.describe NicoLink, type: :model do
   describe 'NICOLINK_RE' do
-    subject { NicoLink::NICOLINK_RE }
+    subject(:regex) { NicoLink::NICOLINK_RE }
 
     context 'with time' do
       it 'matches nicolinks' do
@@ -59,10 +60,33 @@ RSpec.describe NicoLink, type: :model do
         expect(subject.match('あsm9９')).to_not be_nil
       end
     end
+    describe 'enabled prefixs' do
+      subject { regex.match(self.class.metadata[:description]) }
+      context 'このsm9' do
+        it { is_expected.not_to be_nil }
+      end
+      context '#sm9' do
+        it { is_expected.not_to be_nil }
+      end
+      context ' nicovideo.jp/watch/sm9?hello=world' do
+        it { is_expected.not_to be_nil }
+      end
+      context 'nico.ms/sm9' do
+        it { is_expected.not_to be_nil }
+      end
 
-    it 'does not match URLs' do
-      expect(subject.match('https://example.com/sm9')).to be_nil
-      expect(subject.match('https://example.com/Aha_(hello)sm9')).to be_nil
+      context 'https://example.com/sm9' do
+        it { is_expected.to be_nil }
+      end
+      context 'https://example.com/Aha_(hello)sm9' do
+        it { is_expected.to be_nil }
+      end
+      context 'https://example.com/hellosm9' do
+        it { is_expected.to be_nil }
+      end
+      context 'https://sm9.example.com/hellosm9' do
+        it { is_expected.to be_nil }
+      end
     end
   end
 

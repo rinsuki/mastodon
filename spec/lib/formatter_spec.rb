@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'rails_helper'
 
 RSpec.describe Formatter do
@@ -73,7 +74,6 @@ RSpec.describe Formatter do
 
       context 'temporal nicolink format' do
         let(:text) { 'Hello world sm9#1:30' }
-
         it { is_expected.to include 'https://nico.ms/sm9?from=90' }
       end
 

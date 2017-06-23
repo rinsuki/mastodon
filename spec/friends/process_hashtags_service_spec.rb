@@ -8,35 +8,44 @@ describe Friends::ProcessHashtagsService do
 
   subject { service.call(status) }
 
-  describe 'single' do
-    let(:text) { 'sm9' }
-    it do
-      subject
-      expect(status.tags.map(&:name)).to include 'ニコニコ動画タイムライン'
-    end
-  end
-
-  describe 'double' do
-    let(:text) { 'sm9 sm9' }
-    it do
-      expect { subject }.to change { Tag.count }.by(1)
-      expect(status.tags.map(&:name)).to include 'ニコニコ動画タイムライン'
-    end
-  end
-
-  describe 'multi' do
-    let(:text) { 'sm9 lv1' }
-    it do
-      subject
-      status.tags.map(&:name).tap do |tags|
-        expect(tags).to include 'ニコニコ動画タイムライン'
-        expect(tags).to include 'ニコニコ生放送タイムライン'
+  {video: '動画', live: '生放送'}.each do |type, text|
+    shared_examples_for "#{type}_timeline".to_sym do
+      it do
+        subject
+        expect(status.tags.map(&:name)).to include "ニコニコ#{text}タイムライン"
       end
     end
   end
 
+  describe 'single' do
+    let(:text) { 'sm9' }
+    it_behaves_like :video_timeline
+  end
+
+  describe 'double' do
+    let(:text) { 'sm9 sm9' }
+    it_behaves_like :video_timeline
+  end
+
+  describe 'in tag' do
+    let(:text) { '#sm9' }
+    it_behaves_like :video_timeline
+  end
+
+  describe 'in url' do
+    let(:text) { 'http://www.nicovideo.jp/watch/sm9' }
+    it_behaves_like :video_timeline
+  end
+
+  describe 'multi' do
+    let(:text) { 'sm9 lv1' }
+    it_behaves_like :video_timeline
+    it_behaves_like :live_timeline
+  end
+
   describe 'with string' do
     let(:text) { 'sm9 #ニコニコ動画タイムライン' }
+    it_behaves_like :video_timeline
     it do
       expect { subject }.to change { Tag.count }.by(1)
     end
@@ -45,7 +54,7 @@ describe Friends::ProcessHashtagsService do
   describe 'not listed' do
     let(:text) { 'bk1' }
     it do
-      subject
+      expect { subject }.not_to change { Tag.count }
     end
   end
 
