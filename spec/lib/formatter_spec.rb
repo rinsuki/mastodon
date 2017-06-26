@@ -81,6 +81,11 @@ RSpec.describe Formatter do
         let(:text) { 'https://google.com/?q=sm9' }
         it { is_expected.not_to include 'https://nico.ms/sm9' }
       end
+
+      context 'with domain' do
+        let(:text) { 'このnicovideo.jp/watch/sm9はいいぞ' }
+        it { is_expected.not_to include 'nicovideo.jp' }
+      end
     end
 
     context 'matches a stand-alone medium URL' do

@@ -4,88 +4,127 @@
 require 'rails_helper'
 
 RSpec.describe NicoLink, type: :model do
+
+  describe 'NICO_DOMAIN_RE' do
+    let(:regex) { /\A#{NicoLink::NICO_DOMAIN_RE}\z/ }
+
+    %w(nicovideo.jp/
+       nicovideo.jp/watch/
+       www.nicovideo.jp/
+       www.nicovideo.jp/watch/
+       nico.ms/).each do |text|
+      context text do
+        it { expect(text).to match regex }
+      end
+    end
+
+    %w(example.com/
+       nico.ms/watch/
+       example.nico.ms/
+       nicovideo.example.com/).each do |text|
+      context text do
+        it { expect(text).not_to match regex }
+      end
+    end
+  end
+
   describe 'NICOLINK_RE' do
-    subject(:regex) { NicoLink::NICOLINK_RE }
+    let(:regex) { NicoLink::NICOLINK_RE }
+    let(:text) { self.class.metadata[:description] }
+    subject { text }
+
+    describe 'im9#11:10' do
+      it { is_expected.to match regex }
+    end
+    describe 'im0009#11:10' do
+      it { is_expected.to match regex }
+    end
 
     context 'with time' do
       it 'matches nicolinks' do
-        expect(subject.match('im9#11:10')).to_not be_nil
-        expect(subject.match('im0009#11:10')).to_not be_nil
+        expect('lv9#11:10').to match regex
+        expect('lv0009#11:10').to match regex
 
-        expect(subject.match('lv9#11:10')).to_not be_nil
-        expect(subject.match('lv0009#11:10')).to_not be_nil
-
-        expect(subject.match('sm9#11:10')).to_not be_nil
-        expect(subject.match('sm0009#11:10')).to_not be_nil
+        expect('sm9#11:10').to match regex
+        expect('sm0009#11:10').to match regex
       end
 
       it 'matches nicolinks within Japanese text' do
-        expect(subject.match('このim9#11:10が好き')).to_not be_nil
-        expect(subject.match('つim90923#11:10は観たこと無いな')).to_not be_nil
-        expect(subject.match('あim9#11:10９')).to_not be_nil
-
-        expect(subject.match('このlv9#11:10が好き')).to_not be_nil
-        expect(subject.match('つlv90923#11:10は観たこと無いな')).to_not be_nil
-        expect(subject.match('あlv9#11:10９')).to_not be_nil
-
-        expect(subject.match('このsm9#11:10が好き')).to_not be_nil
-        expect(subject.match('つsm90923#11:10は観たこと無いな')).to_not be_nil
-        expect(subject.match('あsm9#11:10９')).to_not be_nil
+        %w(このim9#11:10が好き つim90923#11:10は観たこと無いな あim9#11:10９ このlv9#11:10が好き つlv90923#11:10は観たこと無いな あlv9#11:10９ このsm9#11:10が好き つsm90923#11:10は観たこと無いな あsm9#11:10９).each do |text|
+          expect(text).to match regex
+        end
       end
     end
 
     context 'without time' do
-      it 'matches nicolinks' do
-        expect(subject.match('im9')).to_not be_nil
-        expect(subject.match('im0009')).to_not be_nil
-
-        expect(subject.match('lv9')).to_not be_nil
-        expect(subject.match('lv0009')).to_not be_nil
-
-        expect(subject.match('sm9')).to_not be_nil
-        expect(subject.match('sm0009')).to_not be_nil
+      %w(im9 im0009 lv9 lv0009 sm9 sm0009).each do |text|
+        describe text do
+          it { is_expected.to match regex }
+        end
       end
 
       it 'matches nicolinks within Japanese text' do
-        expect(subject.match('このim9が好き')).to_not be_nil
-        expect(subject.match('つim90923は観たこと無いな')).to_not be_nil
-        expect(subject.match('あim9９')).to_not be_nil
+        expect('このim9が好き').to match regex
+        expect('つim90923は観たこと無いな').to match regex
+        expect('あim9９').to match regex
 
-        expect(subject.match('このlv9が好き')).to_not be_nil
-        expect(subject.match('つlv90923は観たこと無いな')).to_not be_nil
-        expect(subject.match('あlv9９')).to_not be_nil
+        expect('このlv9が好き').to match regex
+        expect('つlv90923は観たこと無いな').to match regex
+        expect('あlv9９').to match regex
 
-        expect(subject.match('このsm9が好き')).to_not be_nil
-        expect(subject.match('つsm90923は観たこと無いな')).to_not be_nil
-        expect(subject.match('あsm9９')).to_not be_nil
+        expect('このsm9が好き').to match regex
+        expect('つsm90923は観たこと無いな').to match regex
+        expect('あsm9９').to match regex
+      end
+      describe 'mylist/1' do
+        it { is_expected.to match regex }
+      end
+      describe 'nicovideo.jp/mylist/1' do
+        it { is_expected.to match regex }
       end
     end
+
     describe 'enabled prefixs' do
-      subject { regex.match(self.class.metadata[:description]) }
       context 'このsm9' do
-        it { is_expected.not_to be_nil }
+        it { is_expected.to match regex }
       end
       context '#sm9' do
-        it { is_expected.not_to be_nil }
+        it { is_expected.to match regex }
       end
       context ' nicovideo.jp/watch/sm9?hello=world' do
-        it { is_expected.not_to be_nil }
+        it { is_expected.to match regex }
       end
       context 'nico.ms/sm9' do
-        it { is_expected.not_to be_nil }
+        it { is_expected.to match regex }
       end
 
       context 'https://example.com/sm9' do
-        it { is_expected.to be_nil }
+        it { is_expected.not_to match regex }
       end
       context 'https://example.com/Aha_(hello)sm9' do
-        it { is_expected.to be_nil }
+        it { is_expected.not_to match regex }
       end
       context 'https://example.com/hellosm9' do
-        it { is_expected.to be_nil }
+        it { is_expected.not_to match regex }
       end
       context 'https://sm9.example.com/hellosm9' do
-        it { is_expected.to be_nil }
+        it { is_expected.not_to match regex }
+      end
+    end
+
+    describe 'url matching' do
+      subject { regex.match(text)[:nico_domain] }
+      describe 'このsm9' do
+        it { is_expected.to eq nil }
+      end
+      describe 'このnico.ms/sm9' do
+        it { is_expected.to eq 'nico.ms/' }
+      end
+      describe 'このhttps://nico.ms/sm9' do
+        it { is_expected.to eq 'https://nico.ms/' }
+      end
+      describe 'このnico.ms/mylist/1' do
+        it { is_expected.to eq 'nico.ms/' }
       end
     end
   end
@@ -107,15 +146,15 @@ RSpec.describe NicoLink, type: :model do
       end
 
       it 'does not add from param for non-temporal ids' do
-        subject.each do |key, _|
-          expect(NicoLink.new('im0139401923849', key).to_href).to eq 'https://nico.ms/im0139401923849'
+        subject.each do |time, _|
+          expect(NicoLink.new(nico_id: 'im0139401923849', time: time).to_href).to eq 'https://nico.ms/im0139401923849'
         end
       end
 
       it 'adds from param for temporal ids' do
-        subject.each do |key, val|
-          expect(NicoLink.new('lv84120982743', key).to_href).to eq "https://nico.ms/lv84120982743?from=#{val}"
-          expect(NicoLink.new('sm9', key).to_href).to eq "https://nico.ms/sm9?from=#{val}"
+        subject.each do |time, val|
+          expect(NicoLink.new(nico_id: 'lv84120982743', time: time).to_href).to eq "https://nico.ms/lv84120982743?from=#{val}"
+          expect(NicoLink.new(nico_id: 'sm9', time: time).to_href).to eq "https://nico.ms/sm9?from=#{val}"
         end
       end
     end
@@ -134,22 +173,22 @@ RSpec.describe NicoLink, type: :model do
       end
 
       it 'does not add from param for non-temporal ids' do
-        subject.each do |subj|
-          expect(NicoLink.new('im0', subj).to_href).to eq 'https://nico.ms/im0'
+        subject.each do |time|
+          expect(NicoLink.new(nico_id: 'im0', time: time).to_href).to eq 'https://nico.ms/im0'
         end
       end
 
       it 'does not add from param for temporal ids' do
-        subject.each do |subj|
-          expect(NicoLink.new('sm9', subj).to_href).to eq 'https://nico.ms/sm9'
+        subject.each do |time|
+          expect(NicoLink.new(nico_id: 'sm9', time: time).to_href).to eq 'https://nico.ms/sm9'
         end
       end
     end
 
     context 'without time' do
-      let(:im) { NicoLink.new('im0139401923849') }
-      let(:lv) { NicoLink.new('lv84120982743') }
-      let(:sm) { NicoLink.new('sm9') }
+      let(:im) { NicoLink.new(nico_id: 'im0139401923849') }
+      let(:lv) { NicoLink.new(nico_id: 'lv84120982743') }
+      let(:sm) { NicoLink.new(nico_id: 'sm9') }
 
       it 'returns a proper href' do
         expect(im.to_href).to eq 'https://nico.ms/im0139401923849'
@@ -162,29 +201,9 @@ RSpec.describe NicoLink, type: :model do
   describe '.parse' do
     context 'without time' do
       subject do
-        a = []
-
-        a << 'sm9'
-        a << ' sm9'
-        a << '　sm9'
-        a << 'あsm9'
-        a << 'sm9９'
-        a << 'あsm9９'
-
-        a << 'lv9'
-        a << ' lv9'
-        a << '　lv9'
-        a << 'あlv9'
-        a << 'lv9９'
-        a << 'あlv9９'
-
-        a << 'im9'
-        a << ' im9'
-        a << '　im9'
-        a << 'あim9'
-        a << 'im9９'
-        a << 'あim9９'
-
+        a = ['sm9', ' sm9', '　sm9', 'あsm9', 'sm9９', 'あsm9９',
+             'lv9', ' lv9', '　lv9', 'あlv9', 'lv9９', 'あlv9９',
+             'im9', ' im9', '　im9', 'あim9', 'im9９', 'あim9９']
         a.map { |s| NicoLink.parse s }
       end
 

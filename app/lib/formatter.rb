@@ -134,7 +134,7 @@ class Formatter
   end
 
   def link_to_niconico(entity)
-    nl = NicoLink.parse(entity[:niconico_link])
+    nl = entity[:niconico_link]
 
     "<a href=\"#{nl.to_href}\" rel=\"nofollow noopener\" target=\"_blank\"><span>#{nl.text}</span></a>"
   end
