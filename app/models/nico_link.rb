@@ -3,13 +3,13 @@
 class NicoLink
   BASE_URI = URI.parse('https://nico.ms')
 
-  VIDEO_TYPES = %w(sm so).freeze
+  VIDEO_TYPES = %w(sm so nm).freeze
   LIVE_TYPES  = %w(lv).freeze
   TEMPORAL_TYPES = VIDEO_TYPES + LIVE_TYPES
 
   VIDEO_RE = %r{#{VIDEO_TYPES.join('|')}}
   LIVE_RE  = %r{#{LIVE_TYPES.join('|')}}
-  NON_TEMPORAL_TYPES = %w(co ch im mg bk td kn gm nc).freeze
+  NON_TEMPORAL_TYPES = %w(co ch im mg bk td kn gm nc ar nw np mylist\/).freeze
 
   NICO_ID_RE = %r{(#{[].concat([TEMPORAL_TYPES, NON_TEMPORAL_TYPES]).join('|')})(\d+)}
   NICO_ID_RE_FULLSTR = %r{\A#{NICO_ID_RE}\z}
@@ -17,21 +17,30 @@ class NicoLink
   TIME_RE = %r{\d{1,2}:[0-5]\d}
   TIME_RE_FULLSTR = %r{\A#{TIME_RE}\z}
 
-  NICOLINK_RE = %r{(?<prefix>^|[^\/\)\w]|nicovideo\.jp\/watch\/|nico\.ms\/)(?<nico_link>(?<nico_id>#{NICO_ID_RE})(#(?<time>#{TIME_RE}))?)}
+  NICO_DOMAIN_RE = %r{(([a-z\.]+\.)?nicovideo\.jp(\/watch)?|nico\.ms)\/}
 
-  def self.parse(nicolink)
-    m = NICOLINK_RE.match(nicolink)
-    NicoLink.new(m[:nico_id], m[:time], m[:prefix])
+  NICOLINK_RE = %r{((?<prefix>^|[^\/\)\w])|(?<nico_domain>(https?:\/\/)?#{NICO_DOMAIN_RE}))(?<nico_link>(?<nico_id>#{NICO_ID_RE})(#(?<time>#{TIME_RE}))?)}
+
+  def self.parse(text)
+    NicoLink.new(NICOLINK_RE.match(text))
   end
 
-  attr_reader :text, :prefix
+  attr_reader :text, :nico_id, :time
 
-  def initialize(nico_id, time = nil, prefix = '')
-    @text = nico_id
-    process_nico_id(nico_id)
-    process_time(time)
-    @text += "##{time}" if time?
-    @prefix = prefix
+  def initialize(match)
+    @match = match
+    @text = match[:nico_id]
+    process_nico_id(match[:nico_id])
+    process_time(match[:time])
+    @text += "##{time}" if match[:time]
+  end
+
+  def range
+    if @match[:nico_domain]
+      [@match.char_begin(2), @match.char_end(3)]
+    else
+      [@match.char_begin(3), @match.char_end(3)]
+    end
   end
 
   def to_href

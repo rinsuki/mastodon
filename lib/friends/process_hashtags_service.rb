@@ -9,7 +9,7 @@ module Friends
 
       nicolinks = Extractor.extract_niconico_links_with_indices(status.text)
       tags = nicolinks.reduce([]) do |res, link|
-        res << case link[:niconico_link]
+        res << case link[:niconico_link].nico_id
                when NicoLink::VIDEO_RE
                  'ニコニコ動画タイムライン'
                when NicoLink::LIVE_RE
