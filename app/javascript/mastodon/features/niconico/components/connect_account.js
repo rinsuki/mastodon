@@ -1,14 +1,12 @@
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import ImmutablePureComponent from 'react-immutable-pure-component';
 
-const ConnectAccount = React.createClass({
+class ConnectAccount extends ImmutablePureComponent {
 
-  propTypes: {
+  static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
-  },
-
-  mixins: [PureRenderMixin],
+  };
 
   render() {
     const { account } = this.props;
@@ -22,31 +20,32 @@ const ConnectAccount = React.createClass({
       (
         <a
           href={nico_url}
-          target="_blank"
-          rel="noopener"
+          target='_blank'
+          rel='noopener'
         >
-          <span className="nico-connect-account__label">
+          <span className='nico-connect-account__label'>
             niconicoアカウントと連携済み
           </span>
         </a>
       ) :
       (
         <a
-          className="nico-connect-account__wrapper"
-          href="/auth/auth/niconico"
+          className='nico-connect-account__wrapper'
+          href='/auth/auth/niconico'
         >
-          <span className="nico-connect-account__label nico-connect-account__label--disabled">
+          <span className='nico-connect-account__label nico-connect-account__label--disabled'>
             niconicoアカウントと連携する
           </span>
         </a>
       );
 
     return (
-      <div className="nico-connect-account">
+      <div className='nico-connect-account'>
         {connectLink}
       </div>
     );
-  },
-});
+  }
+
+}
 
 export default ConnectAccount;
