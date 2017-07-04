@@ -26,7 +26,8 @@ const messages = defineMessages({
   publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
 });
 
-class ComposeForm extends ImmutablePureComponent {
+@injectIntl
+export default class ComposeForm extends ImmutablePureComponent {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
@@ -68,6 +69,12 @@ class ComposeForm extends ImmutablePureComponent {
   }
 
   handleSubmit = () => {
+    if (this.props.text !== this.autosuggestTextarea.textarea.value) {
+      // Something changed the text inside the textarea (e.g. browser extensions like Grammarly)
+      // Update the state to match the current text
+      this.props.onChange(this.autosuggestTextarea.textarea.value);
+    }
+
     this.props.onSubmit();
   }
 
@@ -214,5 +221,3 @@ class ComposeForm extends ImmutablePureComponent {
   }
 
 }
-
-export default injectIntl(ComposeForm);
