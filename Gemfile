@@ -112,4 +112,5 @@ gem 'omniauth-niconico'
 group :production do
   gem 'exception_notification'
   gem 'slack-notifier'
+  gem 'parallel'
 end
