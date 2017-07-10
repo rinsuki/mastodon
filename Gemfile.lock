@@ -548,6 +548,7 @@ DEPENDENCIES
   ox (~> 2.5)
   paperclip (~> 5.1)
   paperclip-av-transcoder (~> 0.6)
+  parallel
   parallel_tests (~> 2.14)
   pg (~> 0.20)
   pghero (~> 1.7)
