@@ -23,6 +23,7 @@ import {
   COMPOSE_EMOJI_INSERT,
   COMPOSE_NICORU_INSERT,
 } from '../actions/compose';
+import { COMPOSE_LOCK_TAG } from '../actions/favourite_tags';
 import { TIMELINE_DELETE } from '../actions/timelines';
 import { STORE_HYDRATE } from '../actions/store';
 import Immutable from 'immutable';
@@ -48,6 +49,7 @@ const initialState = Immutable.Map({
   default_privacy: 'public',
   resetFileKey: Math.floor((Math.random() * 0x10000)),
   idempotencyKey: null,
+  defaultText: '',
 });
 
 function statusToTextMentions(state, status) {
@@ -62,8 +64,9 @@ function statusToTextMentions(state, status) {
 };
 
 function clearAll(state) {
+  const defaultText = state.get('defaultText');
   return state.withMutations(map => {
-    map.set('text', '');
+    map.set('text', defaultText === '' ? '' : ` ${defaultText}`);
     map.set('spoiler', false);
     map.set('spoiler_text', '');
     map.set('is_submitting', false);
@@ -126,6 +129,14 @@ const insertNicoru = (state, position) => {
   return state.withMutations(map => {
     map.update('text', oldText => `${oldText.slice(0, position)}${nicoru} ${oldText.slice(position)}`);
     map.set('focusDate', new Date());
+  });
+};
+
+const setDefaultText = (state, text) => {
+  const replaceRE = new RegExp(` *${state.get('defaultText')}`);
+  return state.withMutations(map => {
+    map.update('text', oldText => oldText.replace(replaceRE, '') + (text === '' ? '' : ` ${text}`));
+    map.set('defaultText', text);
   });
 };
 
@@ -236,6 +247,8 @@ export default function compose(state = initialState, action) {
     return insertEmoji(state, action.position, action.emoji);
   case COMPOSE_NICORU_INSERT:
     return insertNicoru(state, action.position);
+  case COMPOSE_LOCK_TAG:
+    return setDefaultText(state, action.tag);
   default:
     return state;
   }
