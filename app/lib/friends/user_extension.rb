@@ -1,5 +1,5 @@
 module Friends
-  module User
+  module UserExtension
     extend ActiveSupport::Concern
 
     def nico_url
@@ -7,5 +7,3 @@ module Friends
     end
   end
 end
-
-::User.include(Friends::User)
