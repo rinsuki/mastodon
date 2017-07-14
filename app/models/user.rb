@@ -121,3 +121,5 @@ class User < ApplicationRecord
     filtered_languages.reject!(&:blank?)
   end
 end
+
+User.include(Friends::UserExtension)

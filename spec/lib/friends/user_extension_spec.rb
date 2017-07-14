@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Friends::User do
+describe Friends::UserExtension do
   describe '#nico_url' do
     it 'show if uid given' do
       user = User.new(uid: 1)

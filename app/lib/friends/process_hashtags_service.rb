@@ -22,5 +22,3 @@ module Friends
     end
   end
 end
-
-::ProcessHashtagsService.prepend(Friends::ProcessHashtagsService)
