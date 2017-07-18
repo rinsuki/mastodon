@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     resource :follower_domains, only: [:show, :update]
     resource :delete, only: [:show, :destroy]
     resource :oauth, only: [:show, :update, :destroy]
+    resources :favourite_tags, only: [:index, :create, :destroy]
   end
 
   resources :media, only: [:show]
@@ -204,6 +205,8 @@ Rails.application.routes.draw do
           post :unmute
         end
       end
+
+      resources :favourite_tags, only: [:index]
     end
 
     namespace :web do

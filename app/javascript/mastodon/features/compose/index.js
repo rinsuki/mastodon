@@ -1,6 +1,7 @@
 import React from 'react';
 import ComposeFormContainer from './containers/compose_form_container';
 import NavigationContainer from './containers/navigation_container';
+import FavouriteTagsContainer from './containers/favourite_tags_container';
 import ConnectAccountContainer from '../niconico/containers/connect_account_container';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -73,6 +74,7 @@ export default class Compose extends React.PureComponent {
             <ConnectAccountContainer />
             <ComposeFormContainer />
             <Announcements />
+            <FavouriteTagsContainer />
           </div>
 
           <Motion defaultStyle={{ x: -100 }} style={{ x: spring(showSearch ? 0 : -100, { stiffness: 210, damping: 20 }) }}>

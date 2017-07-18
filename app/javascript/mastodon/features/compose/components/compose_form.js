@@ -129,6 +129,7 @@ export default class ComposeForm extends ImmutablePureComponent {
       this.autosuggestTextarea.textarea.focus();
     } else if(prevProps.is_submitting && !this.props.is_submitting) {
       this.autosuggestTextarea.textarea.focus();
+      this.autosuggestTextarea.textarea.setSelectionRange(0, 0);
     }
   }
 
