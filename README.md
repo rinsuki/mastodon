@@ -8,7 +8,7 @@ friends.nicoへようこそ！
 
 ## 開発者向け
 
-- .env にダミーとして OMNIAUTH=niconico:key:secret を追加しておく必要があります
+- .env にダミーとして `OMNIAUTH=niconico:key:secret` を追加しておく必要があります
 - OAuthは今のところ一般開放されてないのでニコニコ連携のテストはできません
 
 ### 主な変更点
