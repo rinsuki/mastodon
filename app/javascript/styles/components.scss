@@ -2878,18 +2878,22 @@ button.icon-button.active i.fa-retweet {
     font-size: 14px;
   }
 
-  a {
-    display: inline-block;
-    float: right;
-    color: $ui-base-color;
-    background: darken($white, 5%);
-    text-decoration: none;
-    padding: 1px 10px 0;
-    border: solid 1px $ui-base-color;
-    font-size: 10px;
-    font-weight: 600;
-    border-radius: 4px;
-    margin-top: 5px;
+  .links {
+    text-align: right;
+
+    a {
+      display: inline-block;
+      color: $ui-base-color;
+      background: darken($white, 5%);
+      text-decoration: none;
+      padding: 1px 10px 0;
+      border: solid 1px $ui-base-color;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 4px;
+      margin-top: 5px;
+      margin-left: 5px;
+    }
   }
 }
 
