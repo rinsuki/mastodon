@@ -5,16 +5,23 @@ import IconButton from '../../../components/icon_button';
 const announcements = Immutable.fromJS([
   {
     id: 1,
-    body: 'friends.nico の iOSアプリができました!',
-    link: {
-      href: 'https://itunes.apple.com/jp/app/friends-nico/id1230158182?l=ja&ls=1&mt=8',
-      body: 'App Storeへ',
-    },
+    body: 'friends.nico のアプリができました!',
+    links: [
+      {
+        href: 'https://itunes.apple.com/jp/app/friends-nico/id1230158182?l=ja&ls=1&mt=8',
+        body: 'iOS版',
+      },
+      {
+        href: 'https://play.google.com/store/apps/details?id=nico.friends.android',
+        body: 'Android版',
+      },
+    ],
     nicotta: false,
   },
   {
     id: 2,
     body: '利用時のお困りごとなどは @friends_nico へ Mention か DM でご連絡ください',
+    links: [],
     nicotta: false,
   },
 ]);
@@ -49,11 +56,13 @@ const Announcements = React.createClass({
             </div>
             <div className='announcements__body'>
               <p>{announcement.get('body')}</p>
-              {announcement.get('link') && (
-                <a href={announcement.getIn(['link', 'href'])} target='_blank'>
-                  {announcement.getIn(['link', 'body'])}
-                </a>
-              )}
+              <div className='links'>
+                {announcement.get('links').map(link => (
+                  <a href={link.get('href')} target='_blank'>
+                    {link.get('body')}
+                  </a>
+                ))}
+              </div>
             </div>
           </li>
         ))}
