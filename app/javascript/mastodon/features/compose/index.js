@@ -12,7 +12,7 @@ import SearchContainer from './containers/search_container';
 import Motion from 'react-motion/lib/Motion';
 import spring from 'react-motion/lib/spring';
 import SearchResultsContainer from './containers/search_results_container';
-import Announcements from './components/announcements';
+import AnnouncementsContainer from './containers/announcements_container';
 
 const messages = defineMessages({
   start: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
@@ -73,7 +73,7 @@ export default class Compose extends React.PureComponent {
             <NavigationContainer />
             <ConnectAccountContainer />
             <ComposeFormContainer />
-            <Announcements />
+            <AnnouncementsContainer />
             <FavouriteTagsContainer />
           </div>
 

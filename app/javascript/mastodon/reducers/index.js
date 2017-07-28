@@ -19,6 +19,7 @@ import cards from './cards';
 import reports from './reports';
 import contexts from './contexts';
 import favourite_tags from './favourite_tags';
+import announcements from './announcements';
 
 export default combineReducers({
   timelines,
@@ -41,4 +42,5 @@ export default combineReducers({
   reports,
   contexts,
   favourite_tags,
+  announcements,
 });
