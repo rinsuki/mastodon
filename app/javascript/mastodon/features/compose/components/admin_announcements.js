@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class AdminAnnouncements extends React.PureComponent {
+export default class AdminAnnouncements extends React.PureComponent {
 
   static propTypes = {
     settings: PropTypes.string,
@@ -13,21 +13,13 @@ class AdminAnnouncements extends React.PureComponent {
     if (settings.length === 0) {
       return null;
     }
+
     return (
-      <ul className='announcements'>
-        <li>
-          <div className='announcements__admin'>
-            <p dangerouslySetInnerHTML={{ __html: settings }} />
-          </div>
-        </li>
-      </ul>
+      <div
+         className='announcements__admin'
+         dangerouslySetInnerHTML={{ __html: settings }}
+      />
     );
   }
 
 };
-
-AdminAnnouncements.propTypes = {
-  settings: PropTypes.string,
-};
-
-export default AdminAnnouncements;
