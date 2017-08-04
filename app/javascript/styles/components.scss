@@ -2846,41 +2846,6 @@ button.icon-button.active i.fa-retweet {
   }
 }
 
-.announcements {
-  padding: 10px;
-
-  li {
-    display: flex;
-    padding: 10px;
-    color: $ui-base-color;
-    background: darken($white, 10%);
-    border-radius: 4px;
-
-    & + li {
-      margin-top: 10px;
-    }
-  }
-}
-
-.announcements__admin {
-  width: 100%;
-  position: relative;
-
-  p {
-    padding: 0 5px;
-    font-size: 14px;
-  }
-}
-
-.announcements__icon {
-  flex: 0 0 auto;
-  display: inline-block;
-  overflow: hidden;
-  width: 22px;
-  height: 22px;
-}
-
-
 .modal-root__overlay {
   position: absolute;
   top: 0;
