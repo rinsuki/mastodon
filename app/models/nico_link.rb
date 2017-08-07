@@ -49,6 +49,10 @@ class NicoLink
     href.normalize.to_s
   end
 
+  def video?
+    VIDEO_TYPES.include? @type
+  end
+
   private
 
   def process_nico_id(nico_id)

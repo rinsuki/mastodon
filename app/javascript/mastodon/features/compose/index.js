@@ -16,6 +16,7 @@ import SearchResultsContainer from './containers/search_results_container';
 import { changeComposing } from '../../actions/compose';
 import AnnouncementsContainer from './containers/announcements_container';
 import AdminAnnouncementsContainer from './containers/admin_announcements_container';
+import NicovideoPlayerContainer from '../nicovideo/player/containers/player_container';
 
 const messages = defineMessages({
   start: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
@@ -100,6 +101,7 @@ export default class Compose extends React.PureComponent {
             <NavigationContainer onClose={this.onBlur} />
             <ConnectAccountContainer />
             <ComposeFormContainer />
+            <NicovideoPlayerContainer multiColumn={multiColumn} />
             <AnnouncementsContainer />
             <FavouriteTagsContainer />
           </div>

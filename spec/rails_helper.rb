@@ -67,3 +67,7 @@ end
 def attachment_fixture(name)
   File.open(File.join(Rails.root, 'spec', 'fixtures', 'files', name))
 end
+
+def friends_fixture(name)
+  File.open(File.join(Rails.root, 'spec', 'fixtures', 'friends', name))
+end

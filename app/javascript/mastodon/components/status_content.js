@@ -20,6 +20,7 @@ export default class StatusContent extends React.PureComponent {
     onExpandedToggle: PropTypes.func,
     onClick: PropTypes.func,
     highlightKeywords: ImmutablePropTypes.map,
+    onNiconicoVideoLinkClick: PropTypes.func,
   };
 
   state = {
@@ -53,6 +54,10 @@ export default class StatusContent extends React.PureComponent {
         link.addEventListener('click', this.onHashtagClick.bind(this, link.text), false);
       } else {
         link.setAttribute('title', link.href);
+
+        if (link.dataset.nicoVideoId) {
+          link.addEventListener('click', this.onNiconicoVideoLinkClick.bind(this, link.dataset.nicoVideoId), false);
+        }
       }
 
       link.setAttribute('target', '_blank');
@@ -127,6 +132,13 @@ export default class StatusContent extends React.PureComponent {
 
   setRef = (c) => {
     this.node = c;
+  }
+
+  onNiconicoVideoLinkClick= (id, e) => {
+    if (e.button === 0) {
+      e.preventDefault();
+      this.props.onNiconicoVideoLinkClick(id);
+    }
   }
 
   render () {

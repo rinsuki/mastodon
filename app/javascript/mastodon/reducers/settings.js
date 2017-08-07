@@ -57,6 +57,10 @@ const initialState = ImmutableMap({
       body: '',
     }),
   }),
+
+  friends: ImmutableMap({
+    videoplayer: false,
+  }),
 });
 
 const defaultColumns = fromJS([
