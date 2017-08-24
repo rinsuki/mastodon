@@ -33,6 +33,10 @@ import {
   FAVOURITED_STATUSES_EXPAND_SUCCESS,
 } from '../actions/favourites';
 import { SEARCH_FETCH_SUCCESS } from '../actions/search';
+import {
+  VOTE_SUCCESS,
+  SET_ENQUETE_TIMEOUT,
+} from '../actions/enquetes';
 import Immutable from 'immutable';
 
 const normalizeStatus = (state, status) => {
@@ -120,6 +124,13 @@ export default function statuses(state = initialState, action) {
     return deleteStatus(state, action.id, action.references);
   case ACCOUNT_BLOCK_SUCCESS:
     return filterStatuses(state, action.relationship);
+  case VOTE_SUCCESS:
+    return state
+      .setIn([action.status_id, 'vote'], true)
+      .setIn([action.status_id, 'voted_num'], action.item_index);
+  case SET_ENQUETE_TIMEOUT:
+    return state
+      .setIn([action.status_id, 'enquete_timeout'], true);
   default:
     return state;
   }

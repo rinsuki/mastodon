@@ -28,7 +28,8 @@ class PostStatusService < BaseService
                                         spoiler_text: options[:spoiler_text] || '',
                                         visibility: options[:visibility],
                                         language: detect_language_for(text, account),
-                                        application: options[:application])
+                                        application: options[:application],
+                                        enquete: options[:enquete])
       attach_media(status, media)
     end
     process_mentions_service.call(status)

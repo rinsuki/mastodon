@@ -20,6 +20,7 @@ import reports from './reports';
 import contexts from './contexts';
 import favourite_tags from './favourite_tags';
 import announcements from './announcements';
+import enquetes from './enquetes';
 
 export default combineReducers({
   timelines,
@@ -43,4 +44,5 @@ export default combineReducers({
   contexts,
   favourite_tags,
   announcements,
+  enquetes,
 });

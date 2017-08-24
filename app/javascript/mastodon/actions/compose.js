@@ -75,7 +75,14 @@ export function mentionCompose(account, router) {
 export function submitCompose() {
   return function (dispatch, getState) {
     const status = emojione.shortnameToUnicode(getState().getIn(['compose', 'text'], ''));
+    const isEnquete = getState().getIn(['enquetes', 'enquete']);
+    const enquete_items = getState().getIn(['enquetes', 'enquete_items']).toArray();
     if (!status || !status.length) {
+      return;
+    }
+
+    //if its enquete and there is 0 or 1 item, it will be denied
+    if (isEnquete && (enquete_items.filter(item => item !== '').length < 2)){
       return;
     }
 
@@ -91,6 +98,8 @@ export function submitCompose() {
       sensitive: getState().getIn(['compose', 'sensitive']),
       spoiler_text: getState().getIn(['compose', 'spoiler_text'], ''),
       visibility: getState().getIn(['compose', 'privacy']),
+      isEnquete: isEnquete,
+      enquete_items: enquete_items,
     }, {
       headers: {
         'Idempotency-Key': getState().getIn(['compose', 'idempotencyKey']),

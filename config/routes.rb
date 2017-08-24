@@ -207,6 +207,7 @@ Rails.application.routes.draw do
       end
 
       resources :favourite_tags, only: [:index]
+      post '/votes/:status_id', to: 'votes#create'
     end
 
     namespace :web do
