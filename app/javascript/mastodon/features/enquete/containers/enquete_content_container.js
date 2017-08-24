@@ -1,13 +1,12 @@
 import { connect } from 'react-redux';
 import EnqueteContent from '../components/enquete_content';
 import { vote, voteLoad, setEnqueteTimeout } from '../../../actions/enquetes';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 
 const mapStateToProps = (state, { status }) => ({
   status: status,
 });
 
-const mapDispatchToProps = (dispatch, { intl }) => ({
+const mapDispatchToProps = (dispatch) => ({
   onVote (status_id, item_index) {
     dispatch(vote(status_id, item_index));
   },
@@ -21,4 +20,4 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
   },
 });
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(EnqueteContent));
+export default connect(mapStateToProps, mapDispatchToProps)(EnqueteContent);

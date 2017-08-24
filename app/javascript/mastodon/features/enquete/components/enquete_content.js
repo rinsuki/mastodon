@@ -9,11 +9,11 @@ export default class EnqueteContent extends React.PureComponent {
   componentWillMount(){
     const created_at = Date.parse(this.props.status.get('created_at'));
     const id = this.props.status.get('id');
-    if(Immutable.Map(JSON.parse(this.props.status.get('enquete'))).get('type') == 'enquete_result') {
+    if(Immutable.Map(JSON.parse(this.props.status.get('enquete'))).get('type') === 'enquete_result') {
       this.setState({ alive:false });
     } else {
       const isAlreadyVoted = this.readVoteHistory(id);
-      if(isAlreadyVoted != null){
+      if(isAlreadyVoted !== null){
         this.props.onVoteLoad(id, isAlreadyVoted);
       }
       if(Date.now() - created_at > 30 * 1000){
@@ -41,10 +41,10 @@ export default class EnqueteContent extends React.PureComponent {
     const cookieName = 'vote_to_' + String(id) + '=';
     const allCookies = document.cookie;
     const position = allCookies.indexOf(cookieName);
-    if(position != -1){
+    if(position !== -1){
       var startIndex = position + cookieName.length;
       var endIndex   = allCookies.indexOf(';', startIndex);
-      if(endIndex == -1){
+      if(endIndex === -1){
         endIndex = allCookies.length;
       }
       result = allCookies.substring(startIndex, endIndex);
@@ -126,8 +126,8 @@ export default class EnqueteContent extends React.PureComponent {
 
         itemsContent =(
           <div className='enquete-vote-items'>
-            {enqueteStatus.get('items').filter(item => item != '').map((item, index) => {
-              const itemClassName = 'enquete-button disable' + ((votedItemIndex == index) ? '__voted' : '') + ' item-' + (index == enqueteStatus.get('items').length - 1 ? 'thinking' : index);
+            {enqueteStatus.get('items').filter(item => item !== '').map((item, index) => {
+              const itemClassName = 'enquete-button disable' + ((votedItemIndex === index) ? '__voted' : '') + ' item-' + (index === enqueteStatus.get('items').length - 1 ? 'thinking' : index);
               const itemHTML = { __html: emojify(item) };
               return (<button key={index} className={itemClassName} dangerouslySetInnerHTML={itemHTML} />);
             })}
@@ -137,8 +137,8 @@ export default class EnqueteContent extends React.PureComponent {
       } else {
         itemsContent =(
           <div className='enquete-vote-items'>
-            {enqueteStatus.get('items').filter(item => item != '').map((item, index) => {
-              const itemClassName = 'enquete-button active' + ' item-' + (index == enqueteStatus.get('items').length - 1 ? 'thinking' : index);
+            {enqueteStatus.get('items').filter(item => item !== '').map((item, index) => {
+              const itemClassName = 'enquete-button active' + ' item-' + (index === enqueteStatus.get('items').length - 1 ? 'thinking' : index);
               const itemHTML = { __html: emojify(item) };
               return (<button key={index} className={itemClassName} dangerouslySetInnerHTML={itemHTML} onClick={this.handleEnqueteButtonClick} data-number={index} />);
             })}
@@ -149,13 +149,13 @@ export default class EnqueteContent extends React.PureComponent {
     } else if (enqueteStatus.get('type') === 'enquete_result') {
       itemsContent =(
         <div className='enquete-result-items'>
-          {enqueteStatus.get('items').filter(item => item != '').map((item, index) => {
+          {enqueteStatus.get('items').filter(item => item !== '').map((item, index) => {
             // ratios is not immutable component
             const itemRatio = (enqueteStatus.get('ratios'))[index] + '%';
             const itemRatioText = enqueteStatus.get('ratios_text')[index];
             const itemRatioHTML = { __html: emojify(itemRatioText) };
             const itemHTML = { __html: emojify(item) };
-            const resultGaugeClassName = 'item-gauge__inner item-' + (index == enqueteStatus.get('items').length - 1 ? 'thinking' : index);
+            const resultGaugeClassName = 'item-gauge__inner item-' + (index === enqueteStatus.get('items').length - 1 ? 'thinking' : index);
             return (
               <div className='enquete-result-item-gauge'>
                 <div className='item-gauge__content'>
