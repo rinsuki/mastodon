@@ -1,31 +1,28 @@
+# coding: utf-8
+# frozen_string_literal: true
 module EnqueteExtension
   extend ActiveSupport::Concern
 
   def prepare_status_info
-    if enquete_params['isEnquete'] == true
+    if enquete_params['isEnquete']
       @enquete_items = enquete_params['enquete_items'].select do |item|
-        item != '' && item.length <= 15
+        item.present? && item.length <= 15
       end.slice(0, 4).push('🤔')
       raise Mastodon::ValidationError, 'Enquete needs more than 2 items' if @enquete_items.size < 3
-      
-      raise Mastodon::ValidationError, 'Question can\'t be blank' unless status_params[:status].presence
+
+      raise Mastodon::ValidationError, 'Question can\'t be blank' if status_params[:status].blank?
       status_text = build_enquete_status_text(status_params[:status], @enquete_items)
       enquete_json = JSON.generate(question: status_params[:status], items: @enquete_items, type: 'enquete')
     else
       status_text = status_params[:status]
     end
 
-    # Idempotency-Keyをチェックし重複投稿防止でアンケートトゥートが投稿されない場合は、アンケート結果トゥートも行わせない
     if request.headers['Idempotency-Key'].present?
       existing_toot = redis.get("idempotency:status:#{current_user.account.id}:#{request.headers['Idempotency-Key']}")
     end
-    if enquete_params['isEnquete'] == true && !existing_toot
-      register_enquete_result = true
-    else
-      register_enquete_result = false
-    end
+    register_enquete_result = enquete_params['isEnquete'] && !existing_toot
 
-    return status_text, enquete_json, register_enquete_result
+    [status_text, enquete_json, register_enquete_result]
   end
 
   def register_enquete_result_worker(register_enquete_result)
