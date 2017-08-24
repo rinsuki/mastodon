@@ -122,7 +122,7 @@ export default class EnqueteContent extends React.PureComponent {
         </div>);
 
       if (status.get('vote') || status.get('enquete_timeout')) {
-        const votedItemIndex = status.get('voted_num');
+        const votedItemIndex = parseInt(status.get('voted_num'), 10);
 
         itemsContent =(
           <div className='enquete-vote-items'>
@@ -157,7 +157,7 @@ export default class EnqueteContent extends React.PureComponent {
             const itemHTML = { __html: emojify(item) };
             const resultGaugeClassName = 'item-gauge__inner item-' + (index === enqueteStatus.get('items').length - 1 ? 'thinking' : index);
             return (
-              <div className='enquete-result-item-gauge'>
+              <div className='enquete-result-item-gauge' key={index} >
                 <div className='item-gauge__content'>
                   <div className='item-gauge__text__wrapper'>
                     <span className='item-gauge__text' dangerouslySetInnerHTML={itemHTML} />
