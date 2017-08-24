@@ -75,7 +75,7 @@ class EnqueteResultTootWorker
     rand_num = rand(postfix.length)
     ratios_text = []
 
-    ratios.each_with_index do |rate, i|
+    ratios.each_with_index do |rate, _i|
       rate_s = rate.to_s + '%'
       ratios_text.push(rate_s + postfix[rand_num])
     end
