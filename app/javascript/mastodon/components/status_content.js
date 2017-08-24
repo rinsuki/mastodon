@@ -6,6 +6,7 @@ import emojify from '../emoji';
 import { isRtl } from '../rtl';
 import { FormattedMessage } from 'react-intl';
 import Permalink from './permalink';
+import EnqueteContainer from '../features/enquete/containers/enquete_content_container';
 
 export default class StatusContent extends React.PureComponent {
 
@@ -144,10 +145,29 @@ export default class StatusContent extends React.PureComponent {
 
           {mentionsPlaceholder}
 
-          <div className={`status__content__text ${!hidden ? 'status__content__text--visible' : ''}`} style={directionStyle} dangerouslySetInnerHTML={content} />
+          {status.get('enquete') ?
+            <div className={`status__content__text ${!hidden ? 'status__content__text--visible' : ''}`} style={directionStyle} >
+              <EnqueteContainer status={status} />
+            </div> :
+            <div className={`status__content__text ${!hidden ? 'status__content__text--visible' : ''}`} style={directionStyle} dangerouslySetInnerHTML={content} />
+          }
+
         </div>
       );
     } else if (this.props.onClick) {
+      if (status.get('enquete')) {
+        return (
+          <div
+            ref={this.setRef}
+            className='status__content status__content--with-action'
+            style={directionStyle}
+            onMouseDown={this.handleMouseDown}
+            onMouseUp={this.handleMouseUp}
+          >
+            <EnqueteContainer status={status} />
+          </div>
+        );
+      }
       return (
         <div
           ref={this.setRef}
@@ -159,6 +179,17 @@ export default class StatusContent extends React.PureComponent {
         />
       );
     } else {
+      if (status.get('enquete')) {
+        return (
+          <div
+            ref={this.setRef}
+            className='status__content'
+            style={directionStyle}
+          >
+            <EnqueteContainer status={status} />
+          </div>
+        );
+      }
       return (
         <div
           ref={this.setRef}
