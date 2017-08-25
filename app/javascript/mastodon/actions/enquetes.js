@@ -31,7 +31,7 @@ export function vote(status_id, item_index){
         dispatch(voteSuccess(status_id, item_index));
       }
     }).catch(error => {
-      throw error;
+      console.error(error);
     });
   };
 };
