@@ -33,7 +33,7 @@ class EnqueteResultTootWorker
 
     @status = PostStatusService.new.call(status.account,
                                          result_status_text,
-                                         nil,
+                                         status,
                                          sensitive: status.sensitive,
                                          spoiler_text: status.spoiler_text,
                                          visibility: status.visibility,
