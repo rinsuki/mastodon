@@ -39,6 +39,8 @@ class EnqueteResultTootWorker
                                          visibility: status.visibility,
                                          application: status.application,
                                          enquete: enquete_json)
+  rescue ActiveRecord::RecordNotFound
+    true
   end
 
   def build_enquete_result_status(question, items, ratios, ratios_text)
