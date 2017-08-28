@@ -15,15 +15,18 @@ import SensitiveButtonContainer from '../containers/sensitive_button_container';
 import EmojiPickerDropdown from './emoji_picker_dropdown';
 import UploadFormContainer from '../containers/upload_form_container';
 import WarningContainer from '../containers/warning_container';
+import { isMobile } from '../../../is_mobile';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { length } from 'stringz';
+import { countableText } from '../util/counter';
+
 import NicoruImages from '../../../nicoru';
 import EnqueteButtonContainer from '../../enquete/containers/enquete_button_container.js';
 import EnqueteInputsContainer from '../../enquete/containers/enquete_inputs_container.js';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
-  spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Content warning' },
+  spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Write your warning here' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Toot' },
   publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
 });
@@ -143,7 +146,8 @@ export default class ComposeForm extends ImmutablePureComponent {
 
   handleEmojiPick = (data) => {
     const position     = this.autosuggestTextarea.textarea.selectionStart;
-    this._restoreCaret = position + data.shortname.length + 1;
+    const emojiChar    = data.unicode.split('-').map(code => String.fromCodePoint(parseInt(code, 16))).join('');
+    this._restoreCaret = position + emojiChar.length + 1;
     this.props.onPickEmoji(position, data);
   }
 
@@ -158,14 +162,14 @@ export default class ComposeForm extends ImmutablePureComponent {
     const { intl, onPaste, showSearch } = this.props;
     const disabled = this.props.is_submitting;
     const enquete_items = this.props.enquete_items.toArray().join('');
-    const text = !this.props.enquete ? [this.props.spoiler_text, this.props.text].join('') + enquete_items
-    : [this.props.spoiler_text, this.props.text].join('') + enquete_items + 'a'.repeat(150);
+    const text = !this.props.enquete ? [this.props.spoiler_text, countableText(this.props.text)].join('') + enquete_items
+            : [this.props.spoiler_text, countableText(this.props.text)].join('') + enquete_items + 'a'.repeat(150);
 
     const buttonStyle = {
       padding: '0 6px',
     };
 
-    let publishText    = '';
+    let publishText = '';
 
     if (this.props.privacy === 'private' || this.props.privacy === 'direct') {
       publishText = <span className='compose-form__publish-private'><i className='fa fa-lock' /> {intl.formatMessage(messages.publish)}</span>;
@@ -177,7 +181,10 @@ export default class ComposeForm extends ImmutablePureComponent {
       <div className='compose-form'>
         <Collapsable isVisible={this.props.spoiler} fullHeight={50}>
           <div className='spoiler-input'>
-            <input placeholder={intl.formatMessage(messages.spoiler_placeholder)} value={this.props.spoiler_text} onChange={this.handleChangeSpoilerText} onKeyDown={this.handleKeyDown} type='text' className='spoiler-input__input'  id='cw-spoiler-input' />
+            <label>
+              <span style={{ display: 'none' }}>{intl.formatMessage(messages.spoiler_placeholder)}</span>
+              <input placeholder={intl.formatMessage(messages.spoiler_placeholder)} value={this.props.spoiler_text} onChange={this.handleChangeSpoilerText} onKeyDown={this.handleKeyDown} type='text' className='spoiler-input__input'  id='cw-spoiler-input' />
+            </label>
           </div>
         </Collapsable>
 
@@ -198,7 +205,7 @@ export default class ComposeForm extends ImmutablePureComponent {
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             onSuggestionSelected={this.onSuggestionSelected}
             onPaste={onPaste}
-            autoFocus={!showSearch}
+            autoFocus={!showSearch && !isMobile(window.innerWidth)}
           />
 
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
@@ -227,7 +234,7 @@ export default class ComposeForm extends ImmutablePureComponent {
 
           <div className='compose-form__publish'>
             <div className='character-counter__wrapper'><CharacterCounter max={500} text={text} /></div>
-            <div className='compose-form__publish-button-wrapper'><Button text={publishText} style={buttonStyle} onClick={this.handleSubmit} disabled={disabled || this.props.is_uploading || length(text) > 500 || (text.length !==0 && text.trim().length === 0) || (this.props.enquete && this.props.text.length !== 0 && this.props.text.trim().length === 0)} block /></div>
+            <div className='compose-form__publish-button-wrapper'><Button text={publishText} style={buttonStyle} onClick={this.handleSubmit} disabled={disabled || this.props.is_uploading || length(text) > 500 || (text.length !== 0 && text.trim().length === 0) || (this.props.enquete && this.props.text.length !== 0 && this.props.text.trim().length === 0)} block /></div>
           </div>
         </div>
       </div>

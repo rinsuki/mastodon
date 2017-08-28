@@ -1,9 +1,9 @@
+# frozen_string_literal: true
 class Settings::OauthsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!
 
-  def show
-  end
+  def show; end
 
   def update
     current_user.update(oauth_params)

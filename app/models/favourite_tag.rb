@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: favourite_tags
@@ -10,7 +11,6 @@
 #
 
 class FavouriteTag < ApplicationRecord
-
   belongs_to :account, required: true
   belongs_to :tag, required: true
   accepts_nested_attributes_for :tag

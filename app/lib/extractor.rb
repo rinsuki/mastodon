@@ -66,11 +66,11 @@ module Extractor
 
     possible_entries = []
 
-    text.to_s.scan(NicoLink::NICOLINK_RE) do |match|
+    text.to_s.scan(NicoLink::NICOLINK_RE) do |_match|
       nicolink = NicoLink.new($LAST_MATCH_INFO)
       possible_entries << {
         niconico_link: nicolink,
-        indices: nicolink.range
+        indices: nicolink.range,
       }
     end
     possible_entries

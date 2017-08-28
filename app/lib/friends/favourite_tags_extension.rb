@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Friends
   module FavouriteTagsExtension
     extend ActiveSupport::Concern

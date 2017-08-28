@@ -3,7 +3,7 @@ import ConnectAccount from '../components/connect_account';
 
 const mapStateToProps = (state) => {
   return {
-    account: state.getIn(['accounts', state.getIn(['meta', 'me'])]),
+    nico_url: state.getIn(['meta', 'nico_url']),
   };
 };
 
