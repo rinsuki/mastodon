@@ -16,5 +16,10 @@ describe Friends::UserExtension do
       user = User.new
       expect(user.nico_url).to be_nil
     end
+
+    it 'show if force' do
+      user = User.new(uid: 1, hide_oauth: true)
+      expect(user.nico_url(true)).to eq 'http://www.nicovideo.jp/user/1'
+    end
   end
 end

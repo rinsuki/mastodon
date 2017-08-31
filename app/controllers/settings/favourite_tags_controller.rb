@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Settings::FavouriteTagsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module AuthProvider
   def providers
     ENV['OMNIAUTH'].to_s.split(',').map do |auth|

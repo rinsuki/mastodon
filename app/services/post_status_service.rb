@@ -21,6 +21,7 @@ class PostStatusService < BaseService
 
     media  = validate_media!(options[:media_ids])
     status = nil
+
     ApplicationRecord.transaction do
       status = account.statuses.create!(text: text,
                                         thread: in_reply_to,
@@ -32,6 +33,7 @@ class PostStatusService < BaseService
                                         enquete: options[:enquete])
       attach_media(status, media)
     end
+
     process_mentions_service.call(status)
     process_hashtags_service.call(status)
 

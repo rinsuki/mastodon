@@ -2,8 +2,6 @@ import api from '../api';
 
 import { updateTimeline } from './timelines';
 
-import * as emojione from 'emojione';
-
 export const COMPOSE_CHANGE          = 'COMPOSE_CHANGE';
 export const COMPOSE_SUBMIT_REQUEST  = 'COMPOSE_SUBMIT_REQUEST';
 export const COMPOSE_SUBMIT_SUCCESS  = 'COMPOSE_SUBMIT_SUCCESS';
@@ -29,6 +27,7 @@ export const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE';
 export const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE';
 export const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE';
 export const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE';
+export const COMPOSE_COMPOSING_CHANGE = 'COMPOSE_COMPOSING_CHANGE';
 
 export const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT';
 export const COMPOSE_NICORU_INSERT = 'COMPOSE_NICORU_INSERT';
@@ -74,7 +73,7 @@ export function mentionCompose(account, router) {
 
 export function submitCompose() {
   return function (dispatch, getState) {
-    const status = emojione.shortnameToUnicode(getState().getIn(['compose', 'text'], ''));
+    const status = getState().getIn(['compose', 'text'], '');
     const isEnquete = getState().getIn(['enquetes', 'enquete']);
     const enquete_items = getState().getIn(['enquetes', 'enquete_items']).toArray();
     if (!status || !status.length) {
@@ -91,6 +90,7 @@ export function submitCompose() {
     }
 
     dispatch(submitComposeRequest());
+
     api(getState).post('/api/v1/statuses', {
       status,
       in_reply_to_id: getState().getIn(['compose', 'in_reply_to'], null),
@@ -299,3 +299,10 @@ export function insertNicoruCompose(position) {
     position,
   };
 };
+
+export function changeComposing(value) {
+  return {
+    type: COMPOSE_COMPOSING_CHANGE,
+    value,
+  };
+}
