@@ -217,7 +217,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :favourite_tags, only: [:index]
+      resources :favourite_tags, only: [:index, :create, :destroy]
       post '/votes/:status_id', to: 'votes#create'
     end
 
