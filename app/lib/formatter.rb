@@ -39,7 +39,7 @@ class Formatter
     question_html = encode_and_link_urls(raw_enquete_info['question'])
     question_html = simple_format(question_html, {}, sanitize: false)
     question_html = question_html.delete("\n")
-    enquete_info['question'] = question_html.html_safe
+    enquete_info['question'] = question_html.html_safe # rubocop:disable Rails/OutputSafety
     enquete_info['items'] = raw_enquete_info['items'].map do |item|
       encode_and_link_urls(item)
     end
