@@ -3,7 +3,7 @@ import EnqueteContent from '../components/enquete_content';
 import { vote, voteLoad, setEnqueteTimeout } from '../../../actions/enquetes';
 
 const mapStateToProps = (state, { status }) => ({
-  status: status,
+  status,
 });
 
 const mapDispatchToProps = (dispatch) => ({

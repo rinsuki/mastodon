@@ -6,33 +6,25 @@ import {
   COMPOSE_SUBMIT_SUCCESS,
 } from '../actions/compose';
 import Immutable from 'immutable';
-import uuid from '../uuid';
 
+const defaultItems = Immutable.List(['', '', '', '']);
 const initialState = Immutable.Map({
-  enquete: false,
-  enquete_items: Immutable.List(['', '', '', '']),
+  active: false,
+  items: defaultItems,
 });
-
-function closeEnquete(state) {
-  return state.withMutations(map => {
-    map.set('enquete_items', Immutable.List(['', '', '', '']));
-    map.set('enquete', false);
-  });
-}
 
 export default function enquetes(state = initialState, action) {
   switch(action.type) {
   case COMPOSE_ENQUETE_CHANGE:
-    return state
-      .set('enquete', !state.get('enquete'))
-      .set('enquete_items',  Immutable.List(['', '', '', '']))
-      .set('idempotencyKey', uuid());
+    return state.withMutations(map => {
+      map.set('active', !state.get('active'));
+      map.set('items', defaultItems);
+    });
   case COMPOSE_ENQUETE_TEXT_CHANGE:
-    return state
-      .setIn(['enquete_items', action.item_index], action.text);
+    return state.setIn(['items', action.item_index], action.text);
   case COMPOSE_SUBMIT_SUCCESS:
-    return closeEnquete(state);
+    return initialState;
   default:
     return state;
   }
-}
+};

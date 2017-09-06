@@ -29,7 +29,6 @@ export default class EnqueteButton extends ImmutablePureComponent {
   }
 
   render () {
-
     const { intl } = this.props;
 
     return (

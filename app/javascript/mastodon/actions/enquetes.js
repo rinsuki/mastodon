@@ -21,7 +21,7 @@ export function changeComposeEnqueteText(text, item_index) {
 };
 
 
-export function vote(status_id, item_index){
+export function vote(status_id, item_index) {
   return (dispatch, getState) => {
     api(getState).post(`/api/v1/votes/${status_id}`, {
       item_index: item_index,

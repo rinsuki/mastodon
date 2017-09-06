@@ -4,8 +4,8 @@ import { changeComposeEnqueteText } from '../../../actions/enquetes';
 import { submitCompose } from '../../../actions/compose';
 
 const mapStateToProps = state => ({
-  enquete_items: state.getIn(['enquetes', 'enquete_items']),
-  enquete: state.getIn(['enquetes', 'enquete']),
+  active: state.getIn(['enquetes', 'active']),
+  items:  state.getIn(['enquetes', 'items']),
 });
 
 const mapDispatchToProps = dispatch => ({

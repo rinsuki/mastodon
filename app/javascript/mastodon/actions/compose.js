@@ -74,8 +74,8 @@ export function mentionCompose(account, router) {
 export function submitCompose() {
   return function (dispatch, getState) {
     const status = getState().getIn(['compose', 'text'], '');
-    const isEnquete = getState().getIn(['enquetes', 'enquete']);
-    const enquete_items = getState().getIn(['enquetes', 'enquete_items']).toArray();
+    const isEnquete = getState().getIn(['enquetes', 'active']);
+    const enquete_items = getState().getIn(['enquetes', 'items']).toArray();
     if (!status || !status.length) {
       return;
     }
