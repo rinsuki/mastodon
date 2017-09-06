@@ -60,14 +60,14 @@ export default class GettingStarted extends ImmutablePureComponent {
       }
     }
 
-    navItems.push(<ColumnLink icon='nico' text='ニコニコ形式' href='/nicomment' external />);
+    navItems.push(<ColumnLink key='ex-1' icon='nico' text='ニコニコ形式' href='/nicomment' external />);
 
     if (!multiColumn || !columns.find(item => item.get('id') === 'HASHTAG' && item.get('params').get('id') === 'ニコニコ動画タイムライン')) {
-      navItems.push(<ColumnLink icon='nico' hideOnMobile={false} text='動画タイムライン' to='/timelines/tag/ニコニコ動画タイムライン' />);
+      navItems.push(<ColumnLink key='ex-2' icon='nico' text='動画タイムライン' to='/timelines/tag/ニコニコ動画タイムライン' />);
     }
 
     if (!multiColumn || !columns.find(item => item.get('id') === 'HASHTAG' && item.get('params').get('id') === 'ニコニコ生放送タイムライン')) {
-      navItems.push(<ColumnLink icon='nico' hideOnMobile={false} text='生放送タイムライン' to='/timelines/tag/ニコニコ生放送タイムライン' />);
+      navItems.push(<ColumnLink key='ex-3' icon='nico' text='生放送タイムライン' to='/timelines/tag/ニコニコ生放送タイムライン' />);
     }
 
     if (multiColumn) {
