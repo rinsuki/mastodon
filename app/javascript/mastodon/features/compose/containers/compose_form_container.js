@@ -25,8 +25,7 @@ const mapStateToProps = state => ({
   is_uploading: state.getIn(['compose', 'is_uploading']),
   me: state.getIn(['compose', 'me']),
   showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']),
-  enquete_items: state.getIn(['enquetes', 'enquete_items']),
-  enquete: state.getIn(['enquetes', 'enquete']),
+  enquete: state.get('enquetes'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
