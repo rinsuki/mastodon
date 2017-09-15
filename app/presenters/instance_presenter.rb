@@ -32,6 +32,10 @@ class InstancePresenter
     Mastodon::Version
   end
 
+  def source_url
+    Mastodon::Version.source_url
+  end
+
   def niconico_associated_count
     Rails.cache.fetch('niconico_associated_count') { User.where.not(uid: nil).count }
   end
