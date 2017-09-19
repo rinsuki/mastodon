@@ -7,6 +7,8 @@ class REST::AccountSerializer < ActiveModel::Serializer
              :note, :url, :avatar, :avatar_static, :header, :header_static,
              :followers_count, :following_count, :statuses_count, :nico_url
 
+  has_many :profile_emojis, serializer: REST::ProfileEmojiSerializer
+
   def note
     Formatter.instance.simplified_format(object)
   end
