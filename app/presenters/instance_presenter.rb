@@ -39,4 +39,8 @@ class InstancePresenter
   def niconico_associated_count
     Rails.cache.fetch('niconico_associated_count') { User.where.not(uid: nil).count }
   end
+  
+  def thumbnail
+    @thumbnail ||= Rails.cache.fetch('site_uploads/thumbnail') { SiteUpload.find_by(var: 'thumbnail') }
+  end
 end
