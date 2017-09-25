@@ -15,8 +15,6 @@ import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_MUTE_SUCCESS,
   STATUS_UNMUTE_SUCCESS,
-  STATUS_SET_HEIGHT,
-  STATUSES_CLEAR_HEIGHT,
 } from '../actions/statuses';
 import {
   TIMELINE_REFRESH_SUCCESS,
@@ -99,18 +97,6 @@ const filterStatuses = (state, relationship) => {
   return state;
 };
 
-const setHeight = (state, id, height) => {
-  return state.update(id, ImmutableMap(), map => map.set('height', height));
-};
-
-const clearHeights = (state) => {
-  state.forEach(status => {
-    state = state.deleteIn([status.get('id'), 'height']);
-  });
-
-  return state;
-};
-
 const initialState = ImmutableMap();
 
 export default function statuses(state = initialState, action) {
@@ -159,10 +145,6 @@ export default function statuses(state = initialState, action) {
   case SET_ENQUETE_TIMEOUT:
     return state
       .setIn([action.status_id, 'enquete_timeout'], true);
-  case STATUS_SET_HEIGHT:
-    return setHeight(state, action.id, action.height);
-  case STATUSES_CLEAR_HEIGHT:
-    return clearHeights(state);
   default:
     return state;
   }
