@@ -30,6 +30,11 @@ class REST::StatusSerializer < ActiveModel::Serializer
     Formatter.instance.format(object)
   end
 
+  def enquete
+    return nil if object[:enquete].blank?
+    Formatter.instance.format_enquete(object[:enquete])
+  end
+
   def url
     TagManager.instance.url_for(object)
   end
