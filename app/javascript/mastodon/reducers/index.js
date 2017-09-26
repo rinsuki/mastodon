@@ -24,6 +24,7 @@ import height_cache from './height_cache';
 import favourite_tags from './favourite_tags';
 import announcements from './announcements';
 import enquetes from './enquetes';
+import tutorial from './tutorial';
 
 const reducers = {
   timelines,
@@ -50,6 +51,7 @@ const reducers = {
   announcements,
   enquetes,
   height_cache,
+  tutorial,
 };
 
 export default combineReducers(reducers);
