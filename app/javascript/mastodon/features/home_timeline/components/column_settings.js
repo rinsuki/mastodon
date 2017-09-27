@@ -17,10 +17,11 @@ export default class ColumnSettings extends React.PureComponent {
     settings: ImmutablePropTypes.map.isRequired,
     onChange: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
+    highlight_keywords: ImmutablePropTypes.map.isRequired,
   };
 
   render () {
-    const { settings, onChange, intl } = this.props;
+    const { settings, onChange, intl, highlight_keywords } = this.props;
 
     return (
       <div>
@@ -32,6 +33,18 @@ export default class ColumnSettings extends React.PureComponent {
 
         <div className='column-settings__row'>
           <SettingToggle prefix='home_timeline' settings={settings} settingKey={['shows', 'reply']} onChange={onChange} label={<FormattedMessage id='home.column_settings.show_replies' defaultMessage='Show replies' />} />
+        </div>
+
+        <div className='column-settings__section'>
+          <span><FormattedMessage id='home.column_settings.highlight_keywords' defaultMessage='Highlight keywords' /></span>
+          <a href='/settings/highlight_keywords' className='setting-highlight_keyword__icon'>
+            <i className='fa fa-gear' />
+          </a>
+        </div>
+        <div className='column-settings__row setting-highlight_keyword__body'>
+          {highlight_keywords.get('keywords').map(keyword => {
+            return <span key={keyword.get('id')} className='setting-highlight_keyword__section'>{keyword.get('word')}</span>;
+          })}
         </div>
 
         <span className='column-settings__section'><FormattedMessage id='home.column_settings.advanced' defaultMessage='Advanced' /></span>

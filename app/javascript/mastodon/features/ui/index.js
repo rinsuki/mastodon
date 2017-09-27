@@ -12,6 +12,7 @@ import { uploadCompose } from '../../actions/compose';
 import { refreshHomeTimeline } from '../../actions/timelines';
 import { refreshNotifications } from '../../actions/notifications';
 import { clearHeight } from '../../actions/height_cache';
+import { refreshHighlightKeywords } from '../../actions/highlight_keywords';
 import { WrappedSwitch, WrappedRoute } from './util/react_router_helpers';
 import UploadArea from './components/upload_area';
 import ColumnsAreaContainer from './containers/columns_area_container';
@@ -153,6 +154,7 @@ export default class UI extends React.PureComponent {
       navigator.serviceWorker.addEventListener('message', this.handleServiceWorkerPostMessage);
     }
 
+    this.props.dispatch(refreshHighlightKeywords());
     this.props.dispatch(refreshHomeTimeline());
     this.props.dispatch(refreshNotifications());
   }

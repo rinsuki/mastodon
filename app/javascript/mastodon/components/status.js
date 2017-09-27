@@ -39,6 +39,7 @@ export default class Status extends ImmutablePureComponent {
     autoPlayGif: PropTypes.bool,
     muted: PropTypes.bool,
     hidden: PropTypes.bool,
+    highlightKeywords: ImmutablePropTypes.map,
     tutorial: PropTypes.bool,
   };
 
@@ -98,7 +99,7 @@ export default class Status extends ImmutablePureComponent {
     let media = null;
     let statusAvatar;
 
-    const { status, account, hidden, ...other } = this.props;
+    const { status, account, hidden, highlightKeywords, ...other } = this.props;
     const { isExpanded } = this.state;
 
     if (status === null) {
@@ -176,7 +177,7 @@ export default class Status extends ImmutablePureComponent {
           </a>
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} highlightKeywords={highlightKeywords} />
 
         {media}
 

@@ -45,6 +45,7 @@ const makeMapStateToProps = () => {
     boostModal: state.getIn(['meta', 'boost_modal']),
     deleteModal: state.getIn(['meta', 'delete_modal']),
     autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+    highlightKeywords: state.get('highlight_keywords'),
   });
 
   return mapStateToProps;
@@ -157,7 +158,7 @@ export default class Status extends ImmutablePureComponent {
 
   render () {
     let ancestors, descendants;
-    const { status, ancestorsIds, descendantsIds, me, autoPlayGif } = this.props;
+    const { status, ancestorsIds, descendantsIds, me, autoPlayGif, highlightKeywords } = this.props;
 
     if (status === null) {
       return (
@@ -190,6 +191,7 @@ export default class Status extends ImmutablePureComponent {
               me={me}
               onOpenVideo={this.handleOpenVideo}
               onOpenMedia={this.handleOpenMedia}
+              highlightKeywords={highlightKeywords}
             />
 
             <ActionBar

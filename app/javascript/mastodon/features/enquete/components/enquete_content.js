@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import emojify from '../../../emoji';
 import Immutable from 'immutable';
+import { addHighlight } from '../../../actions/highlight_keywords';
 
 export default class EnqueteContent extends React.PureComponent {
 
@@ -12,6 +13,7 @@ export default class EnqueteContent extends React.PureComponent {
 
   static propTypes = {
     status: ImmutablePropTypes.map.isRequired,
+    highlightKeywords: ImmutablePropTypes.map,
     onVote: PropTypes.func,
     onVoteLoad: PropTypes.func,
     onEnqueteTimeout: PropTypes.func,
@@ -104,7 +106,7 @@ export default class EnqueteContent extends React.PureComponent {
     const { status } = this.props;
     const { profileEmojiMap } = this.state;
     const enquete = Immutable.fromJS(JSON.parse(status.get('enquete')));
-    const questionContent = { __html: emojify(enquete.get('question'), profileEmojiMap) };
+    const questionContent = { __html: emojify(addHighlight(enquete.get('question'), this.props.highlightKeywords), profileEmojiMap) };
 
     const itemsContent = enquete.get('type') === 'enquete' ?
             this.voteContent(status, enquete, profileEmojiMap) : this.resultContent(enquete, profileEmojiMap);

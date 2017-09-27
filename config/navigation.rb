@@ -16,6 +16,7 @@ SimpleNavigation::Configuration.run do |navigation|
       settings.item :follower_domains, safe_join([fa_icon('users fw'), t('settings.followers')]), settings_follower_domains_url
       settings.item :nico_account, safe_join([fa_icon('nico'), 'niconicoアカウント連携']), settings_oauth_url
       settings.item :favourite_tags, safe_join([fa_icon('tag'), t('settings.favourite_tags')]), settings_favourite_tags_url
+      settings.item :highlight_keywords, safe_join([fa_icon('search'), t('settings.highlight_keywords')]), settings_highlight_keywords_url
     end
 
     primary.item :development, safe_join([fa_icon('code fw'), t('settings.development')]), settings_applications_url do |development|

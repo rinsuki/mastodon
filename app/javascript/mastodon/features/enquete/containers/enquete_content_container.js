@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import EnqueteContent from '../components/enquete_content';
 import { vote, voteLoad, setEnqueteTimeout } from '../../../actions/enquetes';
 
-const mapStateToProps = (state, { status }) => ({
+const mapStateToProps = (state, { status, highlightKeywords }) => ({
   status,
+  highlightKeywords,
 });
 
 const mapDispatchToProps = (dispatch) => ({

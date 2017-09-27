@@ -4,6 +4,7 @@ import { changeSetting, saveSettings } from '../../../actions/settings';
 
 const mapStateToProps = state => ({
   settings: state.getIn(['settings', 'home']),
+  highlight_keywords: state.get('highlight_keywords'),
 });
 
 const mapDispatchToProps = dispatch => ({
