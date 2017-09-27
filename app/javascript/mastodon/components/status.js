@@ -39,6 +39,7 @@ export default class Status extends ImmutablePureComponent {
     autoPlayGif: PropTypes.bool,
     muted: PropTypes.bool,
     hidden: PropTypes.bool,
+    tutorial: PropTypes.bool,
   };
 
   state = {
@@ -55,6 +56,7 @@ export default class Status extends ImmutablePureComponent {
     'autoPlayGif',
     'muted',
     'hidden',
+    'tutorial',
   ]
 
   updateOnStates = ['isExpanded']
