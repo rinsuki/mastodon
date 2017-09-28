@@ -172,7 +172,7 @@ export default class UI extends React.PureComponent {
 
   componentDidUpdate (prevProps) {
     if (![this.props.location.pathname, '/'].includes(prevProps.location.pathname)) {
-      this.columnsAreaNode.handleChildrenContentChange();
+      this.columnsAreaNode.handleChildrenContentChange(prevProps);
     }
   }
 
