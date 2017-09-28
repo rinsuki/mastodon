@@ -35,8 +35,8 @@ const textAtCursorMatchesToken = (str, caretPosition) => {
 const textAtCursorMatchesProfileEmojiToken = (str, caretPosition) => {
   let word;
 
-  let left  = str.slice(0, caretPosition).search(/:\S+$/);
-  let right = str.slice(caretPosition).search(/\s/);
+  let left  = str.slice(0, caretPosition).search(/:[^:\s]+$/);
+  let right = str.slice(caretPosition).search(/[:\s]/);
   if (left < 0) {
     return [null, null];
   }
