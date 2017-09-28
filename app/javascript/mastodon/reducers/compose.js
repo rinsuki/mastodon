@@ -188,7 +188,10 @@ const setProfileEmojiSuggestions = (state, accounts, token) => {
 
 const insertProfileEmojiSuggestion = (state, position, token, completion) => {
   return state.withMutations(map => {
-    map.update('text', oldText => `${oldText.slice(0, position)}${completion}:${oldText.slice(position + token.length + 1)}`);
+    const oldText = map.get('text');
+    const tail = (oldText[position + token.length + 1] === ':'? '' : ':')
+               + oldText.slice(position + token.length + 1);
+    map.update('text', oldText => `${oldText.slice(0, position)}${completion}${tail}`);
     map.set('profile_emoji_suggestion_token', null);
     map.update('profile_emoji_suggestions', ImmutableList(), list => list.clear());
     map.set('focusDate', new Date());
