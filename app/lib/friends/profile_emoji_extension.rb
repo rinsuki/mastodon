@@ -35,7 +35,7 @@ module Friends
       scaned_usernames = []
       text.scan(PROFILE_EMOJI_RE).map { |username|
         next if scaned_usernames.include? username
-        a = Account.find_by(username: username)
+        a = Account.local.find_by(username: username)
         next if a.nil?
         scaned_usernames << username
         {
