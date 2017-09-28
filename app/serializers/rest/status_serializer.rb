@@ -3,7 +3,8 @@
 class REST::StatusSerializer < ActiveModel::Serializer
   attributes :id, :created_at, :in_reply_to_id, :in_reply_to_account_id,
              :sensitive, :spoiler_text, :visibility, :language,
-             :uri, :content, :url, :reblogs_count, :favourites_count, :enquete
+             :uri, :content, :url, :reblogs_count, :favourites_count,
+             :enquete
 
   attribute :favourited, if: :current_user?
   attribute :reblogged, if: :current_user?
@@ -17,6 +18,8 @@ class REST::StatusSerializer < ActiveModel::Serializer
   has_many :media_attachments, serializer: REST::MediaAttachmentSerializer
   has_many :mentions
   has_many :tags
+
+  has_many :profile_emojis, serializer: REST::ProfileEmojiSerializer
 
   def current_user?
     !current_user.nil?
