@@ -453,9 +453,14 @@ en:
     two_factor_authentication: Two-factor Authentication
     your_apps: Your applications
     favourite_tags: Favourite tags
+    highlight_keywords: Hightlight keywords
   favourite_tags:
     name_of_tag: Name of tag
     delete: delete
+  highlight_keywords:
+    name_of_word: Name of word
+    delete: delete
+    description: Your keywords will be highlighted in orange. In addition, you can receive keyword notifications.
   statuses:
     open_in_web: Open in web
     over_character_limit: character limit of %{max} exceeded

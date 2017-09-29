@@ -1,5 +1,6 @@
 import api, { getLinks } from '../api';
 import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
+import { checkHighlightNotification } from './highlight_keywords';
 
 export const TIMELINE_UPDATE  = 'TIMELINE_UPDATE';
 export const TIMELINE_DELETE  = 'TIMELINE_DELETE';
@@ -30,6 +31,8 @@ export function refreshTimelineSuccess(timeline, statuses, skipLoading, next) {
 export function updateTimeline(timeline, status) {
   return (dispatch, getState) => {
     const references = status.reblog ? getState().get('statuses').filter((item, itemId) => (itemId === status.reblog.id || item.get('reblog') === status.reblog.id)).map((_, itemId) => itemId) : [];
+
+    dispatch(checkHighlightNotification(status));
 
     dispatch({
       type: TIMELINE_UPDATE,

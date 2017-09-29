@@ -132,6 +132,14 @@ ActiveRecord::Schema.define(version: 20170913000752) do
     t.index ["account_id", "target_account_id"], name: "index_follows_on_account_id_and_target_account_id", unique: true
   end
 
+  create_table "highlight_keywords", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "word"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_highlight_keywords_on_account_id"
+  end
+
   create_table "imports", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "type", null: false
@@ -453,6 +461,7 @@ ActiveRecord::Schema.define(version: 20170913000752) do
   add_foreign_key "follow_requests", "accounts", on_delete: :cascade
   add_foreign_key "follows", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "follows", "accounts", on_delete: :cascade
+  add_foreign_key "highlight_keywords", "accounts", on_delete: :cascade
   add_foreign_key "imports", "accounts", on_delete: :cascade
   add_foreign_key "media_attachments", "accounts", on_delete: :nullify
   add_foreign_key "media_attachments", "statuses", on_delete: :nullify

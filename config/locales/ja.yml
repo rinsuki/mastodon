@@ -452,9 +452,14 @@ ja:
     two_factor_authentication: 二段階認証
     your_apps: アプリ
     favourite_tags: お気に入りタグ
+    highlight_keywords: ハイライトキーワード
   favourite_tags:
     name_of_tag: タグ名
     delete: 削除
+  highlight_keywords:
+    name_of_word: ワード名
+    delete: 削除
+    description: 設定したキーワードは強調表示され、ブラウザで通知されるようになります。
   statuses:
     open_in_web: Webで開く
     over_character_limit: 上限は %{max}文字までです

@@ -1,0 +1,23 @@
+- content_for :page_title do
+  = t('settings.highlight_keywords')
+
+%p
+  = t('highlight_keywords.description')
+= simple_form_for @highlight_keyword, url: settings_highlight_keywords_url do |f|
+  = render 'shared/error_messages', object: @highlight_keyword
+  = f.input :word, placeholder: t('highlight_keywords.name_of_word')
+  = f.button :button, type: 'submit'
+%hr
+
+%table.table
+  %tbody
+    - @highlight_keywords.each do |keyword|
+      %tr
+        %td
+          = fa_icon 'search'
+          = keyword.word
+        %td
+          = form_for keyword, url: settings_highlight_keyword_url(keyword), method: :delete do |f|
+            = f.button :button, type: :submit, class: :negative do
+              = fa_icon('times')
+              = t('highlight_keywords.delete')

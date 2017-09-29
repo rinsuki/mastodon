@@ -1,0 +1,30 @@
+.highlight {
+  color: orange;
+}
+
+.muted {
+  .highlight {
+    color: $ui-base-lighter-color;
+  }
+}
+
+.setting-highlight_keyword__icon {
+  color: $ui-primary-color;
+  margin-left: 4px;
+}
+
+.setting-highlight_keyword__body {
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.setting-highlight_keyword__section {
+  float: left;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  color: #fafafa;
+  background-color: #2b90d9;
+  border: 1px solid #2b90d9;
+  padding: 1px 4px 1px;
+  border-radius: 4px;
+}

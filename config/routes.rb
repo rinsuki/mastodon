@@ -97,6 +97,7 @@ Rails.application.routes.draw do
 
     resource :oauth, only: [:show, :update, :destroy]
     resources :favourite_tags, only: [:index, :create, :destroy]
+    resources :highlight_keywords, only: [:index, :create, :destroy]
   end
 
   resources :media, only: [:show]
@@ -241,6 +242,7 @@ Rails.application.routes.draw do
       end
 
       resources :favourite_tags, only: [:index, :create, :destroy]
+      resources :highlight_keywords, only: [:index]
       post '/votes/:status_id', to: 'votes#create'
     end
 
