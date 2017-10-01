@@ -134,7 +134,7 @@ export default class StatusContent extends React.PureComponent {
 
     const hidden = this.props.onExpandedToggle ? !this.props.expanded : this.state.hidden;
     const content = { __html: addHighlight(status.get('contentHtml'), this.props.highlightKeywords) };
-    const spoilerContent = { __html: addHighlight(`<p>${status.get('spoilerHtml')}</p>`, this.props.highlightKeywords) };
+    const spoilerContent = { __html: addHighlight(status.get('spoilerHtml'), this.props.highlightKeywords) };
     const directionStyle = { direction: 'ltr' };
     const classNames = classnames('status__content', {
       'status__content--with-action': this.props.onClick && this.context.router,
