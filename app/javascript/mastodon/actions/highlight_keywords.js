@@ -66,7 +66,7 @@ export function checkHighlightNotification(status) {
       } else {
         contentDom.innerHTML = addHighlight(status.content, highlightKeywords);
       }
-      spoilerDom.innerHTML = addHighlight(`<p>${status.spoiler_text}</p>`, highlightKeywords);
+      spoilerDom.innerHTML = addHighlight(status.get('spoilerHtml'), highlightKeywords);
       if (contentDom.getElementsByClassName('highlight').length + spoilerDom.getElementsByClassName('highlight').length > 0 ) {
         sendNotificationFlag = true;
       }
@@ -115,7 +115,7 @@ export function addHighlight (text, keywords) {
     var dom = document.createElement('div');
     dom.innerHTML = text;
 
-    replaceHighlight(reg, dom.firstChild);
+    replaceHighlight(reg, dom);
 
     return dom.innerHTML;
   } else {
