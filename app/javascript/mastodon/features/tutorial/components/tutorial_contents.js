@@ -111,27 +111,27 @@ const adjustBackSizePosition = (targetPosition) => {
   document.querySelector('.tutorial-back-top').style.left = targetPosition.left + 'px';
 
   // right
-  document.querySelector('.tutorial-back-right').style.width = '2000px';
-  document.querySelector('.tutorial-back-right').style.height = '2000px';
+  document.querySelector('.tutorial-back-right').style.width = window.parent.screen.width + 'px';
+  document.querySelector('.tutorial-back-right').style.height = window.parent.screen.height + 'px';
   document.querySelector('.tutorial-back-right').style.top = 0;
   document.querySelector('.tutorial-back-right').style.left = (targetPosition.left + targetPosition.width) + 'px';
 
   // bottom
   document.querySelector('.tutorial-back-bottom').style.width = targetPosition.width + 'px';
-  document.querySelector('.tutorial-back-bottom').style.height = isColumn ? 0 : '2000px';
+  document.querySelector('.tutorial-back-bottom').style.height = isColumn ? 0 : window.parent.screen.height + 'px';
   document.querySelector('.tutorial-back-bottom').style.top = targetPosition.bottom + 'px';
   document.querySelector('.tutorial-back-bottom').style.left = targetPosition.left + 'px';
 
   // left
   document.querySelector('.tutorial-back-left').style.width = targetPosition.left + 'px';
-  document.querySelector('.tutorial-back-left').style.height = '2000px';
+  document.querySelector('.tutorial-back-left').style.height = window.parent.screen.height + 'px';
   document.querySelector('.tutorial-back-left').style.top = 0;
   document.querySelector('.tutorial-back-left').style.right = targetPosition.left + 'px';
 };
 
 const adjustWindowPosition = (target, newProp) => {
   let windowLeft = document.querySelector('.columns-area').scrollLeft;
-  let windowRight = windowLeft + window.innerWidth;
+  let windowRight = windowLeft + window.parent.screen.width;
   let balloonInfo = document.querySelectorAll('.tutorial-contents')[newProp.nowPage - 1].getBoundingClientRect();
   let balloonLeft = balloonInfo.left;
   let balloonRight = balloonLeft + balloonInfo.width;
