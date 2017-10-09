@@ -17,7 +17,4 @@
           = fa_icon 'search'
           = keyword.word
         %td
-          = form_for keyword, url: settings_highlight_keyword_url(keyword), method: :delete do |f|
-            = f.button :button, type: :submit, class: :negative do
-              = fa_icon('times')
-              = t('highlight_keywords.delete')
+          = table_link_to 'trash', t('highlight_keywords.delete'), settings_highlight_keyword_path(keyword), method: :delete
