@@ -1,6 +1,8 @@
 require 'rake'
 require 'airbrake'
 
+IGNORE_EXCEPTIONS = %w(Mastodon::UnexpectedResponseError OpenSSL::SSL::SSLError)
+
 Airbrake.configure do |config|
   config.project_key = ENV['ERRBIT_PROJECT_KEY']
   config.project_id = ENV['ERRBIT_PROJECT_ID']
@@ -10,3 +12,9 @@ Airbrake.configure do |config|
 end
 
 Airbrake.add_filter(&:ignore!) unless ENV['ERRBIT_HOST']
+
+Airbrake.add_filter do |notice|
+  if notice[:errors].any? { |error| IGNORE_EXCEPTIONS.include?(error[:type]) }
+    notice.ignore!
+  end
+end
