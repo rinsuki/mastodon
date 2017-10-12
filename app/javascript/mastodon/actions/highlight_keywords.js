@@ -66,7 +66,7 @@ export function checkHighlightNotification(status) {
       } else {
         contentDom.innerHTML = addHighlight(status.content, highlightKeywords);
       }
-      spoilerDom.innerHTML = addHighlight(status.get('spoilerHtml'), highlightKeywords);
+      spoilerDom.innerHTML = addHighlight(status.spoilerHtml, highlightKeywords);
       if (contentDom.getElementsByClassName('highlight').length + spoilerDom.getElementsByClassName('highlight').length > 0 ) {
         sendNotificationFlag = true;
       }
