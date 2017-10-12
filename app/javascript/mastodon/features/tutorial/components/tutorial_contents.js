@@ -130,24 +130,18 @@ const adjustBackSizePosition = (targetPosition) => {
 };
 
 const adjustWindowPosition = (target, newProp) => {
-  let windowLeft = document.querySelector('.columns-area').scrollLeft;
-  let windowRight = windowLeft + window.parent.screen.width;
-  let balloonInfo = document.querySelectorAll('.tutorial-contents')[newProp.nowPage - 1].getBoundingClientRect();
-  let balloonLeft = balloonInfo.left;
-  let balloonRight = balloonLeft + balloonInfo.width;
-  let targetInfo = getTargetPosigion(target);
-  let targetLeft = targetInfo.left;
-  let targetRight = targetLeft + targetInfo.width;
+  const columnsAreaLeft = document.querySelector('.columns-area').scrollLeft;
+  const columnsAreaRight = document.querySelector('.columns-area').getBoundingClientRect().right;
+  const balloonInfo = document.querySelectorAll('.tutorial-contents')[newProp.nowPage - 1].getBoundingClientRect();
+  const balloonLeft = balloonInfo.left;
+  const balloonRight = balloonInfo.right + columnsAreaLeft;
+  const targetInfo = getTargetPosigion(target);
+  const targetLeft = targetInfo.left;
+  const targetRight = targetInfo.right + columnsAreaLeft;
 
-  //right
-  let rightShortage = 0;
-  rightShortage = balloonRight - windowRight > rightShortage ? balloonRight - windowRight : rightShortage;
-  rightShortage = targetRight - windowRight > rightShortage ? targetRight - windowRight : rightShortage;
+  const rightShortage = Math.max((balloonRight - columnsAreaRight), (targetRight - columnsAreaRight), 0);
+  const leftShortage = Math.max((columnsAreaLeft - balloonLeft), (columnsAreaLeft - targetLeft), 0);
 
-  //left
-  let leftShortage = 0;
-  leftShortage = windowLeft - balloonLeft > leftShortage ? windowLeft - balloonLeft : leftShortage;
-  leftShortage = windowLeft - targetLeft > leftShortage ? windowLeft - targetLeft : leftShortage;
   if (rightShortage > 0) {
     scrollRight(rightShortage + 10);
   } else if (leftShortage > 0) {
@@ -156,12 +150,12 @@ const adjustWindowPosition = (target, newProp) => {
 
   setTimeout(() => {
     try {
-      adjustBackSizePosition(getTargetPosigion(displayTargets[newProp.nowPage - 1]));
+      adjustPosition(refs[newProp.nowPage - 1], getTargetPosigion(targets[newProp.nowPage - 1]), directions[newProp.nowPage - 1], tutorialPositions[newProp.nowPage - 1]);
     } catch (e) { }
   }, 600);
   setTimeout(() => {
     try {
-      adjustPosition(refs[newProp.nowPage - 1], getTargetPosigion(targets[newProp.nowPage - 1]), directions[newProp.nowPage - 1], tutorialPositions[newProp.nowPage - 1]);
+      adjustBackSizePosition(getTargetPosigion(displayTargets[newProp.nowPage - 1]));
     } catch (e) { }
   }, 600);
 };
