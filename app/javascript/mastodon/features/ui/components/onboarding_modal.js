@@ -55,6 +55,7 @@ const PageTwo = ({ me }) => (
       <ComposeForm
         text='新規です! ニコってください!'
         suggestions={ImmutableList()}
+        profileEmojiSuggestions={ImmutableList()}
         mentionedDomains={[]}
         spoiler={false}
         onPickEmoji={noop}
