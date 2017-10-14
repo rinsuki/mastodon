@@ -8,3 +8,5 @@ Airbrake.configure do |config|
   config.environment = Rails.env
   config.ignore_environments = %w(development test)
 end
+
+Airbrake.add_filter(&:ignore!) unless ENV['ERRBIT_HOST']
