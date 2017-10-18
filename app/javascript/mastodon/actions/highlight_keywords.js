@@ -12,7 +12,7 @@ const unescapeHTML = (html) => {
 };
 
 const escapeHTML = (string) => {
-  if(typeof string !== 'string') {
+  if (typeof string !== 'string') {
     return string;
   }
   return string.replace(/[&'`"<>]/g, function(match) {
@@ -56,11 +56,11 @@ export function checkHighlightNotification(status) {
     const locale = getState().getIn(['meta', 'locale']);
     const { messages } = getLocale();
     const lastNotificationId = highlightKeywords.get('last_notification_id');
-    var sendNotificationFlag = false;
+    let sendNotificationFlag = false;
 
     if (status.account.id !== currentAccountId && status.id > lastNotificationId) {
-      var contentDom = document.createElement('div');
-      var spoilerDom = document.createElement('div');
+      const contentDom = document.createElement('div');
+      const spoilerDom = document.createElement('div');
       if (status.enquete) {
         contentDom.innerHTML = addHighlight(JSON.parse(status.enquete).question, highlightKeywords);
       } else {
@@ -94,14 +94,13 @@ export function refreshHighlightKeywordsSuccess(keywords) {
 }
 
 const replaceHighlight = (reg, node) => {
-  for (var i=0; i < node.childNodes.length; i++) {
-    var target = node.childNodes[i];
+  for (let i = 0; i < node.childNodes.length; i++) {
+    const target = node.childNodes[i];
     if (target.nodeName === '#text') {
-      const textContent = escapeHTML(target.textContent);
-      var span = document.createElement('span');
-      span.innerHTML = textContent.replace(reg, '<span class="highlight">$1</span>');
-
-      node.replaceChild (span, target);
+      const span = document.createElement('span');
+      span.innerHTML = escapeHTML(target.textContent)
+        .replace(reg, '<span class="highlight">$1</span>');
+      target.replaceWith.apply(target, span.childNodes);
     } else {
       replaceHighlight(reg, target);
     }
@@ -112,7 +111,7 @@ export function addHighlight (text, keywords) {
   if (keywords && keywords.get('keywords').size !== 0) {
     const reg = new RegExp(`(${keywords.get('keywords').map(keyword => keyword.get('word').replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|')})`, 'g');
 
-    var dom = document.createElement('div');
+    const dom = document.createElement('div');
     dom.innerHTML = text;
 
     replaceHighlight(reg, dom);
