@@ -93,18 +93,23 @@ export function refreshHighlightKeywordsSuccess(keywords) {
   };
 }
 
+const replaceTextNode = (reg, node) => {
+  const span = document.createElement('span');
+  span.innerHTML = escapeHTML(node.textContent)
+    .replace(reg, '<span class="highlight">$1</span>');
+  return Array.from(span.childNodes);
+};
+
 const replaceHighlight = (reg, node) => {
-  for (let i = 0; i < node.childNodes.length; i++) {
-    const target = node.childNodes[i];
+  const newNode = node.cloneNode();
+  Array.from(node.childNodes).forEach(target => {
     if (target.nodeName === '#text') {
-      const span = document.createElement('span');
-      span.innerHTML = escapeHTML(target.textContent)
-        .replace(reg, '<span class="highlight">$1</span>');
-      target.replaceWith.apply(target, span.childNodes);
+      replaceTextNode(reg, target).forEach(n => newNode.appendChild(n));
     } else {
-      replaceHighlight(reg, target);
+      newNode.appendChild(replaceHighlight(reg, target));
     }
-  }
+  });
+  return newNode;
 };
 
 export function addHighlight (text, keywords) {
@@ -113,10 +118,9 @@ export function addHighlight (text, keywords) {
 
     const dom = document.createElement('div');
     dom.innerHTML = text;
+    const newDOM = replaceHighlight(reg, dom);
 
-    replaceHighlight(reg, dom);
-
-    return dom.innerHTML;
+    return newDOM.innerHTML;
   } else {
     return text;
   }
