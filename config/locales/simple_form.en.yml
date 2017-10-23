@@ -30,6 +30,7 @@ en:
         email: E-mail address
         filtered_languages: Filtered languages
         header: Header
+        hide_oauth: Hide niconico Account
         locale: Language
         locked: Lock account
         new_password: New password
@@ -47,7 +48,6 @@ en:
         severity: Severity
         type: Import type
         username: Username
-        hide_oauth: Hide niconico Account
       interactions:
         must_be_follower: Block notifications from non-followers
         must_be_following: Block notifications from people you don't follow
