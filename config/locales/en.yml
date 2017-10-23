@@ -308,6 +308,9 @@ en:
     follows: You follow
     mutes: You mute
     storage: Media storage
+  favourite_tags:
+    delete: delete
+    name_of_tag: Name of tag
   followers:
     domain: Domain
     explanation_html: If you want to ensure the privacy of your statuses, you must be aware of who is following you. <strong>Your private statuses are delivered to all instances where you have followers</strong>. You may wish to review them, and remove followers if you do not trust your privacy to be respected by the staff or software of those instances.
@@ -327,6 +330,10 @@ en:
     validation_errors:
       one: Something isn't quite right yet! Please review the error below
       other: Something isn't quite right yet! Please review %{count} errors below
+  highlight_keywords:
+    delete: delete
+    description: Your keywords will be highlighted in orange. In addition, you can receive keyword notifications.
+    name_of_word: Name of word
   imports:
     preface: You can import data that you have exported from another instance, such as a list of the people you are following or blocking.
     success: Your data was successfully uploaded and will now be processed in due time
@@ -446,21 +453,14 @@ en:
     development: Development
     edit_profile: Edit profile
     export: Data export
+    favourite_tags: Favourite tags
     followers: Authorized followers
+    highlight_keywords: Hightlight keywords
     import: Import
     preferences: Preferences
     settings: Settings
     two_factor_authentication: Two-factor Authentication
     your_apps: Your applications
-    favourite_tags: Favourite tags
-    highlight_keywords: Hightlight keywords
-  favourite_tags:
-    name_of_tag: Name of tag
-    delete: delete
-  highlight_keywords:
-    name_of_word: Name of word
-    delete: delete
-    description: Your keywords will be highlighted in orange. In addition, you can receive keyword notifications.
   statuses:
     open_in_web: Open in web
     over_character_limit: character limit of %{max} exceeded

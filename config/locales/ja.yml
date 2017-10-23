@@ -307,6 +307,9 @@ ja:
     follows: フォロー
     mutes: ミュート
     storage: メディア
+  favourite_tags:
+    delete: 削除
+    name_of_tag: タグ名
   followers:
     domain: ドメイン
     explanation_html: あなたの投稿のプライバシーを確保したい場合、誰があなたをフォローしているのかを把握している必要があります。 <strong>プライベート投稿は、あなたのフォロワーがいる全てのインスタンスに配信されます</strong>。 フォロワーのインスタンスの管理者やソフトウェアがあなたのプライバシーを尊重してくれるかどうか怪しい場合は、そのフォロワーを削除した方がよいかもしれません。
@@ -326,6 +329,10 @@ ja:
     validation_errors:
       one: エラーが発生しました。以下のエラーを確認してください
       other: エラーが発生しました。以下の%{count}個のエラーを確認してください
+  highlight_keywords:
+    delete: 削除
+    description: 設定したキーワードは強調表示され、ブラウザで通知されるようになります。
+    name_of_word: ワード名
   imports:
     preface: 他のインスタンスでエクスポートされたファイルから、フォロー/ブロックした情報をこのインスタンス上のアカウントにインポートできます。
     success: ファイルは正常にアップロードされ、現在処理中です。しばらくしてから確認してください
@@ -445,21 +452,14 @@ ja:
     development: 開発
     edit_profile: プロフィールを編集
     export: データのエクスポート
+    favourite_tags: お気に入りタグ
     followers: 信頼済みのインスタンス
+    highlight_keywords: ハイライトキーワード
     import: データのインポート
     preferences: ユーザー設定
     settings: 設定
     two_factor_authentication: 二段階認証
     your_apps: アプリ
-    favourite_tags: お気に入りタグ
-    highlight_keywords: ハイライトキーワード
-  favourite_tags:
-    name_of_tag: タグ名
-    delete: 削除
-  highlight_keywords:
-    name_of_word: ワード名
-    delete: 削除
-    description: 設定したキーワードは強調表示され、ブラウザで通知されるようになります。
   statuses:
     open_in_web: Webで開く
     over_character_limit: 上限は %{max}文字までです

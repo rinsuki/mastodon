@@ -26,6 +26,7 @@ ja:
         email: メールアドレス
         filtered_languages: 除外する言語
         header: ヘッダー
+        hide_oauth: niconico連携を隠す
         locale: 言語
         locked: 非公開アカウントにする
         new_password: 新しいパスワード
@@ -43,7 +44,6 @@ ja:
         severity: 重大性
         type: インポートする項目
         username: ユーザー名
-        hide_oauth: niconico連携を隠す
       interactions:
         must_be_follower: フォロワー以外からの通知をブロック
         must_be_following: フォローしていないユーザーからの通知をブロック
