@@ -18,6 +18,19 @@ class REST::StatusSerializer < ActiveModel::Serializer
   has_many :media_attachments, serializer: REST::MediaAttachmentSerializer
   has_many :mentions
   has_many :tags
+  has_many :emojis, serializer: REST::CustomEmojiSerializer
+
+  def id
+    object.id.to_s
+  end
+
+  def in_reply_to_id
+    object.in_reply_to_id&.to_s
+  end
+
+  def in_reply_to_account_id
+    object.in_reply_to_account_id&.to_s
+  end
 
   has_many :profile_emojis, serializer: REST::ProfileEmojiSerializer
 
@@ -26,7 +39,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   end
 
   def uri
-    TagManager.instance.uri_for(object)
+    OStatus::TagManager.instance.uri_for(object)
   end
 
   def content
@@ -89,7 +102,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
     attributes :id, :username, :url, :acct
 
     def id
-      object.account_id
+      object.account_id.to_s
     end
 
     def username

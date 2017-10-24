@@ -4,10 +4,10 @@
 # Table name: favourite_tags
 #
 #  id         :integer          not null, primary key
-#  account_id :integer          not null
-#  tag_id     :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  account_id :integer          not null
+#  tag_id     :integer          not null
 #
 
 class FavouriteTag < ApplicationRecord

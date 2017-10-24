@@ -9,6 +9,10 @@ class REST::AccountSerializer < ActiveModel::Serializer
 
   has_many :profile_emojis, serializer: REST::ProfileEmojiSerializer
 
+  def id
+    object.id.to_s
+  end
+
   def note
     Formatter.instance.simplified_format(object)
   end

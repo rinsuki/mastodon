@@ -6,17 +6,6 @@ import IconButton from '../../../components/icon_button';
 
 const announcements = Immutable.fromJS([
   {
-    id: 3,
-    body: 'friends.nico @ TOKYO 開催！',
-    links: [
-      {
-        href: 'https://goo.gl/forms/LLi2wmHuzr4NJiTG3',
-        body: '参加登録はこちら',
-      },
-    ],
-    nicotta: false,
-  },
-  {
     id: 1,
     body: 'friends.nico のアプリができました!',
     links: [
