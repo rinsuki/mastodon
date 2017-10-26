@@ -11,7 +11,7 @@ class ProcessMentionsService < BaseService
     return unless status.local?
 
     profile_emojis = status.profile_emojis || []
-    profile_emojis_names = profile_emojis.map { |e| e[:shortcode] }
+    profile_emojis_names = profile_emojis.map { |e| e.shortcode }
 
     status.text.scan(Account::MENTION_RE).each do |match|
       username, domain  = match.first.split('@')
@@ -43,7 +43,7 @@ class ProcessMentionsService < BaseService
 
     if mentioned_account.local?
       NotifyService.new.call(mentioned_account, mention)
-    elsif mentioned_account.ostatus? && (Rails.configuration.x.use_ostatus_privacy || !status.stream_entry.hidden?)
+    elsif mentioned_account.ostatus? && !status.stream_entry.hidden?
       NotificationWorker.perform_async(stream_entry_to_xml(status.stream_entry), status.account_id, mentioned_account.id)
     elsif mentioned_account.activitypub?
       ActivityPub::DeliveryWorker.perform_async(build_json(mention.status), mention.status.account_id, mentioned_account.inbox_url)

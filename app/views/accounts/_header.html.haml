@@ -26,7 +26,7 @@
 
   .card__bio
     %h1.name
-      %span.p-name.emojify= Formatter.instance.format_display_name(account, profile_emojify: true)
+      %span.p-name.emojify= Formatter.instance.format_display_name(account, custom_emojify: true)
       %small
         %span @#{account.local_username_and_domain}
         = fa_icon('lock') if account.locked?
@@ -37,20 +37,20 @@
           = t 'accounts.roles.admin'
 
     .bio
-      .account__header__content.p-note.emojify= Formatter.instance.simplified_format(account, profile_emojify: true)
+      .account__header__content.p-note.emojify= Formatter.instance.simplified_format(account)
 
     .details-counters
       .counter{ class: active_nav_class(short_account_url(account)) }
         = link_to short_account_url(account), class: 'u-url u-uid' do
-          %span.counter-number= number_to_human account.statuses_count
+          %span.counter-number= number_to_human account.statuses_count, strip_insignificant_zeros: true
           %span.counter-label= t('accounts.posts')
 
       .counter{ class: active_nav_class(account_following_index_url(account)) }
         = link_to account_following_index_url(account) do
-          %span.counter-number= number_to_human account.following_count
+          %span.counter-number= number_to_human account.following_count, strip_insignificant_zeros: true
           %span.counter-label= t('accounts.following')
 
       .counter{ class: active_nav_class(account_followers_url(account)) }
         = link_to account_followers_url(account) do
-          %span.counter-number= number_to_human account.followers_count
+          %span.counter-number= number_to_human account.followers_count, strip_insignificant_zeros: true
           %span.counter-label= t('accounts.followers')

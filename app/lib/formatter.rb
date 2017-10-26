@@ -20,7 +20,11 @@ class Formatter
 
     raw_content = status.text
 
-    return reformat(raw_content) unless status.local?
+    unless status.local?
+      html = reformat(raw_content)
+      html = encode_custom_emojis(html, status.emojis + status.profile_emojis) if options[:custom_emojify]
+      return html.html_safe # rubocop:disable Rails/OutputSafety
+    end
 
     linkable_accounts = status.mentions.map(&:account)
     linkable_accounts << status.account
@@ -28,7 +32,7 @@ class Formatter
     html = raw_content
     html = "RT @#{prepend_reblog} #{html}" if prepend_reblog
     html = encode_and_link_urls(html, linkable_accounts)
-    html = encode_profile_emojis(html, status.profile_emojis) if options[:profile_emojify]
+    html = encode_custom_emojis(html, status.emojis + status.profile_emojis) if options[:custom_emojify]
     html = simple_format(html, {}, sanitize: false)
     html = html.delete("\n")
 
@@ -56,25 +60,27 @@ class Formatter
     return reformat(display_name) unless account.local?
 
     html = encode_and_link_urls(display_name)
-    html = encode_profile_emojis(html, account.profile_emojis, false) if options[:profile_emojify]
+    html = encode_custom_emojis(html, account.profile_emojis) if options[:custom_emojify]
 
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def reformat(html)
-    sanitize(html, Sanitize::Config::MASTODON_STRICT).html_safe # rubocop:disable Rails/OutputSafety
+    sanitize(html, Sanitize::Config::MASTODON_STRICT)
   end
 
   def plaintext(status)
     return status.text if status.local?
-    strip_tags(status.text)
+
+    text = status.text.gsub(/(<br \/>|<br>|<\/p>)+/) { |match| "#{match}\n" }
+    strip_tags(text)
   end
 
-  def simplified_format(account, options = {})
-    return reformat(account.note) unless account.local?
+  def simplified_format(account)
+    return reformat(account.note).html_safe unless account.local? # rubocop:disable Rails/OutputSafety
 
     html = encode_and_link_urls(account.note)
-    html = encode_profile_emojis(html, account.profile_emojis) if options[:profile_emojify]
+    html = encode_custom_emojis(html, account.profile_emojis)
     html = simple_format(html, {}, sanitize: false)
     html = html.delete("\n")
 
@@ -83,6 +89,12 @@ class Formatter
 
   def sanitize(html, config)
     Sanitize.fragment(html, config)
+  end
+
+  def format_spoiler(status)
+    html = encode(status.spoiler_text)
+    html = encode_custom_emojis(html, status.emojis + status.profile_emojis)
+    html.html_safe # rubocop:disable Rails/OutputSafety
   end
 
   private
@@ -153,6 +165,47 @@ class Formatter
         elsif inside_colon && html[i] != ' '
           shortname += html[i]
         end
+      end
+    end
+
+    html
+  end
+
+  def encode_custom_emojis(html, emojis)
+    return html if emojis.empty?
+
+    emoji_map = emojis.map { |e| [e.shortcode, full_asset_url(e.image.url(:static))] }.to_h
+
+    i                     = -1
+    inside_tag            = false
+    inside_shortname      = false
+    shortname_start_index = -1
+
+    while i + 1 < html.size
+      i += 1
+
+      if inside_shortname && html[i] == ':'
+        shortcode = html[shortname_start_index + 1..i - 1]
+        emoji     = emoji_map[shortcode]
+
+        if emoji
+          replacement = "<img draggable=\"false\" class=\"emojione\" alt=\":#{shortcode}:\" title=\":#{shortcode}:\" src=\"#{emoji}\" />"
+          before_html = shortname_start_index.positive? ? html[0..shortname_start_index - 1] : ''
+          html        = before_html + replacement + html[i + 1..-1]
+          i          += replacement.size - (shortcode.size + 2) - 1
+        else
+          i -= 1
+        end
+
+        inside_shortname = false
+      elsif inside_tag && html[i] == '>'
+        inside_tag = false
+      elsif html[i] == '<'
+        inside_tag       = true
+        inside_shortname = false
+      elsif !inside_tag && html[i] == ':'
+        inside_shortname      = true
+        shortname_start_index = i
       end
     end
 

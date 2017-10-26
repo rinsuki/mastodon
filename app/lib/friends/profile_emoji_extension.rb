@@ -1,6 +1,29 @@
 # frozen_string_literal: true
 
 module Friends
+  ProfileEmoji = Struct.new(:account) do
+    include ActiveModel::Serialization
+
+    Image = Struct.new(:source) do
+      def url(type = :original)
+        type = :original unless source.content_type == 'image/gif'
+        source.url(type)
+      end
+    end
+
+    def shortcode
+      "@#{account.acct}"
+    end
+
+    def image
+      @image ||= Image.new(account.avatar)
+    end
+
+    def attributes
+      {}
+    end
+  end
+
   module ProfileEmojiExtension
     extend ActiveSupport::Concern
 
@@ -16,7 +39,9 @@ module Friends
       profile_emojis = JSON.parse(profile_emojis_json, symbolize_names: true)
 
       return get_profile_emojis(text, key, force: true) if !force && updated_within_ttl?(profile_emojis)
-      Account.where(id: profile_emojis.map{|x| x[:account_id] })
+      Account.where(id: profile_emojis.map{|x| x[:account_id] }).map do |account|
+        ProfileEmoji.new(account)
+      end
     end
 
     private
