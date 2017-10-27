@@ -8,7 +8,7 @@ class REST::ProfileEmojiSerializer < ActiveModel::Serializer
   end
 
   def url
-    full_asset_url(object.image.url(:original))
+    full_asset_url(object.image.url(:static))
   end
 
   def account_url

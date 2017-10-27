@@ -6,6 +6,13 @@ module Friends
 
     IMAGE_MIME_TYPES = AccountAvatar::IMAGE_MIME_TYPES
 
+    Image = Struct.new(:source) do
+      def url(type = :original)
+        type = :original unless source.content_type == 'image/gif'
+        source.url(type)
+      end
+    end
+
     def profile_emoji
       avatar
     end
