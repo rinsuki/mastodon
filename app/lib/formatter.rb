@@ -80,7 +80,6 @@ class Formatter
     return reformat(account.note).html_safe unless account.local? # rubocop:disable Rails/OutputSafety
 
     html = encode_and_link_urls(account.note)
-    html = encode_custom_emojis(html, account.profile_emojis)
     html = simple_format(html, {}, sanitize: false)
     html = html.delete("\n")
 
