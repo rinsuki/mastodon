@@ -8,7 +8,7 @@ const assetHost = process.env.CDN_HOST || '';
 
 let allowAnimations = false;
 
-const nicoru_re = /nicoru(-?\d+)?/;
+const nicoru_re = /:nicoru(-?\d+)?:/;
 
 const emojify = (str, customEmojis = {}) => {
   let rtn = '';
