@@ -66,28 +66,9 @@
   background-color: $classic-base-color;
 
   &__select {
-    flex-basis: 90%;
+    flex-basis: 100%;
     margin: 8px;
   }
-
-  &__refresh {
-    flex-basis: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    cursor: pointer;
-    color: #fff;
-    text-decoration: none;
-
-    > i {
-      &:hover {
-        color: rgba($primary-text-color, 0.8);
-        transition: 0.1s;
-      }
-    }
-  }
-
 }
 
 .refresh-icon {

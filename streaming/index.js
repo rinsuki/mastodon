@@ -313,7 +313,6 @@ const startWorker = (workerId) => {
 
     const listener = message => {
       const { event, payload, queued_at } = JSON.parse(message);
-
       const transmit = () => {
         const now            = new Date().getTime();
         const delta          = now - queued_at;
@@ -537,6 +536,9 @@ const startWorker = (workerId) => {
       break;
     case 'commands':
       streamFrom('commands', req, streamToWs(req, ws), streamWsEnd(req, ws), false);
+      break;
+    case 'nicovideo:ranking':
+      streamFrom('nicovideo:ranking:streaming', req, streamToWs(req, ws), streamWsEnd(req, ws), false);
       break;
     default:
       ws.close();

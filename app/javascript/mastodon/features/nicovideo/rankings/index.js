@@ -7,7 +7,7 @@ import ColumnHeader from '../../../components/column_header';
 import RankingList from './list';
 import { defineMessages, injectIntl } from 'react-intl';
 import { addColumn, removeColumn, moveColumn } from '../../../actions/columns';
-import { fetchNicovideoRanking } from '../../../actions/nicovideo_rankings';
+import { fetchNicovideoRanking, connectRankingStream } from '../../../actions/nicovideo_rankings';
 import { changeSetting } from '../../../actions/settings';
 import { openNiconicoVideoLink } from '../../../actions/nicovideo_player';
 import Select from 'react-select';
@@ -95,13 +95,24 @@ export default class VideoRanking extends React.PureComponent {
 
   handleChangeCategory = (obj) => {
     const { dispatch, columnId }  = this.props;
-    dispatch(fetchNicovideoRanking(obj.value));
     if (columnId) {
       dispatch(changeSetting(['columns', this.getTabIndex(), 'params', 'id'], obj.value));
     } else if (this.context.router) {
       this.context.router.history.push(`/rankings/${obj.value}`);
     }
     this.column.scrollTop();
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    this.disconnect = dispatch(connectRankingStream());
+  }
+
+  componentWillUnmount () {
+    if (this.disconnect) {
+      this.disconnect();
+      this.disconnect = null;
+    }
   }
 
   setRef = c => {
@@ -139,9 +150,6 @@ export default class VideoRanking extends React.PureComponent {
             searchable={false}
             clearable={false}
           />
-          <button className='rankings-category__area__refresh refresh-icon' onClick={this.onReloadButtonClick}  >
-            <i className='fa fa-refresh reload fa-fw' />
-          </button>
         </div>
 
         <RankingList
