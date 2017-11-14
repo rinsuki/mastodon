@@ -43,7 +43,7 @@ class NicoLink
     end
   end
 
-  def to_href
+  def url
     href = BASE_URI + @nico_id
     href.query = URI.encode_www_form(from: @from_sec) if time?
     href.normalize.to_s

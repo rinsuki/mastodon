@@ -106,14 +106,14 @@ class Formatter
     entities = Extractor.extract_entities_with_indices(html, extract_url_without_protocol: false)
 
     rewrite(html.dup, entities) do |entity|
-      if entity[:url]
+      if entity[:niconico_link]
+        link_to_niconico(entity)
+      elsif entity[:url]
         link_to_url(entity)
       elsif entity[:hashtag]
         link_to_hashtag(entity)
       elsif entity[:screen_name]
         link_to_mention(entity, accounts)
-      elsif entity[:niconico_link]
-        link_to_niconico(entity)
       end
     end
   end
@@ -268,7 +268,7 @@ class Formatter
   def link_to_niconico(entity)
     nl = entity[:niconico_link]
 
-    "<a href=\"#{nl.to_href}\" rel=\"nofollow noopener\" target=\"_blank\"><span>#{nl.text}</span></a>"
+    "<a href=\"#{nl.url}\" rel=\"nofollow noopener\" target=\"_blank\"><span>#{nl.text}</span></a>"
   end
 
   def link_html(url)
