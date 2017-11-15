@@ -129,7 +129,7 @@ RSpec.describe NicoLink, type: :model do
     end
   end
 
-  describe '#to_href' do
+  describe '#url' do
     context 'with valid time' do
       subject do
         {
@@ -147,14 +147,14 @@ RSpec.describe NicoLink, type: :model do
 
       it 'does not add from param for non-temporal ids' do
         subject.each do |time, _|
-          expect(NicoLink.new(nico_id: 'im0139401923849', time: time).to_href).to eq 'https://nico.ms/im0139401923849'
+          expect(NicoLink.new(nico_id: 'im0139401923849', time: time).url).to eq 'https://nico.ms/im0139401923849'
         end
       end
 
       it 'adds from param for temporal ids' do
         subject.each do |time, val|
-          expect(NicoLink.new(nico_id: 'lv84120982743', time: time).to_href).to eq "https://nico.ms/lv84120982743?from=#{val}"
-          expect(NicoLink.new(nico_id: 'sm9', time: time).to_href).to eq "https://nico.ms/sm9?from=#{val}"
+          expect(NicoLink.new(nico_id: 'lv84120982743', time: time).url).to eq "https://nico.ms/lv84120982743?from=#{val}"
+          expect(NicoLink.new(nico_id: 'sm9', time: time).url).to eq "https://nico.ms/sm9?from=#{val}"
         end
       end
     end
@@ -174,13 +174,13 @@ RSpec.describe NicoLink, type: :model do
 
       it 'does not add from param for non-temporal ids' do
         subject.each do |time|
-          expect(NicoLink.new(nico_id: 'im0', time: time).to_href).to eq 'https://nico.ms/im0'
+          expect(NicoLink.new(nico_id: 'im0', time: time).url).to eq 'https://nico.ms/im0'
         end
       end
 
       it 'does not add from param for temporal ids' do
         subject.each do |time|
-          expect(NicoLink.new(nico_id: 'sm9', time: time).to_href).to eq 'https://nico.ms/sm9'
+          expect(NicoLink.new(nico_id: 'sm9', time: time).url).to eq 'https://nico.ms/sm9'
         end
       end
     end
@@ -191,9 +191,9 @@ RSpec.describe NicoLink, type: :model do
       let(:sm) { NicoLink.new(nico_id: 'sm9') }
 
       it 'returns a proper href' do
-        expect(im.to_href).to eq 'https://nico.ms/im0139401923849'
-        expect(lv.to_href).to eq 'https://nico.ms/lv84120982743'
-        expect(sm.to_href).to eq 'https://nico.ms/sm9'
+        expect(im.url).to eq 'https://nico.ms/im0139401923849'
+        expect(lv.url).to eq 'https://nico.ms/lv84120982743'
+        expect(sm.url).to eq 'https://nico.ms/sm9'
       end
     end
   end
