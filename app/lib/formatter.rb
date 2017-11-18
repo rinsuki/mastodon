@@ -9,6 +9,7 @@ class Formatter
   include StreamEntriesHelper
 
   include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::TagHelper
 
   def format(status, options = {})
     if status.reblog?
@@ -267,8 +268,14 @@ class Formatter
 
   def link_to_niconico(entity)
     nl = entity[:niconico_link]
+    params = {data: {}}.tap do |x|
+      x[:href] = nl.url
+      x[:rel] = 'nofollow noopener'
+      x[:target] = '_blank'
+      x[:data][:nico_video_id] = nl.text if nl.video?
+    end
 
-    "<a href=\"#{nl.url}\" rel=\"nofollow noopener\" target=\"_blank\"><span>#{nl.text}</span></a>"
+    tag.a(tag.span(nl.text), params)
   end
 
   def link_html(url)

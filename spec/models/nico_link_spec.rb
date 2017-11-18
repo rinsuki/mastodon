@@ -129,6 +129,20 @@ RSpec.describe NicoLink, type: :model do
     end
   end
 
+  describe '#video?' do
+    subject { NicoLink.new(nico_id: text, time: nil) }
+
+    context 'sm9' do
+      let(:text) { 'sm9' }
+      it { is_expected.to be_video }
+    end
+
+    context 'im9' do
+      let(:text) { 'im9' }
+      it { is_expected.not_to be_video }
+    end
+  end
+
   describe '#url' do
     context 'with valid time' do
       subject do

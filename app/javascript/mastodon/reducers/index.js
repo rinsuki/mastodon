@@ -27,6 +27,8 @@ import announcements from './announcements';
 import enquetes from './enquetes';
 import tutorial from './tutorial';
 import highlight_keywords from './highlight_keywords';
+import nicovideo_player from './nicovideo_player';
+import nicovideo_rankings from './nicovideo_rankings';
 
 const reducers = {
   timelines,
@@ -56,6 +58,8 @@ const reducers = {
   custom_emojis,
   tutorial,
   highlight_keywords,
+  nicovideo_player,
+  nicovideo_rankings,
 };
 
 export default combineReducers(reducers);

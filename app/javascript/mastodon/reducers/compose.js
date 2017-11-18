@@ -36,6 +36,7 @@ import { TIMELINE_DELETE } from '../actions/timelines';
 import { STORE_HYDRATE } from '../actions/store';
 import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrderedSet, fromJS } from 'immutable';
 import uuid from '../uuid';
+import { COMPOSE_NICOVIDEO_ID_INSERT } from '../actions/nicovideo_player';
 
 const initialState = ImmutableMap({
   mounted: false,
@@ -147,6 +148,12 @@ const insertNicoru = (state, position) => {
   return state.withMutations(map => {
     map.update('text', oldText => `${oldText.slice(0, position)}${nicoru} ${oldText.slice(position)}`);
     map.set('focusDate', new Date());
+  });
+};
+
+const insertNicovideoId = (state, text) => {
+  return state.withMutations(map => {
+    map.update('text', oldText => `${oldText} ${text}`);
   });
 };
 
@@ -331,6 +338,8 @@ export default function compose(state = initialState, action) {
 
         return item;
       }));
+  case COMPOSE_NICOVIDEO_ID_INSERT:
+    return insertNicovideoId(state, action.videoId);
   default:
     return state;
   }

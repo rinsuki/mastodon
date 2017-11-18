@@ -45,6 +45,7 @@ export default class Status extends ImmutablePureComponent {
     onMoveDown: PropTypes.func,
     highlightKeywords: ImmutablePropTypes.map,
     tutorial: PropTypes.bool,
+    onClickNicovideoLink: PropTypes.func,
   };
 
   state = {
@@ -241,7 +242,7 @@ export default class Status extends ImmutablePureComponent {
               </a>
             </div>
 
-            <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} highlightKeywords={highlightKeywords} />
+            <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} onNiconicoVideoLinkClick={this.props.onNiconicoVideoLinkClick} highlightKeywords={highlightKeywords} />
 
             {media}
 

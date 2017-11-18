@@ -263,6 +263,7 @@ Rails.application.routes.draw do
       resources :favourite_tags, only: [:index, :create, :destroy]
       resources :highlight_keywords, only: [:index]
       post '/votes/:status_id', to: 'votes#create'
+      resources :nicovideo_rankings, only: [:show]
     end
 
     namespace :web do

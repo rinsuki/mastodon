@@ -62,6 +62,7 @@ export default class GettingStarted extends ImmutablePureComponent {
     }
 
     navItems.push(<ColumnLink key='ex-1' icon='nico' text='ニコニコ形式' href='/nicomment' external />);
+    navItems.push(<ColumnLink key='ex-4' icon='nico' text='ニコニコ動画ランキング' to='/rankings/all' />);
 
     if (!multiColumn || !columns.find(item => item.get('id') === 'HASHTAG' && item.get('params').get('id') === 'ニコニコ動画タイムライン')) {
       navItems.push(<ColumnLink key='ex-2' icon='nico' text='動画タイムライン' to='/timelines/tag/ニコニコ動画タイムライン' />);

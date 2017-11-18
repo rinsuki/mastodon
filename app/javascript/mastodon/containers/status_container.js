@@ -21,6 +21,7 @@ import {
 import { muteStatus, unmuteStatus, deleteStatus } from '../actions/statuses';
 import { initReport } from '../actions/reports';
 import { openModal } from '../actions/modal';
+import { openNiconicoVideoLink } from '../actions/nicovideo_player';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 
 const messages = defineMessages({
@@ -138,6 +139,10 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
     } else {
       dispatch(muteStatus(status.get('id')));
     }
+  },
+
+  onNiconicoVideoLinkClick(videoId) {
+    dispatch(openNiconicoVideoLink(videoId));
   },
 
 });

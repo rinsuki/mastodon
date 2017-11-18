@@ -37,6 +37,7 @@ import {
   Blocks,
   Mutes,
   PinnedStatuses,
+  NicovideoRanking,
 } from './util/async-components';
 import { HotKeys } from 'react-hotkeys';
 
@@ -375,6 +376,7 @@ export default class UI extends React.Component {
               <WrappedRoute path='/blocks' component={Blocks} content={children} />
               <WrappedRoute path='/mutes' component={Mutes} content={children} />
 
+              <WrappedRoute path='/rankings/:id' component={NicovideoRanking} content={children} />
               <WrappedRoute component={GenericNotFound} content={children} />
             </WrappedSwitch>
           </ColumnsAreaContainer>
