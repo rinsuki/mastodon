@@ -22,7 +22,7 @@ export default [
   { value: 'tech', label: 'ニコニコ技術部' },
   { value: 'imas', label: 'アイドルマスター' },
   { value: 'toho', label: '東方' },
-  { value: 'are', label: '例のあれ' },
+  { value: 'are', label: '例のアレ' },
   { value: 'diary', label: '日記' },
   { value: 'other', label: 'その他' },
   { value: 'nicoindies', label: 'ニコニコインディーズ' },
