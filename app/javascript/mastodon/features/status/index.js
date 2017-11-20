@@ -29,6 +29,7 @@ import { openModal } from '../../actions/modal';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { HotKeys } from 'react-hotkeys';
+import { openNiconicoVideoLink } from '../../actions/nicovideo_player';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
@@ -256,10 +257,13 @@ export default class Status extends ImmutablePureComponent {
     }
   }
 
+  onNiconicoVideoLinkClick = videoId => {
+    this.props.dispatch(openNiconicoVideoLink(videoId));
+  }
+
   render () {
     let ancestors, descendants;
     const { status, ancestorsIds, descendantsIds, me, autoPlayGif, highlightKeywords } = this.props;
-
     if (status === null) {
       return (
         <Column>
@@ -304,6 +308,7 @@ export default class Status extends ImmutablePureComponent {
                   onOpenVideo={this.handleOpenVideo}
                   onOpenMedia={this.handleOpenMedia}
                   highlightKeywords={highlightKeywords}
+                  onNiconicoVideoLinkClick={this.onNiconicoVideoLinkClick}
                 />
 
                 <ActionBar
