@@ -24,6 +24,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
     onOpenVideo: PropTypes.func.isRequired,
     autoPlayGif: PropTypes.bool,
     highlightKeywords: ImmutablePropTypes.map.isRequired,
+    onNiconicoVideoLinkClick: PropTypes.func,
   };
 
   handleAccountClick = (e) => {
@@ -107,7 +108,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
           <DisplayName account={status.get('account')} />
         </a>
 
-        <StatusContent status={status} highlightKeywords={this.props.highlightKeywords} />
+        <StatusContent status={status} highlightKeywords={this.props.highlightKeywords} onNiconicoVideoLinkClick={this.props.onNiconicoVideoLinkClick} />
 
         {media}
 
