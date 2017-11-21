@@ -22,13 +22,36 @@
       }
     }
 
+    &__controls {
+      margin: 4px 10px 0 10px;
+    }
+
+    &__input {
+      border-radius: 4px;
+      border-width: 1px;
+      padding: 2px 10px;
+      height: 34px;
+      width: 62%;
+      line-height: 30px;
+      box-sizing: border-box;
+
+      &:invalid {
+        border-color: $error-red;
+        outline-color: $error-red;
+      }
+    }
+
+
     &__btn {
       padding     : 0 16px;
       height      : 36px;
       width       : 36%;
-      margin      : 4px 10px 0 auto;
       line-height : 36px;
       float:right;
+
+      i {
+        padding-right: 5px;
+      }
     }
   }
 }
