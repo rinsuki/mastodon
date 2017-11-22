@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ToggleButton from './toggle_button';
+import Controller from  './controller';
 
 export default class Player extends React.PureComponent {
 
   static propTypes = {
     visible: PropTypes.bool.isRequired,
     videoId: PropTypes.string,
+    input: PropTypes.string,
     onToggle: PropTypes.func.isRequired,
     onNicovideoShare: PropTypes.func.isRequired,
+    onNicovideoPlay: PropTypes.func.isRequired,
+    onChangeVideoId: PropTypes.func.isRequired,
     multiColumn: PropTypes.bool,
   };
 
@@ -19,8 +23,35 @@ export default class Player extends React.PureComponent {
     });
   }
 
+  handleCopy = () => {
+    this.props.onNicovideoShare(this.props.videoId);
+  }
+
+  handlePlay = () => {
+    this.props.onNicovideoPlay(this.props.input);
+  }
+
+  setInput = (c) => {
+    this.input = c;
+  }
+
+  videoContent(videoId) {
+    const url = `https://embed.nicovideo.jp/watch/${videoId}`;
+    return (
+      <iframe
+         title='nico_video_player'
+         className='nico-video-player__item__iframe'
+         allowFullScreen='allowfullscreen'
+         src={url}
+         width='320'
+         height='180'
+         key={videoId}
+      />
+    );
+  }
+
   render () {
-    const { visible, onToggle, videoId, multiColumn } = this.props;
+    const { visible, onToggle, input, videoId, onChangeVideoId, multiColumn } = this.props;
 
     if (!multiColumn) {
       return null;
@@ -34,33 +65,19 @@ export default class Player extends React.PureComponent {
           <ToggleButton onToggle={onToggle} checked={visible} />
         </div>
         {(() => {
-          if (videoId && visible) {
-            const url = `https://embed.nicovideo.jp/watch/${videoId}`;
+          if (visible) {
             return (
               <div className='nico-video-player__item'>
-                <iframe
-                   title='nico_video_player'
-                   className='nico-video-player__item__iframe'
-                   allowFullScreen='allowfullscreen'
-                   src={url}
-                   width='320'
-                   height='180'
-                   key={videoId}
+                { videoId && this.videoContent(videoId) ||
+                  <p>動画リンクをクリックすると再生できます。</p>
+                }
+                <Controller
+                   videoId={videoId}
+                   input={input}
+                   onChange={onChangeVideoId}
+                   onClickPlay={this.handlePlay}
+                   onClickCopy={this.handleCopy}
                 />
-                <a
-                   href={`#${videoId}`}
-                   className='button nico-video-player__item__btn'
-                   onClick={this.onClickNicovideoShareButton(videoId)}
-                >
-                  <span className='fa fa-pencil-square-o' />
-                  動画ID
-                </a>
-              </div>
-            );
-          } else if (visible) {
-            return(
-              <div className='nico-video-player__item' >
-                <p>動画リンクをクリックすると再生できます。</p>
               </div>
             );
           } else {

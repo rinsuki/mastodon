@@ -3,6 +3,7 @@ import { isMobile } from '../is_mobile';
 
 export const COMPOSE_NICOVIDEO_ID_INSERT = 'COMPOSE_NICOVIDEO_ID_INSERT';
 export const PLAY_NICONICO_VIDEO = 'PLAY_NICONICO_VIDEO';
+export const UPDATE_NICONICO_VIDEO_INPUT = 'UPDATE_NICONICO_VIDEO_INPUT';
 
 export function openNiconicoVideoLink(videoId) {
   return (dispatch, getState) => {
@@ -26,6 +27,13 @@ export function toggleNiconicoVideoPlayer() {
     dispatch(changeSetting(['friends', 'videoplayer'], !visible));
   };
 };
+
+export function updateNiconicoVideoInput(videoId) {
+  return {
+    type: UPDATE_NICONICO_VIDEO_INPUT,
+    videoId,
+  };
+}
 
 export function onNicovideoShare(videoId) {
   return {
