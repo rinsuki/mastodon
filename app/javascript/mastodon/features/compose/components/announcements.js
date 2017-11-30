@@ -6,6 +6,17 @@ import IconButton from '../../../components/icon_button';
 
 const announcements = Immutable.fromJS([
   {
+    id: 3,
+    body: 'friends.nico @ どこそこの行き先アンケートにご協力下さい',
+    links: [
+      {
+        href: 'https://goo.gl/forms/uyM4qCYIFJTvwAtO2',
+        body: 'アンケートに答える',
+      },
+    ],
+    nicotta: false,
+  },
+  {
     id: 1,
     body: 'friends.nico のアプリができました!',
     links: [
