@@ -54,6 +54,14 @@ class User < ApplicationRecord
 
   validates :locale, inclusion: I18n.available_locales.map(&:to_s), if: :locale?
   validates_with BlacklistedEmailValidator, if: :email_changed?
+  validates_each :email  do |record, attr, value|
+    case
+      when value.match(/@gmail.com\Z/)
+        record.errors.add(:email, I18n.t('users.invalid_email')) if value.include?('+')
+      when value.match(/@yahoo.co.jp\Z/)
+        record.errors.add(:email, I18n.t('users.invalid_email')) if value.include?('-')
+    end
+  end 
 
   scope :recent,    -> { order(id: :desc) }
   scope :admins,    -> { where(admin: true) }
