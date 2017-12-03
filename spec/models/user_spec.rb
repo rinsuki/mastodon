@@ -184,7 +184,7 @@ RSpec.describe User, type: :model do
       expect(user.setting_auto_play_gif).to eq false
     end
   end
-  
+
   describe '#setting_system_font_ui' do
     it 'returns system font ui setting' do
       user = Fabricate(:user)
@@ -305,5 +305,15 @@ RSpec.describe User, type: :model do
 
       expect(user.token_for_app(app)).to be_nil
     end
+  end
+end
+
+describe User do
+  let(:attrs) { Fabricate.attributes_for(:user, email: 'hoge+hage@gmail.com') }
+  let(:user) { User.new(attrs) }
+  before { user.save(validate: false) }
+  it 'allow existing alias email' do
+    user.locale = 'ja'
+    expect(user).to be_valid
   end
 end
