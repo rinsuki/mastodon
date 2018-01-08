@@ -56,6 +56,12 @@ RSpec.describe NicoLink, type: :model do
       end
     end
 
+    context 'with params' do
+      subject { NicoLink.parse 'http://nico.ms/sm9?tw=twitter&time=90' }
+      it { expect(subject.from_sec).to eq 90 }
+      it { expect(subject.time).to eq '1:30' }
+    end
+
     context 'without time' do
       %w(im9 im0009 lv9 lv0009 sm9 sm0009).each do |text|
         describe text do
@@ -143,6 +149,11 @@ RSpec.describe NicoLink, type: :model do
     end
   end
 
+  describe '#text' do
+    subject { NicoLink.new(nico_id: 'sm9', time: '1:30') }
+    it { expect(subject.text).to eq 'sm9#1:30' }
+  end
+
   describe '#url' do
     context 'with valid time' do
       subject do
@@ -209,6 +220,20 @@ RSpec.describe NicoLink, type: :model do
         expect(lv.url).to eq 'https://nico.ms/lv84120982743'
         expect(sm.url).to eq 'https://nico.ms/sm9'
       end
+    end
+  end
+
+  describe '#range' do
+    subject { NicoLink.parse(text).range }
+
+    context 'with domain' do
+      let(:text) { 'test https://nico.ms/sm9?tw=tw#1:30 text' }
+      it { is_expected.to eq [5, text.length - 5] }
+    end
+
+    context 'without domain' do
+      let(:text) { 'test sm9#1:30 test' }
+      it { is_expected.to eq [5, text.length - 5] }
     end
   end
 
