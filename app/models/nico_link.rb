@@ -19,20 +19,24 @@ class NicoLink
 
   NICO_DOMAIN_RE = %r{(([a-z\.]+\.)?nicovideo\.jp(\/watch)?|nico\.ms)\/}
 
-  NICOLINK_RE = %r{((?<prefix>^|[^\/\)\w])|(?<nico_domain>(https?:\/\/)?#{NICO_DOMAIN_RE}))(?<nico_link>(?<nico_id>#{NICO_ID_RE})(#(?<time>#{TIME_RE}))?)}
+  NICOLINK_RE = %r{((?<prefix>^|[^\/\)\w])|(?<nico_domain>(https?:\/\/)?#{NICO_DOMAIN_RE}))(?<nico_link>(?<nico_id>#{NICO_ID_RE})(\?(?<query>[a-zA-Z0-9_&%=]*))?(#(?<time>#{TIME_RE}))?)}
 
   def self.parse(text)
     NicoLink.new(NICOLINK_RE.match(text))
   end
 
-  attr_reader :text, :nico_id, :time
+  attr_reader :nico_id, :type, :from_sec
 
   def initialize(match)
     @match = match
-    @text = match[:nico_id]
+    query = Rack::Utils.parse_query(match[:query])
     process_nico_id(match[:nico_id])
-    process_time(match[:time])
-    @text += "##{time}" if match[:time]
+    process_time(match[:time]) if match[:time]
+    process_query_time(query['time']) if query['time']
+  end
+
+  def text
+    [nico_id, time].compact.join('#')
   end
 
   def range
@@ -53,6 +57,14 @@ class NicoLink
     VIDEO_TYPES.include? @type
   end
 
+  def time
+    return unless @from_sec
+    min = @from_sec / 60
+    sec = @from_sec % 60
+
+    "#{min}:#{sec}"
+  end
+
   private
 
   def process_nico_id(nico_id)
@@ -71,6 +83,13 @@ class NicoLink
     sec += min * 60
 
     @from_sec = sec unless sec <= 0
+  end
+
+  def process_query_time(time)
+    return unless temporal?
+    time = time.to_i
+
+    @from_sec = time unless time <= 0
   end
 
   def temporal?
