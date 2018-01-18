@@ -9,6 +9,8 @@ class REST::AccountSerializer < ActiveModel::Serializer
 
   has_many :profile_emojis, serializer: REST::ProfileEmojiSerializer
 
+  has_one :moved_to_account, key: :moved, serializer: REST::AccountSerializer, if: :moved_and_not_nested?
+
   def id
     object.id.to_s
   end
@@ -35,6 +37,10 @@ class REST::AccountSerializer < ActiveModel::Serializer
 
   def header_static
     full_asset_url(object.header_static_url)
+  end
+
+  def moved_and_not_nested?
+    object.moved? && object.moved_to_account.moved_to_account_id.nil?
   end
 
   def nico_url

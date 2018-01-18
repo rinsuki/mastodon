@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { fetchStatus } from '../../actions/statuses';
 import MissingIndicator from '../../components/missing_indicator';
@@ -19,21 +20,27 @@ import {
   replyCompose,
   mentionCompose,
 } from '../../actions/compose';
-import { deleteStatus } from '../../actions/statuses';
+import { blockAccount } from '../../actions/accounts';
+import { muteStatus, unmuteStatus, deleteStatus } from '../../actions/statuses';
+import { initMuteModal } from '../../actions/mutes';
 import { initReport } from '../../actions/reports';
 import { makeGetStatus } from '../../selectors';
-import { ScrollContainer } from 'react-router-scroll';
+import { ScrollContainer } from 'react-router-scroll-4';
 import ColumnBackButton from '../../components/column_back_button';
 import StatusContainer from '../../containers/status_container';
 import { openModal } from '../../actions/modal';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { HotKeys } from 'react-hotkeys';
+import { boostModal, deleteModal } from '../../initial_state';
+import { attachFullscreenListener, detachFullscreenListener, isFullscreen } from '../../features/ui/util/fullscreen';
+
 import { openNiconicoVideoLink } from '../../actions/nicovideo_player';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
   deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this status?' },
+  blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
 });
 
 const makeMapStateToProps = () => {
@@ -43,10 +50,6 @@ const makeMapStateToProps = () => {
     status: getStatus(state, props.params.statusId),
     ancestorsIds: state.getIn(['contexts', 'ancestors', props.params.statusId]),
     descendantsIds: state.getIn(['contexts', 'descendants', props.params.statusId]),
-    me: state.getIn(['meta', 'me']),
-    boostModal: state.getIn(['meta', 'boost_modal']),
-    deleteModal: state.getIn(['meta', 'delete_modal']),
-    autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
     highlightKeywords: state.get('highlight_keywords'),
   });
 
@@ -67,15 +70,19 @@ export default class Status extends ImmutablePureComponent {
     status: ImmutablePropTypes.map,
     ancestorsIds: ImmutablePropTypes.list,
     descendantsIds: ImmutablePropTypes.list,
-    me: PropTypes.string,
-    boostModal: PropTypes.bool,
-    deleteModal: PropTypes.bool,
-    autoPlayGif: PropTypes.bool,
     intl: PropTypes.object.isRequired,
+  };
+
+  state = {
+    fullscreen: false,
   };
 
   componentWillMount () {
     this.props.dispatch(fetchStatus(this.props.params.statusId));
+  }
+
+  componentDidMount () {
+    attachFullscreenListener(this.onFullScreenChange);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -113,7 +120,7 @@ export default class Status extends ImmutablePureComponent {
     if (status.get('reblogged')) {
       this.props.dispatch(unreblog(status));
     } else {
-      if (e.shiftKey || !this.props.boostModal) {
+      if (e.shiftKey || !boostModal) {
         this.handleModalReblog(status);
       } else {
         this.props.dispatch(openModal('BOOST', { status, onReblog: this.handleModalReblog }));
@@ -124,7 +131,7 @@ export default class Status extends ImmutablePureComponent {
   handleDeleteClick = (status) => {
     const { dispatch, intl } = this.props;
 
-    if (!this.props.deleteModal) {
+    if (!deleteModal) {
       dispatch(deleteStatus(status.get('id')));
     } else {
       dispatch(openModal('CONFIRM', {
@@ -145,6 +152,28 @@ export default class Status extends ImmutablePureComponent {
 
   handleOpenVideo = (media, time) => {
     this.props.dispatch(openModal('VIDEO', { media, time }));
+  }
+
+  handleMuteClick = (account) => {
+    this.props.dispatch(initMuteModal(account));
+  }
+
+  handleConversationMuteClick = (status) => {
+    if (status.get('muted')) {
+      this.props.dispatch(unmuteStatus(status.get('id')));
+    } else {
+      this.props.dispatch(muteStatus(status.get('id')));
+    }
+  }
+
+  handleBlockClick = (account) => {
+    const { dispatch, intl } = this.props;
+
+    dispatch(openModal('CONFIRM', {
+      message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong>@{account.get('acct')}</strong> }} />,
+      confirm: intl.formatMessage(messages.blockConfirm),
+      onConfirm: () => dispatch(blockAccount(account.get('id'))),
+    }));
   }
 
   handleReport = (status) => {
@@ -257,13 +286,23 @@ export default class Status extends ImmutablePureComponent {
     }
   }
 
+  componentWillUnmount () {
+    detachFullscreenListener(this.onFullScreenChange);
+  }
+
+  onFullScreenChange = () => {
+    this.setState({ fullscreen: isFullscreen() });
+  }
+
   onNiconicoVideoLinkClick = videoId => {
     this.props.dispatch(openNiconicoVideoLink(videoId));
   }
 
   render () {
     let ancestors, descendants;
-    const { status, ancestorsIds, descendantsIds, me, autoPlayGif, highlightKeywords } = this.props;
+    const { status, ancestorsIds, descendantsIds, highlightKeywords } = this.props;
+    const { fullscreen } = this.state;
+
     if (status === null) {
       return (
         <Column>
@@ -296,15 +335,13 @@ export default class Status extends ImmutablePureComponent {
         <ColumnBackButton />
 
         <ScrollContainer scrollKey='thread'>
-          <div className='scrollable detailed-status__wrapper' ref={this.setRef}>
+          <div className={classNames('scrollable', 'detailed-status__wrapper', { fullscreen })} ref={this.setRef}>
             {ancestors}
 
             <HotKeys handlers={handlers}>
               <div className='focusable' tabIndex='0'>
                 <DetailedStatus
                   status={status}
-                  autoPlayGif={autoPlayGif}
-                  me={me}
                   onOpenVideo={this.handleOpenVideo}
                   onOpenMedia={this.handleOpenMedia}
                   highlightKeywords={highlightKeywords}
@@ -313,12 +350,14 @@ export default class Status extends ImmutablePureComponent {
 
                 <ActionBar
                   status={status}
-                  me={me}
                   onReply={this.handleReplyClick}
                   onFavourite={this.handleFavouriteClick}
                   onReblog={this.handleReblogClick}
                   onDelete={this.handleDeleteClick}
                   onMention={this.handleMentionClick}
+                  onMute={this.handleMuteClick}
+                  onMuteConversation={this.handleConversationMuteClick}
+                  onBlock={this.handleBlockClick}
                   onReport={this.handleReport}
                   onPin={this.handlePin}
                   onEmbed={this.handleEmbed}

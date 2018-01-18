@@ -41,12 +41,6 @@ $item-font-size: 12px;
     }
 }
 
-.character-counter__wrapper {
-    line-height: 36px;
-    margin:0 8px;
-    padding-top: 10px;
-}
-
 /**
  * Enquete view in timeline
  */
@@ -89,7 +83,7 @@ $item-font-size: 12px;
         // choosed item
         &__voted {
             opacity: 1.0;
-            
+
             &::after {
                 content: "\f00c";            // check mark
                 font-family: FontAwesome;
