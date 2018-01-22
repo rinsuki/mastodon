@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180112054855) do
+ActiveRecord::Schema.define(version: 20180122100211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "account_domain_blocks", force: :cascade do |t|
     t.string "domain"
@@ -91,6 +90,22 @@ ActiveRecord::Schema.define(version: 20180112054855) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_admin_action_logs_on_account_id"
     t.index ["target_type", "target_id"], name: "index_admin_action_logs_on_target_type_and_target_id"
+  end
+
+  create_table "announcement_links", force: :cascade do |t|
+    t.bigint "announcement_id", null: false
+    t.string "text", default: "", null: false
+    t.string "url", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["announcement_id"], name: "index_announcement_links_on_announcement_id"
+  end
+
+  create_table "announcements", force: :cascade do |t|
+    t.string "body", default: "", null: false
+    t.integer "order", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "blocks", force: :cascade do |t|
@@ -538,6 +553,7 @@ ActiveRecord::Schema.define(version: 20180112054855) do
   add_foreign_key "account_moderation_notes", "accounts", column: "target_account_id"
   add_foreign_key "accounts", "accounts", column: "moved_to_account_id", on_delete: :nullify
   add_foreign_key "admin_action_logs", "accounts", on_delete: :cascade
+  add_foreign_key "announcement_links", "announcements", on_delete: :cascade
   add_foreign_key "blocks", "accounts", column: "target_account_id", name: "fk_9571bfabc1", on_delete: :cascade
   add_foreign_key "blocks", "accounts", name: "fk_4269e03e65", on_delete: :cascade
   add_foreign_key "conversation_mutes", "accounts", name: "fk_225b4212bb", on_delete: :cascade

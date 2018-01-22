@@ -172,6 +172,7 @@ Rails.application.routes.draw do
     end
 
     resources :account_moderation_notes, only: [:create, :destroy]
+    resources :announcements
   end
 
   authenticate :user, lambda { |u| u.admin? } do
