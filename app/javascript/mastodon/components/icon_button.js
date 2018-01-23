@@ -77,6 +77,25 @@ export default class IconButton extends React.PureComponent {
       rotateDeg = this.props.icon === 'nicoru--status' ? -450 : -360;
     }
 
+    if (!animate) {
+      // Perf optimization: avoid unnecessary <Motion> components unless
+      // we actually need to animate.
+      return (
+        <button
+          aria-label={title}
+          aria-pressed={pressed}
+          aria-expanded={expanded}
+          title={title}
+          className={classes}
+          onClick={this.handleClick}
+          style={style}
+          tabIndex={tabIndex}
+        >
+          <i className={`fa fa-fw fa-${icon}`} aria-hidden='true' />
+        </button>
+      );
+    }
+
     return (
       <Motion defaultStyle={{ rotate: rotateDeg }} style={{ rotate: animate ? spring(rotateDeg : 0, { stiffness: 120, damping: 7 }) : 0 }}>
         {({ rotate }) =>

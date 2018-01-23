@@ -10,13 +10,14 @@ class Api::V1::FavouriteTagsController < Api::BaseController
 
   def index
     @favourite_tags = current_account.favourite_tags.includes(:tag)
+    render json: @favourite_tags, each_serializer: REST::FavouriteTagSerializer
   end
 
   def create
     name = tag_params[:name].gsub(/\A#/, '')
     tag = Tag.find_or_initialize_by(name: name)
-    @favourite_tag = FavouriteTag.new(account: current_account, tag: tag)
-    render json: invalid_name_error, status: 400 unless @favourite_tag.save
+    @favourite_tag = FavouriteTag.create!(account: current_account, tag: tag)
+    render json: @favourite_tag, serializer: REST::FavouriteTagSerializer
   end
 
   def destroy
@@ -34,7 +35,4 @@ class Api::V1::FavouriteTagsController < Api::BaseController
     @favourite_tag = current_account.favourite_tags.find(params[:id])
   end
 
-  def invalid_name_error
-    { error: 'Tag name is invalid' }
-  end
 end
