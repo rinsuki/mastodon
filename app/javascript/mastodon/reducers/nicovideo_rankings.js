@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import lodash from 'lodash';
 import {
   NICOVIDEO_RANKING_FETCH_SUCCESS,
   NICOVIDEO_RANKING_FETCH_FAIL,
@@ -14,7 +15,11 @@ export default function nicovideo_rankings(state = initialState, action) {
   switch(action.type) {
   case NICOVIDEO_RANKING_FETCH_SUCCESS:
     return state.withMutations(map => {
-      map.setIn(['rankings', action.categoryId], action.data);
+      lodash.each(action.data, (v, k) => {
+        if (v) {
+          map.setIn(['rankings', k], v);
+        }
+      });
       map.set('error', null);
     });
   case NICOVIDEO_RANKING_FETCH_FAIL:

@@ -27,6 +27,6 @@
   ip_cleanup_scheduler:
     cron: '<%= Random.rand(0..59) %> <%= Random.rand(3..5) %> * * *'
     class: Scheduler::IpCleanupScheduler
-  nico_vieo_rankings_scheduler:
+  nicovieo_ranking_scheduler:
     cron: '*/10 * * * *'
-    class: Scheduler::NicovideoRankingsScheduler
+    class: Scheduler::NicovideoRankingScheduler

@@ -42,7 +42,7 @@ export function connectStream(path, pollingRefresh = null, callbacks = () => ({ 
       reconnected () {
         if (pollingRefresh) {
           clearPolling();
-          pollingRefresh(dispatch);
+          onDisconnect(dispatch);
         }
         onConnect();
       },
