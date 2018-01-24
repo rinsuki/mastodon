@@ -3,6 +3,7 @@ import Announcements from '../components/announcements';
 import { nicoruAnnouncement, toggleAnnouncements } from '../../../actions/announcements';
 
 const mapStateToProps = (state) => ({
+  announcements: state.getIn(['announcements', 'list']),
   nicotta: state.getIn(['announcements', 'nicotta']),
   visible: state.getIn(['announcements', 'visible']),
 });
