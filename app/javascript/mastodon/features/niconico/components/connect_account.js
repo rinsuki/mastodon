@@ -11,9 +11,9 @@ class ConnectAccount extends ImmutablePureComponent {
   connectedLink(nico_url) {
     return (
       <a
-         href={nico_url}
-         target='_blank'
-         rel='noopener'
+        href={nico_url}
+        target='_blank'
+        rel='noopener'
       >
         <span className='nico-connect-account__label'>
           niconicoアカウントと連携済み
@@ -25,8 +25,8 @@ class ConnectAccount extends ImmutablePureComponent {
   connectLink() {
     return (
       <a
-         className='nico-connect-account__wrapper'
-         href='/auth/auth/niconico'
+        className='nico-connect-account__wrapper'
+        href='/auth/auth/niconico'
       >
         <span className='nico-connect-account__label nico-connect-account__label--disabled'>
           niconicoアカウントと連携する

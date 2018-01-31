@@ -44,7 +44,7 @@ class Avatar extends ImmutablePureComponent {
       <div>
         <Motion defaultStyle={{ radius: 90 }} style={{ radius: spring(isHovered ? 30 : 90, { stiffness: 180, damping: 12 }) }}>
           {({ radius }) =>
-            <a
+            (<a
               href={account.get('url')}
               className='account__header__avatar'
               role='presentation'
@@ -57,7 +57,7 @@ class Avatar extends ImmutablePureComponent {
               onBlur={this.handleMouseOut}
             >
               <span style={{ display: 'none' }}>{account.get('acct')}</span>
-            </a>
+            </a>)
           }
         </Motion>
         <AccountButton account={account} />
@@ -107,7 +107,7 @@ export default class Header extends ImmutablePureComponent {
       }
     }
 
-    if (account.get('moved')) {
+    if (account.get('moved') && !account.getIn(['relationship', 'following'])) {
       actionBtn = '';
     }
 

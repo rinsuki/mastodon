@@ -109,7 +109,7 @@ export default class EnqueteContent extends React.PureComponent {
     const questionContent = { __html: emojify(addHighlight(enquete.get('question'), this.props.highlightKeywords), profileEmojiMap) };
 
     const itemsContent = enquete.get('type') === 'enquete' ?
-            this.voteContent(status, enquete, profileEmojiMap) : this.resultContent(enquete, profileEmojiMap);
+      this.voteContent(status, enquete, profileEmojiMap) : this.resultContent(enquete, profileEmojiMap);
 
     return (
       <div className='enquete-form'>
@@ -138,11 +138,11 @@ export default class EnqueteContent extends React.PureComponent {
           const itemHTML = { __html: emojify(item, profileEmojiMap) };
           return (
             <button
-               key={index}
-               className={itemClassName(index)}
-               dangerouslySetInnerHTML={itemHTML}
-               onClick={enable ? this.handleEnqueteButtonClick : null}
-               data-number={index}
+              key={index}
+              className={itemClassName(index)}
+              dangerouslySetInnerHTML={itemHTML}
+              onClick={enable ? this.handleEnqueteButtonClick : null}
+              data-number={index}
             />);
         })}
         {gauge}

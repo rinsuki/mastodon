@@ -40,14 +40,14 @@ export default class EnqueteInputs extends ImmutablePureComponent {
         {[0, 1, 2, 3].map(index => (
           <div className='enquete-input' key={`enquete-input-${index}`}>
             <input
-               type='text'
-               id={`enquete-input-${index}`}
-               className='enquete-input__input'
-               placeholder={intl.formatMessage(messages[index])}
-               value={items.get(index)}
-               onChange={this.handleChangeEnqueteText}
-               onKeyDown={this.handleKeyDown}
-               maxLength={inputMaxLength}
+              type='text'
+              id={`enquete-input-${index}`}
+              className='enquete-input__input'
+              placeholder={intl.formatMessage(messages[index])}
+              value={items.get(index)}
+              onChange={this.handleChangeEnqueteText}
+              onKeyDown={this.handleKeyDown}
+              maxLength={inputMaxLength}
             />
           </div>
         ))}

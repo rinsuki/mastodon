@@ -5,7 +5,7 @@ import nicoru from '../../../../images/nicoru.png';
 import nicoruStatus from '../../../../images/nicoru-status.svg';
 import TutorialNav from './tutorial_nav';
 
-import getTargetPosigion from '../utils/get_target_position';
+import getTargetPosition from '../utils/get_target_position';
 import { scrollLeft, scrollRight } from '../utils//scroll';
 
 const PageOne = ({ page }) => {
@@ -135,7 +135,7 @@ const adjustWindowPosition = (target, newProp) => {
   const balloonInfo = document.querySelectorAll('.tutorial-contents')[newProp.nowPage - 1].getBoundingClientRect();
   const balloonLeft = balloonInfo.left;
   const balloonRight = balloonInfo.right + columnsAreaLeft;
-  const targetInfo = getTargetPosigion(target);
+  const targetInfo = getTargetPosition(target);
   const targetLeft = targetInfo.left;
   const targetRight = targetInfo.right + columnsAreaLeft;
 
@@ -150,12 +150,12 @@ const adjustWindowPosition = (target, newProp) => {
 
   setTimeout(() => {
     try {
-      adjustPosition(refs[newProp.nowPage - 1], getTargetPosigion(targets[newProp.nowPage - 1]), directions[newProp.nowPage - 1], tutorialPositions[newProp.nowPage - 1]);
+      adjustPosition(refs[newProp.nowPage - 1], getTargetPosition(targets[newProp.nowPage - 1]), directions[newProp.nowPage - 1], tutorialPositions[newProp.nowPage - 1]);
     } catch (e) { }
   }, 600);
   setTimeout(() => {
     try {
-      adjustBackSizePosition(getTargetPosigion(displayTargets[newProp.nowPage - 1]));
+      adjustBackSizePosition(getTargetPosition(displayTargets[newProp.nowPage - 1]));
     } catch (e) { }
   }, 600);
 };
@@ -192,7 +192,38 @@ export default class TutorialContents extends React.Component {
   }
 
   followingTutorialBack = () => {
-    adjustBackSizePosition(getTargetPosigion(displayTargets[this.props.nowPage - 1]));
+    adjustBackSizePosition(getTargetPosition(displayTargets[this.props.nowPage - 1]));
+  }
+
+  pageSwitch = (newProp) => {
+    if (newProp.page_number === newProp.nowPage) {
+      this.setState({
+        zIndex: 20,
+        opacity: 1,
+      });
+    } else {
+      this.setState({
+        zIndex: -1,
+        opacity: 0,
+      });
+    }
+  }
+
+  firstOpacityChange = () => {
+    this.setState({
+      zIndex: 20,
+      opacity: 1,
+    });
+  }
+
+  tutorialContentsRef = (c) => {
+    this.tutorialContents = c;
+  };
+
+  displayFirstPage = () => {
+    if (this.props.page_number === 1) {
+      setTimeout(this.firstOpacityChange, 1000);
+    }
   }
 
   componentDidMount() {
@@ -218,45 +249,19 @@ export default class TutorialContents extends React.Component {
     }
   }
 
-  PageSwitch = (newProp) => {
-    if (newProp.page_number === newProp.nowPage) {
-      this.setState({
-        zIndex: 20,
-        opacity: 1,
-      });
-    } else {
-      this.setState({
-        zIndex: -1,
-        opacity: 0,
-      });
-    }
-  }
-
-  FirstOpacityChange = () => {
-    this.setState({
-      zIndex: 20,
-      opacity: 1,
-    });
-  }
-
-  DisplayFirstPage = () => {
-    if (this.props.page_number === 1) {
-      setTimeout(this.FirstOpacityChange, 1000);
-    }
-  }
-
   componentWillMount = () => {
-    this.DisplayFirstPage();
+    this.displayFirstPage();
   }
+
   componentWillReceiveProps = (newProp) => {
-    this.PageSwitch(newProp);
-    adjustBackSizePosition(getTargetPosigion(displayTargets[newProp.nowPage - 1]));
-    adjustPosition(refs[newProp.nowPage - 1], getTargetPosigion(targets[newProp.nowPage - 1]), directions[newProp.nowPage - 1], tutorialPositions[newProp.nowPage - 1]);
+    this.pageSwitch(newProp);
+    adjustBackSizePosition(getTargetPosition(displayTargets[newProp.nowPage - 1]));
+    adjustPosition(refs[newProp.nowPage - 1], getTargetPosition(targets[newProp.nowPage - 1]), directions[newProp.nowPage - 1], tutorialPositions[newProp.nowPage - 1]);
     adjustWindowPosition(displayTargets[newProp.nowPage - 1], newProp);
   }
 
   render() {
-    let balloonStylePosition = (direction) => {
+    const balloonStylePosition = (direction) => {
       switch (direction) {
       case 'right':
         return {
@@ -296,13 +301,9 @@ export default class TutorialContents extends React.Component {
       isLast: this.props.isLast,
     };
 
-    const tutorialContentsRef = (c) => {
-      this.tutorialContents = c;
-    };
-
     return (
       <div className='tutorial-box'>
-        <div className={`tutorial-contents ${this.props.direction}`} style={{ opacity: this.state.opacity, zIndex: this.state.zIndex }} ref={tutorialContentsRef}>
+        <div className={`tutorial-contents ${this.props.direction}`} style={{ opacity: this.state.opacity, zIndex: this.state.zIndex }} ref={this.tutorialContentsRef}>
           <div className='page-one'>
             <PageOne page={this.props.page} />
             <TutorialNav {...constantArgumentsForNavigation} />

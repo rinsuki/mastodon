@@ -153,9 +153,9 @@ export default class VideoRanking extends React.PureComponent {
         </div>
 
         <RankingList
-           videos={rankings.get(categoryId)}
-           onClick={this.onVideoClick}
-           error={error}
+          videos={rankings.get(categoryId)}
+          onClick={this.onVideoClick}
+          error={error}
         />
       </Column>
     );

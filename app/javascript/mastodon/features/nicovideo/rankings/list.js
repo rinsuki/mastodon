@@ -66,10 +66,10 @@ export default class RankingList extends React.PureComponent {
         <ul>
           {videos.map((video, index) => (
             <RankingItem
-               key={`rank_${index}`}
-               video={video}
-               index={index}
-               onClick={this.handleClick}
+              key={`rank_${index}`}
+              video={video}
+              index={index}
+              onClick={this.handleClick}
             />
           ))}
         </ul>
