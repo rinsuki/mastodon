@@ -37,6 +37,7 @@ pl:
         expires_in: Wygaśnie po
         filtered_languages: Filtrowane języki
         header: Nagłówek
+        hide_oauth: Ukryj konto niconico
         locale: Język
         locked: Ustaw konto jako prywatne
         max_uses: Maksymalna liczba użyć

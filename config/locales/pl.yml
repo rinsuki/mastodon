@@ -160,6 +160,27 @@ pl:
         update_custom_emoji: "%{name} zaktualizował emoji %{target}"
         update_status: "%{name} zaktualizował wpis użytkownika %{target}"
       title: Dziennik działań administracyjnych
+    announcements:
+      add_new: Dodaj nowe
+      body: Ogłoszenie
+      delete_it: Usuń
+      edit:
+        submit: Aktualizuj ogłoszenie
+        title: Edytuj ogłoszenie
+      edit_it: Edytuj
+      form:
+        hint:
+          body: Znak nowej wierszy będzie ignorowany.
+          order: W kolejności malejącej
+        links:
+          text: Tekst odnośnika
+          url: Adres URL
+      links: Odnośniki
+      new:
+        submit: Utwórz ogłoszenie
+        title: Dodaj nowe ogłoszenie
+      order: Kolejność
+      title: Ogłoszenie
     custom_emojis:
       by_domain: Domeny
       copied_msg: Pomyślnie utworzono lokalną kopię emoji
@@ -269,6 +290,9 @@ pl:
       activity_api_enabled:
         desc_html: Liczy publikowane lokalnie wpisy, aktywnych użytkowników i nowe rejestracje w ciągu danego tygodnia
         title: Publikuj zbiorowe statystyki o aktywności użytkowników
+      admin_announcement:
+        desc_html: Wyświetlane na stronie głównej.<br>Możesz korzystać z tagów HTML
+        title: Ogłoszenie administratora
       bootstrap_timeline_accounts:
         desc_html: Oddzielaj nazwy użytkowników przecinkami. Działa tylko dla niezablokowanych kont w obrębie instancji. Jeżeli puste, zostaną użyte konta administratorów instancji.
         title: Domyślnie obserwowani użytkownicy
@@ -417,6 +441,9 @@ pl:
     follows: Śledzeni
     mutes: Wyciszeni
     storage: Urządzenie przechowujące dane
+  favourite_tags:
+    delete: usuń
+    name_of_tag: Nazwa tagu
   followers:
     domain: Domena
     explanation_html: Jeżeli chcesz mieć pewność, kto może przeczytać Twoje wpisy, musisz kontrolować, kto śledzi Twój profil. <strong>Twoje prywatne wpisy są dostarczane na te instancje, na których jesteś śledzony</strong>. Możesz sprawdzać, kto Cię śledzi i blokować ich, jeśli nie ufasz właścicielom lub oprogramowaniu danej instancji.
@@ -436,6 +463,10 @@ pl:
     validation_errors:
       one: Coś jest wciąż nie tak! Przyjrzyj się błędowi poniżej
       other: Coś jest wciąż nie tak! Przejrzyj błędy (%{count}) poniżej
+  highlight_keywords:
+    delete: usuń
+    description: Słowa kluczowe będą wyróżnione kolorem pomarańczowym. Dodatkowo, będziesz otrzymywać powiadomienia o ich wystąpieniu.
+    name_of_word: Słowo
   imports:
     preface: Możesz zaimportować pewne dane (jak dane kont, które śledzisz lub blokujesz) do swojego konta na tym serwerze, korzystając z danych wyeksportowanych z innego serwera.
     success: Twoje dane zostały załadowane i zostaną niebawem przetworzone
@@ -597,7 +628,9 @@ pl:
     development: Tworzenie aplikacji
     edit_profile: Edytuj profil
     export: Eksportowanie danych
+    favourite_tags: Ulubione tagi
     followers: Autoryzowani śledzący
+    highlight_keywords: Wyróżnione słowa kluczowe
     import: Importowanie danych
     migrate: Migracja konta
     notifications: Powiadomienia
