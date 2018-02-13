@@ -41,9 +41,9 @@ class FavouriteTags extends React.PureComponent {
     const tags = this.props.tags.map(tag => (
       <li key={tag.get('name')}>
         <Link
-           to={`/timelines/tag/${tag.get('name')}`}
-           className='favourite-tags__name'
-           key={tag.get('name')}
+          to={`/timelines/tag/${tag.get('name')}`}
+          className='favourite-tags__name'
+          key={tag.get('name')}
         >
           <i className='fa fa-hashtag' />
           {tag.get('name')}

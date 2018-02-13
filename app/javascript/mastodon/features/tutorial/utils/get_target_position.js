@@ -1,13 +1,17 @@
-export default function getTargetPosigion(target) {
+const getHeaderFromTitle = (title) => {
+  return Array.from(document.querySelectorAll('.column-header__title')).find(x => x.innerHTML === title).closest('.column-header');
+};
+
+export default function getTargetPosition(target) {
   switch (target) {
   case 'All':
     return document.querySelector('.columns-area').getBoundingClientRect();
   case 'Header:localTimeLine':
-    return document.querySelector('.column-header[aria-label="ローカルタイムライン"]').getBoundingClientRect();
+    return getHeaderFromTitle('ローカルタイムライン').getBoundingClientRect();
   case 'Header:home':
-    return document.querySelector('.column-header[aria-label="ホーム"]').getBoundingClientRect();
+    return getHeaderFromTitle('ホーム').getBoundingClientRect();
   case 'Header:notification':
-    return document.querySelector('.column-header[aria-label="通知"]').getBoundingClientRect();
+    return getHeaderFromTitle('通知').getBoundingClientRect();
   case 'Column:localTimeLine':
     return document.querySelectorAll('.column')[0].getBoundingClientRect();
   case 'Column:home':
@@ -31,4 +35,4 @@ export default function getTargetPosigion(target) {
   default:
     return document.querySelector('.tutorial').getBoundingClientRect();
   }
-}
+};

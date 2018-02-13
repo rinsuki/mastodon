@@ -16,8 +16,8 @@ export default class AdminAnnouncements extends React.PureComponent {
 
     return (
       <div
-         className='announcements__admin'
-         dangerouslySetInnerHTML={{ __html: settings }}
+        className='announcements__admin'
+        dangerouslySetInnerHTML={{ __html: settings }}
       />
     );
   }

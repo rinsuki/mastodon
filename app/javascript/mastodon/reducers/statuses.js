@@ -58,7 +58,7 @@ const normalizeStatus = (state, status) => {
     normalStatus.reblog = status.reblog.id;
   }
 
-  const searchContent = [status.spoiler_text, status.content].join('\n\n').replace(/<br \/>/g, '\n').replace(/<\/p><p>/g, '\n\n');
+  const searchContent = [status.spoiler_text, status.content].join('\n\n').replace(/<br\s*\/?>/g, '\n').replace(/<\/p><p>/g, '\n\n');
 
   const profileEmojiMap = (normalStatus.profile_emojis || []).reduce((obj, emoji) => {
     obj[emoji.shortcode] = emoji;

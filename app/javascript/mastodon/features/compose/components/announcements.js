@@ -37,11 +37,11 @@ export default class Announcements extends React.PureComponent {
               <li key={idx}>
                 <div className='announcements__icon'>
                   <IconButton
-                     active={nicotta.includes(announcement.get('id'))}
-                     animate
-                     icon='nicoru--status'
-                     title='announcement-icon'
-                     onClick={this.handleNicoru(announcement.get('id'))}
+                    active={nicotta.includes(announcement.get('id'))}
+                    animate
+                    icon='nicoru--status'
+                    title='announcement-icon'
+                    onClick={this.handleNicoru(announcement.get('id'))}
                     activeStyle={{ color: '#ca8f04' }}
                   />
                 </div>

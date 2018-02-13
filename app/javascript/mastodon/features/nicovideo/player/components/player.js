@@ -39,13 +39,13 @@ export default class Player extends React.PureComponent {
     const url = `https://embed.nicovideo.jp/watch/${videoId}`;
     return (
       <iframe
-         title='nico_video_player'
-         className='nico-video-player__item__iframe'
-         allowFullScreen='allowfullscreen'
-         src={url}
-         width='320'
-         height='180'
-         key={videoId}
+        title='nico_video_player'
+        className='nico-video-player__item__iframe'
+        allowFullScreen='allowfullscreen'
+        src={url}
+        width='320'
+        height='180'
+        key={videoId}
       />
     );
   }
@@ -72,11 +72,11 @@ export default class Player extends React.PureComponent {
                   <p>動画リンクをクリックすると再生できます。</p>
                 }
                 <Controller
-                   videoId={videoId}
-                   input={input}
-                   onChange={onChangeVideoId}
-                   onClickPlay={this.handlePlay}
-                   onClickCopy={this.handleCopy}
+                  videoId={videoId}
+                  input={input}
+                  onChange={onChangeVideoId}
+                  onClickPlay={this.handlePlay}
+                  onClickCopy={this.handleCopy}
                 />
               </div>
             );

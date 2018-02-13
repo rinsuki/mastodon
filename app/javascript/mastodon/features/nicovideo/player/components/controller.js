@@ -54,8 +54,8 @@ export default class Controller extends React.PureComponent {
     const { icon, text } = this.buttonText();
     const button = (
       <button
-         className='button nico-video-player__item__btn'
-         onClick={this.handleSubmit}
+        className='button nico-video-player__item__btn'
+        onClick={this.handleSubmit}
       >
         <i className={`fa ${icon}`} />
         {text}
@@ -65,14 +65,14 @@ export default class Controller extends React.PureComponent {
     return (
       <div className='nico-video-player__item__controls'>
         <input
-           type='text'
-           className='nico-video-player__item__input'
-           value={input}
-           placeholder='sm9'
-           onChange={this.handleChange}
-           onKeyDown={this.handleKeyDown}
-           ref={this.setRef}
-           pattern='(sm|so)\d*'
+          type='text'
+          className='nico-video-player__item__input'
+          value={input}
+          placeholder='sm9'
+          onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
+          ref={this.setRef}
+          pattern='(sm|so)\d*'
         />
         {button}
       </div>

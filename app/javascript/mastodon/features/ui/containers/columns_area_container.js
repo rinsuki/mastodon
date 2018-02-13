@@ -4,6 +4,7 @@ import { closeTutorial } from '../../../actions/tutorial';
 
 const mapStateToProps = state => ({
   columns: state.getIn(['settings', 'columns']),
+  isModalOpen: !!state.get('modal').modalType,
   tutorial: state.getIn(['tutorial', 'visible']),
 });
 
