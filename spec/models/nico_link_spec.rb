@@ -12,6 +12,7 @@ RSpec.describe NicoLink, type: :model do
        nicovideo.jp/watch/
        www.nicovideo.jp/
        www.nicovideo.jp/watch/
+       live2.nicovideo.jp/
        nico.ms/).each do |text|
       context text do
         it { expect(text).to match regex }
