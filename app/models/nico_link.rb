@@ -17,7 +17,7 @@ class NicoLink
   TIME_RE = %r{\d{1,2}:[0-5]\d}
   TIME_RE_FULLSTR = %r{\A#{TIME_RE}\z}
 
-  NICO_DOMAIN_RE = %r{(([a-z\.]+\.)?nicovideo\.jp(\/watch)?|nico\.ms)\/}
+  NICO_DOMAIN_RE = %r{(([a-z0-9\.]+\.)?nicovideo\.jp(\/watch)?|nico\.ms)\/}
 
   NICOLINK_RE = %r{((?<prefix>^|[^\/\)\w])|(?<nico_domain>(https?:\/\/)?#{NICO_DOMAIN_RE}))(?<nico_link>(?<nico_id>#{NICO_ID_RE})(\?(?<query>[a-zA-Z0-9_&%=]*))?(#(?<time>#{TIME_RE}))?)}
 
