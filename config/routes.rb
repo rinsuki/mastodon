@@ -230,7 +230,7 @@ Rails.application.routes.draw do
       end
 
       resources :streaming, only: [:index]
-      resources :custom_emojis, only: [:index]
+      resources :custom_emojis, only: [:index, :create, :destroy]
 
       get '/search', to: 'search#index', as: :search
 
