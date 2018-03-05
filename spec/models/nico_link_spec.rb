@@ -13,7 +13,8 @@ RSpec.describe NicoLink, type: :model do
        www.nicovideo.jp/
        www.nicovideo.jp/watch/
        live2.nicovideo.jp/
-       nico.ms/).each do |text|
+       nico.ms/
+       dic.nicovideo.jp/).each do |text|
       context text do
         it { expect(text).to match regex }
       end
@@ -88,6 +89,16 @@ RSpec.describe NicoLink, type: :model do
       end
       describe 'nicovideo.jp/mylist/1' do
         it { is_expected.to match regex }
+      end
+
+      describe 'dic.nicovideo.jp/a/%E5%91%89%E7%B9%94%E3%81%82%E3%81%8E%E3%82%8A' do
+        it { is_expected.to match NicoLink::NICODIC_LINK_RE }
+        it { is_expected.to match NicoLink::NICOLINK_RE }
+      end
+
+      describe 'dic.nicovideo.jp/a/呉織あぎり' do
+        it { is_expected.to match NicoLink::NICODIC_LINK_RE }
+        it { is_expected.to match NicoLink::NICOLINK_RE }
       end
     end
 
@@ -236,6 +247,11 @@ RSpec.describe NicoLink, type: :model do
       let(:text) { 'test sm9#1:30 test' }
       it { is_expected.to eq [5, text.length - 5] }
     end
+
+    context 'nicodic' do
+      let(:text) { 'test http://dic.nicovideo.jp/a/%E5%91%89%E7%B9%94%E3%81%82%E3%81%8E%E3%82%8A text' }
+        it { is_expected.to eq [5, text.length - 5] }
+    end
   end
 
   describe '.parse' do
@@ -252,6 +268,13 @@ RSpec.describe NicoLink, type: :model do
           expect(subj.is_a?(NicoLink)).to be_truthy
         end
       end
+    end
+
+    context 'dic' do
+      let(:text) { 'http://dic.nicovideo.jp/a/%E5%91%89%E7%B9%94%E3%81%82%E3%81%8E%E3%82%8A' }
+      subject { NicoLink.parse(text) }
+      it { expect(subject.text).to eq "呉織あぎり\u2006:nicodic:" }
+      it { expect(subject.url).to eq text }
     end
   end
 end
