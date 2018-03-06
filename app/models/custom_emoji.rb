@@ -51,6 +51,7 @@ class CustomEmoji < ApplicationRecord
       return [] if text.blank?
 
       shortcodes = text.scan(SCAN_RE).map(&:first).uniq
+      shortcodes << 'nicodic' if text.match(NicoLink::NICODIC_LINK_RE)
 
       return [] if shortcodes.empty?
 

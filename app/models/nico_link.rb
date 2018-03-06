@@ -14,15 +14,31 @@ class NicoLink
   NICO_ID_RE = %r{(#{[].concat([TEMPORAL_TYPES, NON_TEMPORAL_TYPES]).join('|')})(\d+)}
   NICO_ID_RE_FULLSTR = %r{\A#{NICO_ID_RE}\z}
 
+  DIC_WORD_RE = %r{(?<dic_word>[^\s\?]+)}
+
   TIME_RE = %r{\d{1,2}:[0-5]\d}
   TIME_RE_FULLSTR = %r{\A#{TIME_RE}\z}
 
   NICO_DOMAIN_RE = %r{(([a-z0-9\.]+\.)?nicovideo\.jp(\/watch)?|nico\.ms)\/}
 
-  NICOLINK_RE = %r{((?<prefix>^|[^\/\)\w])|(?<nico_domain>(https?:\/\/)?#{NICO_DOMAIN_RE}))(?<nico_link>(?<nico_id>#{NICO_ID_RE})(\?(?<query>[a-zA-Z0-9_&%=]*))?(#(?<time>#{TIME_RE}))?)}
+  PREFIX_RE = %r{(?<prefix>^|[^\/\)\w])}
+  SUFFIX_RE = %r{(\?(?<query>[a-zA-Z0-9_&%=]*))?(#(?<time>#{TIME_RE}))?}
+
+  NICODIC_LINK_RE = %r{(?<nico_domain>(https?:\/\/)?dic\.nicovideo\.jp/)(?<nico_link>a\/#{DIC_WORD_RE}#{SUFFIX_RE})}
+  NICOMAIN_LINK_RE = %r{(#{PREFIX_RE}|(?<nico_domain>(https?:\/\/)?#{NICO_DOMAIN_RE}))(?<nico_link>(?<nico_id>#{NICO_ID_RE})#{SUFFIX_RE})}
+
+  NICOLINK_RE = %r{(#{NICOMAIN_LINK_RE})|(#{NICODIC_LINK_RE})}
 
   def self.parse(text)
-    NicoLink.new(NICOLINK_RE.match(text))
+    build(NICOLINK_RE.match(text))
+  end
+
+  def self.build(matches)
+    if matches[:dic_word]
+      NicoLink::Dic.new(matches)
+    else
+      NicoLink.new(matches)
+    end
   end
 
   attr_reader :nico_id, :type, :from_sec
@@ -40,11 +56,10 @@ class NicoLink
   end
 
   def range
-    if @match[:nico_domain]
-      [@match.char_begin(2), @match.char_end(3)]
-    else
-      [@match.char_begin(3), @match.char_end(3)]
-    end
+    [
+      @match.char_begin(:nico_domain) || @match.char_begin(:nico_link),
+      @match.char_end(:nico_link)
+    ]
   end
 
   def url
@@ -98,5 +113,23 @@ class NicoLink
 
   def time?
     !@from_sec.nil?
+  end
+
+  class Dic < NicoLink
+    attr_accessor :word
+
+    def initialize(match)
+      @match = match
+      @word = URI.decode(match[:dic_word])
+    end
+
+    def text
+      # join with SIX-PER-EM SPACE
+      [word, ':nicodic:'].join("\u2006")
+    end
+
+    def url
+      "http://dic.nicovideo.jp/a/#{URI.encode(word)}"
+    end
   end
 end

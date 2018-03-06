@@ -11,7 +11,7 @@ module Friends
       possible_entries = []
 
       text.to_s.scan(NicoLink::NICOLINK_RE) do |_match|
-        nicolink = NicoLink.new($LAST_MATCH_INFO)
+        nicolink = NicoLink.build($LAST_MATCH_INFO)
         possible_entries << {
           url: nicolink.url,
           niconico_link: nicolink,
