@@ -54,8 +54,5 @@
   .fields-group
     = f.input :peers_api_enabled, as: :boolean, wrapper: :with_label, label: t('admin.settings.peers_api_enabled.title'), hint: t('admin.settings.peers_api_enabled.desc_html')
 
-  .fields-group
-    = f.input :admin_announcement, wrapper: :with_block_label, as: :text, label: t('admin.settings.admin_announcement.title'), hint: t('admin.settings.admin_announcement.desc_html'), input_html: { rows: 8 }
-
   .actions
     = f.button :button, t('generic.save_changes'), type: :submit

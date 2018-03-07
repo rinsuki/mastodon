@@ -34,8 +34,6 @@ class Form::AdminSettings
     :activity_api_enabled=,
     :peers_api_enabled,
     :peers_api_enabled=,
-    :admin_announcement,
-    :admin_announcement=,
     to: Setting
   )
 end
