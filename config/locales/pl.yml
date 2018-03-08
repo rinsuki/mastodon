@@ -290,9 +290,6 @@ pl:
       activity_api_enabled:
         desc_html: Liczy publikowane lokalnie wpisy, aktywnych użytkowników i nowe rejestracje w ciągu danego tygodnia
         title: Publikuj zbiorowe statystyki o aktywności użytkowników
-      admin_announcement:
-        desc_html: Wyświetlane na stronie głównej.<br>Możesz korzystać z tagów HTML
-        title: Ogłoszenie administratora
       bootstrap_timeline_accounts:
         desc_html: Oddzielaj nazwy użytkowników przecinkami. Działa tylko dla niezablokowanych kont w obrębie instancji. Jeżeli puste, zostaną użyte konta administratorów instancji.
         title: Domyślnie obserwowani użytkownicy
