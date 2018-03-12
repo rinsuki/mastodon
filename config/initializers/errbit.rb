@@ -1,4 +1,4 @@
-if ENV['DISABLE_PROJECT_ID'].present?
+unless ENV['DISABLE_PROJECT_ID'].present?
 
   require 'rake'
   require 'airbrake'
