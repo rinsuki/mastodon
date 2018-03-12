@@ -24,7 +24,7 @@ class NicoLink
   PREFIX_RE = %r{(?<prefix>^|[^\/\)\w])}
   SUFFIX_RE = %r{(\?(?<query>[a-zA-Z0-9_&%=]*))?(#(?<time>#{TIME_RE}))?}
 
-  NICODIC_LINK_RE = %r{(?<nico_domain>(https?:\/\/)?dic\.nicovideo\.jp/)(?<nico_link>a\/#{DIC_WORD_RE}#{SUFFIX_RE})}
+  NICODIC_LINK_RE = %r{(?<nico_domain>(https?:\/\/)?dic\.nicovideo\.jp/)(t\/)?(?<nico_link>a\/#{DIC_WORD_RE}#{SUFFIX_RE})}
   NICOMAIN_LINK_RE = %r{(#{PREFIX_RE}|(?<nico_domain>(https?:\/\/)?#{NICO_DOMAIN_RE}))(?<nico_link>(?<nico_id>#{NICO_ID_RE})#{SUFFIX_RE})}
 
   NICOLINK_RE = %r{(#{NICOMAIN_LINK_RE})|(#{NICODIC_LINK_RE})}
