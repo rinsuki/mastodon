@@ -96,6 +96,11 @@ RSpec.describe NicoLink, type: :model do
         it { is_expected.to match NicoLink::NICOLINK_RE }
       end
 
+      describe 'dic.nicovideo.jp/t/a/%E5%91%89%E7%B9%94%E3%81%82%E3%81%8E%E3%82%8A' do
+        it { is_expected.to match NicoLink::NICODIC_LINK_RE }
+        it { is_expected.to match NicoLink::NICOLINK_RE }
+      end
+
       describe 'dic.nicovideo.jp/a/呉織あぎり' do
         it { is_expected.to match NicoLink::NICODIC_LINK_RE }
         it { is_expected.to match NicoLink::NICOLINK_RE }
