@@ -120,7 +120,7 @@ class NicoLink
 
     def initialize(match)
       @match = match
-      @word = URI.decode(match[:dic_word])
+      @word = CGI.unescape(match[:dic_word]).scrub ''
     end
 
     def text
@@ -129,7 +129,7 @@ class NicoLink
     end
 
     def url
-      "http://dic.nicovideo.jp/a/#{URI.encode(word)}"
+      "http://dic.nicovideo.jp/a/#{CGI.escape(word)}"
     end
   end
 end
