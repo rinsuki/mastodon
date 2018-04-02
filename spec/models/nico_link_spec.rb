@@ -281,5 +281,11 @@ RSpec.describe NicoLink, type: :model do
       it { expect(subject.text).to eq "呉織あぎり\u2006:nicodic:" }
       it { expect(subject.url).to eq text }
     end
+
+    context 'invalid url encoded' do
+      let(:text) { 'http://dic.nicovideo.jp/a/%E5%91%89%E7%B9%94%E3%81%82%E3%81%8E%E3%82' }
+      subject { NicoLink.parse(text) }
+      it { expect(subject.text).to eq "呉織あぎ\u2006:nicodic:" }
+    end
   end
 end
