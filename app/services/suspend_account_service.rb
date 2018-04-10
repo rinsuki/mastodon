@@ -67,3 +67,5 @@ class SuspendAccountService < BaseService
     Oj.dump(ActivityPub::LinkedDataSignature.new(payload).sign!(@account))
   end
 end
+
+SuspendAccountService.prepend(Friends::SuspendAccountExtension)
