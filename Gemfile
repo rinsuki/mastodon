@@ -125,7 +125,5 @@ end
 # for friends
 gem 'omniauth-niconico', '0.0.1'
 group :production do
-  gem 'exception_notification', '~> 4.2.2'
-  gem 'slack-notifier', '~> 2.3.1'
   gem 'parallel'
 end
