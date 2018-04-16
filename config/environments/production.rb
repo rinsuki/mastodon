@@ -96,15 +96,4 @@ Rails.application.configure do
     'X-Content-Type-Options' => 'nosniff',
     'X-XSS-Protection'       => '1; mode=block',
   }
-
-  if ENV['SLACK_NOTIFIER_URL'] && ENV['SLACK_NOTIFIER_CHANNEL'] && ENV['SLACK_NOTIFIER_USER']
-    config.middleware.use ExceptionNotification::Rack, slack: {
-                            webhook_url: ENV['SLACK_NOTIFIER_URL'],
-                            channel: "##{ENV['SLACK_NOTIFIER_CHANNEL']}",
-                            username: ENV['SLACK_NOTIFIER_USER'],
-                            additional_parameters: {
-                              icon_emoji: ':elephant:'
-                            }
-                          }
-  end
 end
