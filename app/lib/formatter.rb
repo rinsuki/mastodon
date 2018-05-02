@@ -60,7 +60,8 @@ class Formatter
     display_name = display_name(account)
     return reformat(display_name) unless account.local?
 
-    html = encode_custom_emojis(display_name, account.profile_emojis) if options[:custom_emojify]
+    html = encode(display_name)
+    html = encode_custom_emojis(html, account.profile_emojis) if options[:custom_emojify]
 
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
