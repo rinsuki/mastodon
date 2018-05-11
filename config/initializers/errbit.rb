@@ -16,7 +16,7 @@ unless ENV['DISABLE_PROJECT_ID'].present?
   Airbrake.add_filter(&:ignore!) unless ENV['ERRBIT_HOST']
 
   Airbrake.add_filter do |notice|
-    if notice[:errors].any? { |error| IGNORE_EXCEPTIONS.include?(error[:type]) }
+    if notice[:errors].any? { |error| error[:type].constantize.ancestors.include?(HTTP::Error) || IGNORE_EXCEPTIONS.include?(error[:type]) }
       notice.ignore!
     end
   end
