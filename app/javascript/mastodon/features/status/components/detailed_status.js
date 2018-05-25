@@ -22,6 +22,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
     status: ImmutablePropTypes.map.isRequired,
     onOpenMedia: PropTypes.func.isRequired,
     onOpenVideo: PropTypes.func.isRequired,
+    onToggleHidden: PropTypes.func.isRequired,
     highlightKeywords: ImmutablePropTypes.map.isRequired,
     onNiconicoVideoLinkClick: PropTypes.func,
   };
@@ -37,6 +38,10 @@ export default class DetailedStatus extends ImmutablePureComponent {
 
   handleOpenVideo = startTime => {
     this.props.onOpenVideo(this.props.status.getIn(['media_attachments', 0]), startTime);
+  }
+
+  handleExpandedToggle = () => {
+    this.props.onToggleHidden(this.props.status);
   }
 
   render () {
@@ -59,6 +64,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
             src={video.get('url')}
             width={300}
             height={150}
+            inline
             onOpenVideo={this.handleOpenVideo}
             sensitive={status.get('sensitive')}
           />
@@ -106,7 +112,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
           <DisplayName account={status.get('account')} />
         </a>
 
-        <StatusContent status={status} highlightKeywords={this.props.highlightKeywords} onNiconicoVideoLinkClick={this.props.onNiconicoVideoLinkClick} />
+        <StatusContent status={status} expanded={!status.get('hidden')} onExpandedToggle={this.handleExpandedToggle} onNiconicoVideoLinkClick={this.props.onNiconicoVideoLinkClick} />
 
         {media}
 

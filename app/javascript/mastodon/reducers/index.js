@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux-immutable';
+import dropdown_menu from './dropdown_menu';
 import timelines from './timelines';
 import meta from './meta';
 import alerts from './alerts';
@@ -34,6 +35,7 @@ import nicovideo_player from './nicovideo_player';
 import nicovideo_rankings from './nicovideo_rankings';
 
 const reducers = {
+  dropdown_menu,
   timelines,
   meta,
   alerts,

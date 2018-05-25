@@ -14,6 +14,7 @@ import Motion from '../ui/util/optional_motion';
 import spring from 'react-motion/lib/spring';
 import SearchResultsContainer from './containers/search_results_container';
 import { changeComposing } from '../../actions/compose';
+import elephantUIPlane from '../../../images/elephant_ui_plane.svg';
 import AnnouncementsContainer from './containers/announcements_container';
 import NicovideoPlayerContainer from '../nicovideo/player/containers/player_container';
 
@@ -99,11 +100,16 @@ export default class Compose extends React.PureComponent {
             <NavigationContainer onClose={this.onBlur} />
             <ConnectAccountContainer />
             <ComposeFormContainer />
+
             <NicovideoPlayerContainer multiColumn={multiColumn} />
             <AnnouncementsContainer />
             <FavouriteTagsContainer />
 
-            {multiColumn && <div className='mastodon' />}
+            {multiColumn && (
+              <div className='drawer__inner__mastodon'>
+                <img alt='' draggable='false' src={elephantUIPlane} />
+              </div>
+            )}
           </div>
 
           <Motion defaultStyle={{ x: -100 }} style={{ x: spring(showSearch ? 0 : -100, { stiffness: 210, damping: 20 }) }}>

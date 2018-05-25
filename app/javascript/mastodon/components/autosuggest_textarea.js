@@ -21,7 +21,7 @@ const textAtCursorMatchesToken = (str, caretPosition) => {
     word = str.slice(left, right + caretPosition);
   }
 
-  if (!word || word.trim().length < 3 || ['@', ':'].indexOf(word[0]) === -1) {
+  if (!word || word.trim().length < 3 || ['@', ':', '#'].indexOf(word[0]) === -1) {
     return [null, null];
   }
 
@@ -199,6 +199,9 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
     if (typeof suggestion === 'object') {
       inner = <AutosuggestEmoji emoji={suggestion} />;
       key   = suggestion.id;
+    } else if (suggestion[0] === '#') {
+      inner = suggestion;
+      key   = suggestion;
     } else {
       inner = <AutosuggestAccountContainer id={suggestion} />;
       key   = suggestion;
