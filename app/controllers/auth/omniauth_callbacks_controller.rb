@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+
 class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_before_action :verify_authenticity_token
+
   Devise.omniauth_providers.each do |provider|
     define_method(provider) do
       auth = request.env['omniauth.auth']
@@ -18,25 +21,33 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
-  protected
+=begin
+  def self.provides_callback_for(provider)
+    provider_id = provider.to_s.chomp '_oauth2'
 
-  def after_sign_in_path_for(resource)
-    last_url = stored_location_for(:user)
+    define_method provider do
+      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
 
-    if home_paths(resource).include?(last_url)
-      root_path
-    else
-      last_url || root_path
+      if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session["devise.#{provider}_data"] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
+      end
     end
   end
+=end
 
-  private
+#  Devise.omniauth_configs.each_key do |provider|
+#    provides_callback_for provider
+#  end
 
-  def home_paths(resource)
-    paths = [about_path]
-    if single_user_mode? && resource.is_a?(User)
-      paths << short_account_path(username: resource.account)
+  def after_sign_in_path_for(resource)
+    if resource.email_verified?
+      root_path
+    else
+      finish_signup_path
     end
-    paths
   end
 end
