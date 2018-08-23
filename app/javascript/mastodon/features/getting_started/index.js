@@ -82,7 +82,7 @@ export default class GettingStarted extends ImmutablePureComponent {
 
     const navItems = [];
     let i = 1;
-    let height = (multiColumn) ? 0 : 60;
+    let height = 0;
 
     if (multiColumn) {
       navItems.push(
@@ -114,7 +114,6 @@ export default class GettingStarted extends ImmutablePureComponent {
       height += 50;
     }
 
-
     if (myAccount.get('locked')) {
       navItems.push(<ColumnLink key={i++} icon='users' text={intl.formatMessage(messages.follow_requests)} badge={badgeDisplay(unreadFollowRequests, 40)} to='/follow_requests' />);
       height += 48;
@@ -124,10 +123,12 @@ export default class GettingStarted extends ImmutablePureComponent {
       navItems.push(
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.settings_subheading)} />,
         <ColumnLink key={i++} icon='gears' text={intl.formatMessage(messages.preferences)} href='/settings/preferences' />,
+        <ColumnLink key={i++} icon='lock' text={intl.formatMessage(messages.security)} href='/auth/edit' />
       );
 
-      height += 34 + 48;
+      height += 34 + 48*2;
     }
+
   
     return (
       <Column>

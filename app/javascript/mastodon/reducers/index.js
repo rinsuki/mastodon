@@ -26,7 +26,6 @@ import height_cache from './height_cache';
 import custom_emojis from './custom_emojis';
 import lists from './lists';
 import listEditor from './list_editor';
-import trends from './trends';
 
 import favourite_tags from './favourite_tags';
 import announcements from './announcements';
@@ -71,7 +70,6 @@ const reducers = {
   highlight_keywords,
   nicovideo_player,
   nicovideo_rankings,
-  trends,
 };
 
 export default combineReducers(reducers);
