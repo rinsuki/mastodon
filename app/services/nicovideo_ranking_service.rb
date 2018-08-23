@@ -15,10 +15,12 @@ class NicovideoRankingService
 
   def fetch(id)
     url = "http://www.nicovideo.jp/ranking/fav/hourly/#{id}?rss=2.0&lang=ja-jp"
-    response = Request.new(:get, url).perform
-    raise NicovideoMaintenanceError if response.status === 503
+    response = Request.new(:get, url).perform do |res|
+      raise NicovideoMaintenanceError if res.code === 503
+      res.body_with_limit
+    end
 
-    hash_items =  Hash.from_xml(response.body.to_s)
+    hash_items =  Hash.from_xml(response)
     return nil if hash_items.nil?
 
     process(hash_items)

@@ -62,6 +62,12 @@ const initialState = ImmutableMap({
   friends: ImmutableMap({
     videoplayer: false,
   }),
+
+  direct: ImmutableMap({
+    regex: ImmutableMap({
+      body: '',
+    }),
+  }),
 });
 
 const defaultColumns = fromJS([

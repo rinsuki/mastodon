@@ -1,5 +1,5 @@
 const getHeaderFromTitle = (title) => {
-  return Array.from(document.querySelectorAll('.column-header__title')).find(x => x.innerHTML === title).closest('.column-header');
+  return Array.from(document.querySelectorAll('.column-header>button')).find(x => x.innerText === title).closest('.column-header');
 };
 
 export default function getTargetPosition(target) {

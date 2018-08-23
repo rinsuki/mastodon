@@ -19,6 +19,7 @@ import {
 import {
   replyCompose,
   mentionCompose,
+  directCompose,
 } from '../../actions/compose';
 import { blockAccount } from '../../actions/accounts';
 import {
@@ -151,6 +152,10 @@ export default class Status extends ImmutablePureComponent {
     }
   }
 
+  handleDirectClick = (account, router) => {
+    this.props.dispatch(directCompose(account, router));
+  }
+
   handleMentionClick = (account, router) => {
     this.props.dispatch(mentionCompose(account, router));
   }
@@ -240,6 +245,10 @@ export default class Status extends ImmutablePureComponent {
 
   handleHotkeyOpenProfile = () => {
     this.context.router.history.push(`/accounts/${this.props.status.getIn(['account', 'id'])}`);
+  }
+
+  handleHotkeyToggleHidden = () => {
+    this.handleToggleHidden(this.props.status);
   }
 
   handleMoveUp = id => {
@@ -357,6 +366,7 @@ export default class Status extends ImmutablePureComponent {
       boost: this.handleHotkeyBoost,
       mention: this.handleHotkeyMention,
       openProfile: this.handleHotkeyOpenProfile,
+      toggleHidden: this.handleHotkeyToggleHidden,
     };
 
     return (
@@ -389,6 +399,7 @@ export default class Status extends ImmutablePureComponent {
                   onFavourite={this.handleFavouriteClick}
                   onReblog={this.handleReblogClick}
                   onDelete={this.handleDeleteClick}
+                  onDirect={this.handleDirectClick}
                   onMention={this.handleMentionClick}
                   onMute={this.handleMuteClick}
                   onMuteConversation={this.handleConversationMuteClick}
