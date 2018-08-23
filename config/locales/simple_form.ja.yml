@@ -40,7 +40,7 @@ ja:
         header: ヘッダー
         hide_oauth: niconico連携を隠す
         locale: 言語
-        locked: 非公開アカウントにする
+        locked: 承認制アカウントにする
         max_uses: 使用できる回数
         new_password: 新しいパスワード
         note: プロフィール
