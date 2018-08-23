@@ -317,6 +317,10 @@ Rails.application.routes.draw do
       resources :highlight_keywords, only: [:index]
       post '/votes/:status_id', to: 'votes#create'
       resources :nicovideo_rankings, only: [:show]
+      
+      namespace :push do
+        resource :subscription, only: [:create, :show, :update, :destroy]
+      end
     end
 
     namespace :web do
