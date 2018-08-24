@@ -56,15 +56,15 @@ export function normalizeStatus(status, normalOldStatus) {
     normalStatus.spoilerHtml = normalOldStatus.get('spoilerHtml');
     normalStatus.hidden = normalOldStatus.get('hidden');
   } else {
-    const searchContent = [status.spoiler_text, status.content].join('\n\n').replace(/<br\s*\/?>/g, '\n').replace(/<\/p><p>/g, '\n\n');
-
+    const spoilerText   = normalStatus.spoiler_text || '';
+    const searchContent = [spoilerText, status.content].join('\n\n').replace(/<br\s*\/?>/g, '\n').replace(/<\/p><p>/g, '\n\n');
     const profileEmojiMap = makeProfileEmojiMap(normalStatus)
     const emojiMap = makeEmojiMap(normalStatus,profileEmojiMap);
 
     normalStatus.search_index = domParser.parseFromString(searchContent, 'text/html').documentElement.textContent;
     normalStatus.contentHtml  = emojify(normalStatus.content, emojiMap);
-    normalStatus.spoilerHtml  = emojify(escapeTextContentForBrowser(normalStatus.spoiler_text || ''), emojiMap);
-    normalStatus.hidden       = normalStatus.sensitive;
+    normalStatus.spoilerHtml  = emojify(escapeTextContentForBrowser(spoilerText), emojiMap);
+    normalStatus.hidden       = spoilerText.length > 0 || normalStatus.sensitive;
   }
 
   return normalStatus;

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import SettingText from '../../../components/setting_text';
+import SettingToggle from '../../notifications/components/setting_toggle';
 
 const messages = defineMessages({
   filter_regex: { id: 'home.column_settings.filter_regex', defaultMessage: 'Filter out by regular expressions' },
@@ -17,6 +18,7 @@ export default class ColumnSettings extends React.PureComponent {
     onChange: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     highlight_keywords: ImmutablePropTypes.map.isRequired,
+    columnId: PropTypes.string,
   };
 
   render () {
@@ -35,6 +37,9 @@ export default class ColumnSettings extends React.PureComponent {
           {highlight_keywords.get('keywords').map(keyword => {
             return <span key={keyword.get('id')} className='setting-highlight_keyword__section'>{keyword.get('word')}</span>;
           })}
+        </div>
+        <div className='column-settings__row'>
+          <SettingToggle settings={settings} settingPath={['other', 'onlyMedia']} onChange={onChange} label={<FormattedMessage id='community.column_settings.media_only' defaultMessage='Media Only' />} />
         </div>
 
         <span className='column-settings__section'><FormattedMessage id='home.column_settings.advanced' defaultMessage='Advanced' /></span>
