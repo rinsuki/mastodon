@@ -12,6 +12,7 @@ import { debounce } from 'lodash';
 import { uploadCompose, resetCompose } from '../../actions/compose';
 import { expandHomeTimeline } from '../../actions/timelines';
 import { expandNotifications } from '../../actions/notifications';
+import { fetchFilters } from '../../actions/filters';
 import { clearHeight } from '../../actions/height_cache';
 import { refreshHighlightKeywords } from '../../actions/highlight_keywords';
 import { WrappedSwitch, WrappedRoute } from './util/react_router_helpers';
@@ -304,6 +305,7 @@ export default class UI extends React.PureComponent {
     this.props.dispatch(refreshHighlightKeywords());
     this.props.dispatch(expandHomeTimeline());
     this.props.dispatch(expandNotifications());
+    setTimeout(() => this.props.dispatch(fetchFilters()), 500);
   }
 
   componentDidMount () {

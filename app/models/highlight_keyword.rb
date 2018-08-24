@@ -2,8 +2,8 @@
 #
 # Table name: highlight_keywords
 #
-#  id         :integer          not null, primary key
-#  account_id :integer          not null
+#  id         :bigint(8)        not null, primary key
+#  account_id :bigint(8)        not null
 #  word       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
