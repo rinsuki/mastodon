@@ -38,17 +38,18 @@ addons:
       - libprotobuf-dev
       - protobuf-compiler
       - yarn
+      - libpam0g-dev
 
 rvm:
-  - 2.4.3
-  - 2.5.0
+  - 2.4.4
+  - 2.5.1
 
 services:
   - redis-server
 
 install:
   - nvm install
-  - bundle install --path=vendor/bundle --without development production --retry=3 --jobs=16
+  - bundle install --path=vendor/bundle --with pam_authentication --without development production --retry=3 --jobs=16
   - yarn install
 
 before_script:

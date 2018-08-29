@@ -41,10 +41,10 @@ class InstancePresenter
   end
   
   def thumbnail
-    @thumbnail ||= Rails.cache.fetch('site_uploads/thumbnail') { SiteUpload.find_by(var: 'thumbnail') }
+    @thumbnail ||= Rails.cache.fetch('site_uploads/thumbnail_image') { SiteUpload.find_by(var: 'thumbnail') }
   end
 
   def hero
-    @hero ||= Rails.cache.fetch('site_uploads/hero') { SiteUpload.find_by(var: 'hero') }
+    @hero ||= Rails.cache.fetch('site_uploads/hero_image') { SiteUpload.find_by(var: 'hero') }
   end
 end

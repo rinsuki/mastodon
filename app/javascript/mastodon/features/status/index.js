@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,6 +20,7 @@ import {
 import {
   replyCompose,
   mentionCompose,
+  directCompose,
 } from '../../actions/compose';
 import { blockAccount } from '../../actions/accounts';
 import {
@@ -47,6 +49,8 @@ import { openNiconicoVideoLink } from '../../actions/nicovideo_player';
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
   deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this status?' },
+  redraftConfirm: { id: 'confirmations.redraft.confirm', defaultMessage: 'Delete & redraft' },
+  redraftMessage: { id: 'confirmations.redraft.message', defaultMessage: 'Are you sure you want to delete this status and re-draft it? You will lose all replies, boosts and favourites to it.' },
   blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
   revealAll: { id: 'status.show_more_all', defaultMessage: 'Show more for all' },
   hideAll: { id: 'status.show_less_all', defaultMessage: 'Show less for all' },
@@ -55,12 +59,48 @@ const messages = defineMessages({
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
 
-  const mapStateToProps = (state, props) => ({
-    status: getStatus(state, props.params.statusId),
-    ancestorsIds: state.getIn(['contexts', 'ancestors', props.params.statusId]),
-    descendantsIds: state.getIn(['contexts', 'descendants', props.params.statusId]),
-    highlightKeywords: state.get('highlight_keywords'),
-  });
+  const mapStateToProps = (state, props) => {
+    const status = getStatus(state, props.params.statusId);
+    let ancestorsIds = Immutable.List();
+    let descendantsIds = Immutable.List();
+
+    if (status) {
+      ancestorsIds = ancestorsIds.withMutations(mutable => {
+        let id = status.get('in_reply_to_id');
+
+        while (id) {
+          mutable.unshift(id);
+          id = state.getIn(['contexts', 'inReplyTos', id]);
+        }
+      });
+
+      descendantsIds = descendantsIds.withMutations(mutable => {
+        const ids = [status.get('id')];
+
+        while (ids.length > 0) {
+          let id        = ids.shift();
+          const replies = state.getIn(['contexts', 'replies', id]);
+
+          if (status.get('id') !== id) {
+            mutable.push(id);
+          }
+
+          if (replies) {
+            replies.reverse().forEach(reply => {
+              ids.unshift(reply);
+            });
+          }
+        }
+      });
+    }
+
+    return {
+      status,
+      ancestorsIds,
+      descendantsIds,
+      highlightKeywords: state.get('highlight_keywords'),
+    };
+  };
 
   return mapStateToProps;
 };
@@ -137,18 +177,22 @@ export default class Status extends ImmutablePureComponent {
     }
   }
 
-  handleDeleteClick = (status) => {
+  handleDeleteClick = (status, withRedraft = false) => {
     const { dispatch, intl } = this.props;
 
     if (!deleteModal) {
-      dispatch(deleteStatus(status.get('id')));
+      dispatch(deleteStatus(status.get('id'), withRedraft));
     } else {
       dispatch(openModal('CONFIRM', {
-        message: intl.formatMessage(messages.deleteMessage),
-        confirm: intl.formatMessage(messages.deleteConfirm),
-        onConfirm: () => dispatch(deleteStatus(status.get('id'))),
+        message: intl.formatMessage(withRedraft ? messages.redraftMessage : messages.deleteMessage),
+        confirm: intl.formatMessage(withRedraft ? messages.redraftConfirm : messages.deleteConfirm),
+        onConfirm: () => dispatch(deleteStatus(status.get('id'), withRedraft)),
       }));
     }
+  }
+
+  handleDirectClick = (account, router) => {
+    this.props.dispatch(directCompose(account, router));
   }
 
   handleMentionClick = (account, router) => {
@@ -240,6 +284,10 @@ export default class Status extends ImmutablePureComponent {
 
   handleHotkeyOpenProfile = () => {
     this.context.router.history.push(`/accounts/${this.props.status.getIn(['account', 'id'])}`);
+  }
+
+  handleHotkeyToggleHidden = () => {
+    this.handleToggleHidden(this.props.status);
   }
 
   handleMoveUp = id => {
@@ -357,6 +405,7 @@ export default class Status extends ImmutablePureComponent {
       boost: this.handleHotkeyBoost,
       mention: this.handleHotkeyMention,
       openProfile: this.handleHotkeyOpenProfile,
+      toggleHidden: this.handleHotkeyToggleHidden,
     };
 
     return (
@@ -389,6 +438,7 @@ export default class Status extends ImmutablePureComponent {
                   onFavourite={this.handleFavouriteClick}
                   onReblog={this.handleReblogClick}
                   onDelete={this.handleDeleteClick}
+                  onDirect={this.handleDirectClick}
                   onMention={this.handleMentionClick}
                   onMute={this.handleMuteClick}
                   onMuteConversation={this.handleConversationMuteClick}

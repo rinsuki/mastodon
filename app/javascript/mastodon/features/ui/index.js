@@ -10,8 +10,8 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { isMobile } from '../../is_mobile';
 import { debounce } from 'lodash';
 import { uploadCompose, resetCompose } from '../../actions/compose';
-import { refreshHomeTimeline } from '../../actions/timelines';
-import { refreshNotifications } from '../../actions/notifications';
+import { expandHomeTimeline } from '../../actions/timelines';
+import { expandNotifications } from '../../actions/notifications';
 import { clearHeight } from '../../actions/height_cache';
 import { refreshHighlightKeywords } from '../../actions/highlight_keywords';
 import { WrappedSwitch, WrappedRoute } from './util/react_router_helpers';
@@ -31,6 +31,7 @@ import {
   Following,
   Reblogs,
   Favourites,
+  DirectTimeline,
   HashtagTimeline,
   Notifications,
   FollowRequests,
@@ -38,6 +39,7 @@ import {
   FavouritedStatuses,
   ListTimeline,
   Blocks,
+  DomainBlocks,
   Mutes,
   PinnedStatuses,
   Lists,
@@ -82,12 +84,14 @@ const keyMap = {
   goToNotifications: 'g n',
   goToLocal: 'g l',
   goToFederated: 'g t',
+  goToDirect: 'g d',
   goToStart: 'g s',
   goToFavourites: 'g f',
   goToPinned: 'g p',
   goToProfile: 'g u',
   goToBlocked: 'g b',
   goToMuted: 'g m',
+  toggleHidden: 'x',
 };
 
 class SwitchingColumnsArea extends React.PureComponent {
@@ -132,22 +136,28 @@ class SwitchingColumnsArea extends React.PureComponent {
   render () {
     const { children } = this.props;
     const { mobile } = this.state;
+    const redirect = mobile ? <Redirect from='/' to='/timelines/home' exact /> : <Redirect from='/' to='/getting-started' exact />;
 
     return (
       <ColumnsAreaContainer ref={this.setRef} singleColumn={mobile}>
         <WrappedSwitch>
-          <Redirect from='/' to='/getting-started' exact />
+          {redirect}
           <WrappedRoute path='/getting-started' component={GettingStarted} content={children} />
           <WrappedRoute path='/keyboard-shortcuts' component={KeyboardShortcuts} content={children} />
           <WrappedRoute path='/timelines/home' component={HomeTimeline} content={children} />
           <WrappedRoute path='/timelines/public' exact component={PublicTimeline} content={children} />
-          <WrappedRoute path='/timelines/public/local' component={CommunityTimeline} content={children} />
+          <WrappedRoute path='/timelines/public/media' component={PublicTimeline} content={children} componentParams={{ onlyMedia: true }} />
+          <WrappedRoute path='/timelines/public/local' exact component={CommunityTimeline} content={children} />
+          <WrappedRoute path='/timelines/public/local/media' component={CommunityTimeline} content={children} componentParams={{ onlyMedia: true }} />
+          <WrappedRoute path='/timelines/direct' component={DirectTimeline} content={children} />
           <WrappedRoute path='/timelines/tag/:id' component={HashtagTimeline} content={children} />
           <WrappedRoute path='/timelines/list/:id' component={ListTimeline} content={children} />
 
           <WrappedRoute path='/notifications' component={Notifications} content={children} />
           <WrappedRoute path='/favourites' component={FavouritedStatuses} content={children} />
           <WrappedRoute path='/pinned' component={PinnedStatuses} content={children} />
+
+          <WrappedRoute path='/search' component={Compose} content={children} componentParams={{ isSearchPage: true }} />
 
           <WrappedRoute path='/statuses/new' component={Compose} content={children} />
           <WrappedRoute path='/statuses/:statusId' exact component={Status} content={children} />
@@ -162,6 +172,7 @@ class SwitchingColumnsArea extends React.PureComponent {
 
           <WrappedRoute path='/follow_requests' component={FollowRequests} content={children} />
           <WrappedRoute path='/blocks' component={Blocks} content={children} />
+          <WrappedRoute path='/domain_blocks' component={DomainBlocks} content={children} />
           <WrappedRoute path='/mutes' component={Mutes} content={children} />
           <WrappedRoute path='/lists' component={Lists} content={children} />
 
@@ -291,8 +302,8 @@ export default class UI extends React.PureComponent {
     }
 
     this.props.dispatch(refreshHighlightKeywords());
-    this.props.dispatch(refreshHomeTimeline());
-    this.props.dispatch(refreshNotifications());
+    this.props.dispatch(expandHomeTimeline());
+    this.props.dispatch(expandNotifications());
   }
 
   componentDidMount () {
@@ -388,6 +399,10 @@ export default class UI extends React.PureComponent {
     this.context.router.history.push('/timelines/public');
   }
 
+  handleHotkeyGoToDirect = () => {
+    this.context.router.history.push('/timelines/direct');
+  }
+
   handleHotkeyGoToStart = () => {
     this.context.router.history.push('/getting-started');
   }
@@ -427,6 +442,7 @@ export default class UI extends React.PureComponent {
       goToNotifications: this.handleHotkeyGoToNotifications,
       goToLocal: this.handleHotkeyGoToLocal,
       goToFederated: this.handleHotkeyGoToFederated,
+      goToDirect: this.handleHotkeyGoToDirect,
       goToStart: this.handleHotkeyGoToStart,
       goToFavourites: this.handleHotkeyGoToFavourites,
       goToPinned: this.handleHotkeyGoToPinned,
