@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_09_104432) do
+ActiveRecord::Schema.define(version: 2018_08_14_171349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,7 +119,6 @@ ActiveRecord::Schema.define(version: 2018_06_09_104432) do
     t.boolean "processed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_backups_on_user_id"
   end
 
   create_table "blocks", force: :cascade do |t|
@@ -158,6 +157,18 @@ ActiveRecord::Schema.define(version: 2018_06_09_104432) do
     t.string "image_remote_url"
     t.boolean "visible_in_picker", default: true, null: false
     t.index ["shortcode", "domain"], name: "index_custom_emojis_on_shortcode_and_domain", unique: true
+  end
+
+  create_table "custom_filters", force: :cascade do |t|
+    t.bigint "account_id"
+    t.datetime "expires_at"
+    t.text "phrase", default: "", null: false
+    t.string "context", default: [], null: false, array: true
+    t.boolean "irreversible", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "whole_word", default: true, null: false
+    t.index ["account_id"], name: "index_custom_filters_on_account_id"
   end
 
   create_table "domain_blocks", force: :cascade do |t|
@@ -251,6 +262,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_104432) do
     t.integer "uses", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "autofollow", default: false, null: false
     t.index ["code"], name: "index_invites_on_code", unique: true
     t.index ["user_id"], name: "index_invites_on_user_id"
   end
@@ -359,6 +371,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_104432) do
     t.string "website"
     t.string "owner_type"
     t.bigint "owner_id"
+    t.boolean "confidential", default: true, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
@@ -480,7 +493,6 @@ ActiveRecord::Schema.define(version: 2018_06_09_104432) do
     t.bigint "application_id"
     t.bigint "in_reply_to_account_id"
     t.index ["account_id", "id", "visibility", "updated_at"], name: "index_statuses_20180106", order: { id: :desc }
-    t.index ["conversation_id"], name: "index_statuses_on_conversation_id"
     t.index ["in_reply_to_id"], name: "index_statuses_on_in_reply_to_id"
     t.index ["reblog_of_id", "account_id"], name: "index_statuses_on_reblog_of_id_and_account_id"
     t.index ["uri"], name: "index_statuses_on_uri", unique: true
@@ -560,6 +572,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_104432) do
     t.boolean "moderator", default: false, null: false
     t.bigint "invite_id"
     t.string "remember_token"
+    t.string "chosen_languages", array: true
     t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -601,6 +614,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_104432) do
   add_foreign_key "blocks", "accounts", name: "fk_4269e03e65", on_delete: :cascade
   add_foreign_key "conversation_mutes", "accounts", name: "fk_225b4212bb", on_delete: :cascade
   add_foreign_key "conversation_mutes", "conversations", on_delete: :cascade
+  add_foreign_key "custom_filters", "accounts", on_delete: :cascade
   add_foreign_key "favourite_tags", "accounts", name: "fk_3dba9ba90d", on_delete: :cascade
   add_foreign_key "favourite_tags", "tags", name: "fk_cbacfd2c4d", on_delete: :cascade
   add_foreign_key "favourites", "accounts", name: "fk_5eb6c2b873", on_delete: :cascade
