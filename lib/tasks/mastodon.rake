@@ -574,6 +574,22 @@ namespace :mastodon do
   end
 
   namespace :maintenance do
+    desc 'copy status stats (only need update to v2.5.0)'
+    task copy_status_stats: :environment do
+      puts 'copy_status_stats'
+      Status.unscoped.select('id').find_in_batches(batch_size: 5_000) do |statuses|
+        puts statuses.first.id.to_s
+        ActiveRecord::Base.connection.execute <<-SQL.squish
+          INSERT INTO status_stats (status_id, reblogs_count, favourites_count, created_at, updated_at)
+          SELECT id, reblogs_count, favourites_count, created_at, updated_at
+          FROM statuses
+          WHERE id IN (#{statuses.map(&:id).join(', ')})
+          ON CONFLICT (status_id) DO UPDATE
+          SET reblogs_count = EXCLUDED.reblogs_count, favourites_count = EXCLUDED.favourites_count
+        SQL
+      end
+    end
+
     desc 'Update counter caches'
     task update_counter_caches: :environment do
       puts 'Updating counter caches for accounts...'
