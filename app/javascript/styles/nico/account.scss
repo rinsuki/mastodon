@@ -10,13 +10,23 @@
   z-index: 999;
 
   &--large {
+    position: static;
     width: $icon-size--nico--large;
     height: $icon-size--nico--large;
-    transform: translate(-60px, -$icon-size--nico--large);
 
     &__icon {
       @include icon--nico($icon-size--nico--large);
     }
+
+    @media screen and (max-width: 600px) {
+      width: $icon-size--nico;
+      height: $icon-size--nico;
+      transform: translate(-$icon-size--nico/2, -$icon-size--nico);
+      &__icon {
+        @include icon--nico;
+      }
+    }
+
   }
 
   &__icon {
