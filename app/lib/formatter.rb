@@ -25,7 +25,7 @@ class Formatter
 
     unless status.local?
       html = reformat(raw_content)
-      html = encode_custom_emojis(html, status.emojis + status.profile_emojis, options[:autoplay]) if options[:custom_emojify]
+      html = encode_custom_emojis(html, status.emojis, options[:autoplay]) if options[:custom_emojify]
       return html.html_safe # rubocop:disable Rails/OutputSafety
     end
 
@@ -35,7 +35,8 @@ class Formatter
     html = raw_content
     html = "RT @#{prepend_reblog} #{html}" if prepend_reblog
     html = encode_and_link_urls(html, linkable_accounts)
-    html = encode_custom_emojis(html, status.emojis + status.profile_emojis, options[:autoplay]) if options[:custom_emojify]
+    html = encode_custom_emojis(html, status.emojis, options[:autoplay]) if options[:custom_emojify]
+    html = encode_profile_emojis(html, status.profile_emojis) if options[:custom_emojify]
     html = simple_format(html, {}, sanitize: false)
     html = html.delete("\n")
 
@@ -58,16 +59,6 @@ class Formatter
     JSON.generate(enquete_info)
   end
 
-  def format_display_name(account, options = {})
-    display_name = display_name(account)
-    return reformat(display_name) unless account.local?
-
-    html = encode(display_name)
-    html = encode_custom_emojis(html, account.profile_emojis) if options[:custom_emojify]
-
-    html.html_safe # rubocop:disable Rails/OutputSafety
-  end
-
   def reformat(html)
     sanitize(html, Sanitize::Config::MASTODON_STRICT)
   end
@@ -82,6 +73,7 @@ class Formatter
   def simplified_format(account, **options)
     html = account.local? ? linkify(account.note) : reformat(account.note)
     html = encode_custom_emojis(html, account.emojis, options[:autoplay]) if options[:custom_emojify]
+    html = encode_profile_emojis(html, account.profile_emojis) if options[:custom_emojify] && account.local?
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
 
@@ -91,13 +83,15 @@ class Formatter
 
   def format_spoiler(status, **options)
     html = encode(status.spoiler_text)
-    html = encode_custom_emojis(html, status.emojis + status.profile_emojis, options[:autoplay])
+    html = encode_custom_emojis(html, status.emojis, options[:autoplay])
+    html = encode_profile_emojis(html, status.profile_emojis) if status.local?
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def format_display_name(account, **options)
     html = encode(account.display_name.presence || account.username)
     html = encode_custom_emojis(html, account.emojis, options[:autoplay]) if options[:custom_emojify]
+    html = encode_custom_emojis(html, account.profile_emojis) if options[:custom_emojify] && account.local?
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
 
@@ -105,6 +99,7 @@ class Formatter
     return reformat(str).html_safe unless account.local? # rubocop:disable Rails/OutputSafety
     html = encode_and_link_urls(str, me: true)
     html = encode_custom_emojis(html, account.emojis, options[:autoplay]) if options[:custom_emojify]
+    html = encode_profile_emojis(html, account.profile_emojis) if options[:custom_emojify] && account.local?
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
 
@@ -152,43 +147,51 @@ class Formatter
       [e[:shortcode], e]
     end.to_h
 
-    i = -1
-    inside_tag = false
-    inside_colon = false
-    shortname = ''
+    i                     = -1
+    tag_open_index        = nil
+    inside_shortname      = false
     shortname_start_index = -1
+    invisible_depth       = 0
+
     while i + 1 < html.size
       i += 1
-      if html[i] == '<'
-        inside_tag = true
-      elsif inside_tag && html[i] == '>'
-        inside_tag = false
-      elsif !inside_tag
-        if !inside_colon && html[i] == ':'
-          inside_colon = true
-          shortname = ''
-          shortname_start_index = i
-        elsif inside_colon && html[i] == ':'
-          inside_colon = false
-          stripped_shortname = shortname[1..-1]
-          emoji = profile_emoji_map[stripped_shortname]
-          if shortname[0] == '@' && emoji
-            if embed_links
-              replacement = "<a href=\"#{emoji[:account_url]}\" class=\"profile-emoji\" data-account-name=\"#{stripped_shortname}\">" \
-                          +   "<img draggable=\"false\" class=\"emojione\" alt=\":#{shortname}:\" title=\":#{shortname}:\"  src=\"#{emoji[:url]}\" />" \
-                          + "</a>"
-            else
-              replacement = "<img draggable=\"false\" class=\"emojione\" alt=\":#{shortname}:\" title=\":#{shortname}:\" src=\"#{emoji[:url]}\" />"
-            end
-            before_html = shortname_start_index.positive? ? html[0..shortname_start_index - 1] : ''
-            html = before_html + replacement + html[i + 1..-1]
-            i = shortname_start_index + replacement.size - 1
+
+      if invisible_depth.zero? && inside_shortname && html[i] == ':'
+        shortcode = html[shortname_start_index + 1..i - 1]
+        emoji     = profile_emoji_map[shortcode]
+
+
+        
+        if emoji
+          if embed_links
+            replacement = "<a href=\"#{emoji[:account_url]}\" class=\"profile-emoji\" data-account-name=\"#{shortcode}\">" \
+                        +   "<img draggable=\"false\" class=\"emojione\" alt=\":#{shortcode}:\" title=\":#{shortcode}:\"  src=\"#{emoji[:url]}\" />" \
+                        + "</a>"
           else
-            i -= 1
+            replacement = "<img draggable=\"false\" class=\"emojione\" alt=\":#{shortcode}:\" title=\":#{shortcode}:\" src=\"#{emoji[:url]}\" />"
           end
-        elsif inside_colon && html[i] != ' '
-          shortname += html[i]
+          before_html = shortname_start_index.positive? ? html[0..shortname_start_index - 1] : ''
+          html        = before_html + replacement + html[i + 1..-1]
+          i          += replacement.size - (shortcode.size + 2) - 1
+        else
+          i -= 1
         end
+
+        inside_shortname = false
+      elsif tag_open_index && html[i] == '>'
+        tag = html[tag_open_index..i]
+        tag_open_index = nil
+        if invisible_depth.positive?
+          invisible_depth += count_tag_nesting(tag)
+        elsif tag == '<span class="invisible">'
+          invisible_depth = 1
+        end
+      elsif html[i] == '<'
+        tag_open_index   = i
+        inside_shortname = false
+      elsif !tag_open_index && html[i] == ':'
+        inside_shortname      = true
+        shortname_start_index = i
       end
     end
 

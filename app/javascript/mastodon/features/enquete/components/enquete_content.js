@@ -55,7 +55,11 @@ export default class EnqueteContent extends React.PureComponent {
       obj[emoji.get('shortcode')] = emoji.toJSON();
       return obj;
     }, {});
-    this.setState({ profileEmojiMap });
+    const emojiMap = status.get('emojis', []).reduce((obj, emoji) => {
+      obj[emoji.get('shortcode')] = emoji.toJSON();
+      return obj;
+    }, profileEmojiMap);
+    this.setState({ emojiMap });
   };
 
   readVoteHistory(id) {
@@ -104,12 +108,12 @@ export default class EnqueteContent extends React.PureComponent {
 
   render() {
     const { status } = this.props;
-    const { profileEmojiMap } = this.state;
+    const { emojiMap } = this.state;
     const enquete = Immutable.fromJS(JSON.parse(status.get('enquete')));
-    const questionContent = { __html: emojify(addHighlight(enquete.get('question'), this.props.highlightKeywords), profileEmojiMap) };
+    const questionContent = { __html: emojify(addHighlight(enquete.get('question'), this.props.highlightKeywords), emojiMap) };
 
     const itemsContent = enquete.get('type') === 'enquete' ?
-      this.voteContent(status, enquete, profileEmojiMap) : this.resultContent(enquete, profileEmojiMap);
+      this.voteContent(status, enquete, emojiMap) : this.resultContent(enquete, emojiMap);
 
     return (
       <div className='enquete-form'>
@@ -119,7 +123,7 @@ export default class EnqueteContent extends React.PureComponent {
     );
   }
 
-  voteContent(status, enquete, profileEmojiMap) {
+  voteContent(status, enquete, emojiMap) {
     const enable = !(status.get('vote') || status.get('enquete_timeout'));
     const voted = parseInt(status.get('voted_num'), 10);
     const gauge = this.gaugeContent(status);
@@ -135,7 +139,7 @@ export default class EnqueteContent extends React.PureComponent {
     return (
       <div className='enquete-vote-items'>
         {enquete.get('items').filter(item => item !== '').map((item, index) => {
-          const itemHTML = { __html: emojify(item, profileEmojiMap) };
+          const itemHTML = { __html: emojify(item, emojiMap) };
           return (
             <button
               key={index}
@@ -150,15 +154,15 @@ export default class EnqueteContent extends React.PureComponent {
     );
   }
 
-  resultContent(enquete, profileEmojiMap) {
+  resultContent(enquete, emojiMap) {
     return (
       <div className='enquete-result-items'>
         {enquete.get('items').filter(item => item !== '').map((item, index) => {
           // ratios is not immutable component
           const itemRatio = (enquete.get('ratios')).get(index) + '%';
           const itemRatioText = enquete.get('ratios_text').get(index);
-          const itemRatioHTML = { __html: emojify(itemRatioText, profileEmojiMap) };
-          const itemHTML = { __html: emojify(item, profileEmojiMap) };
+          const itemRatioHTML = { __html: emojify(itemRatioText, emojiMap) };
+          const itemHTML = { __html: emojify(item, emojiMap) };
           const resultGaugeClassName = 'item-gauge__inner';
           return (
             <div className='enquete-result-item-gauge' key={index} >
