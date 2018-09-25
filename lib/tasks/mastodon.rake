@@ -577,16 +577,19 @@ namespace :mastodon do
     desc 'copy status stats (only need update to v2.5.0)'
     task copy_status_stats: :environment do
       puts 'copy_status_stats'
-      Status.unscoped.select('id').find_in_batches(batch_size: 5_000) do |statuses|
+      Status.unscoped.select('id').where('id < ?',  Mastodon::Snowflake.id_at(DateTime.now)).find_in_batches(batch_size: 500) do |statuses|
         puts statuses.first.id.to_s
         ActiveRecord::Base.connection.execute <<-SQL.squish
-          INSERT INTO status_stats (status_id, reblogs_count, favourites_count, created_at, updated_at)
-          SELECT id, reblogs_count, favourites_count, created_at, updated_at
+          INSERT INTO status_stats (status_id, reblogs_count, favourites_count, created_at, updated_at, replies_count)
+          SELECT id, reblogs_count, favourites_count, created_at, updated_at, (SELECT COUNT(*) FROM statuses AS replies WHERE replies.visibility IN (0,1) AND replies.in_reply_to_id = statuses.id)
           FROM statuses
           WHERE id IN (#{statuses.map(&:id).join(', ')})
           ON CONFLICT (status_id) DO UPDATE
-          SET reblogs_count = EXCLUDED.reblogs_count, favourites_count = EXCLUDED.favourites_count
+          SET reblogs_count    = (SELECT COUNT(*) FROM statuses   WHERE reblog_of_id   = EXCLUDED.status_id),
+              favourites_count = (SELECT COUNT(*) FROM favourites WHERE status_id      = EXCLUDED.status_id),
+              replies_count    = (SELECT COUNT(*) FROM statuses   WHERE visibility IN (0,1) AND in_reply_to_id = EXCLUDED.status_id)
         SQL
+        sleep 0.1
       end
     end
 
