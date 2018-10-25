@@ -275,6 +275,13 @@ RSpec.describe NicoLink, type: :model do
       end
     end
 
+    context 'cas' do
+      let(:text) { 'https://cas.nicovideo.jp/user/19334237/lv316485754' }
+      subject { NicoLink.parse(text) }
+      it { expect(subject.text).to eq 'lv316485754' }
+      it { expect(subject.url).to eq 'https://nico.ms/lv316485754' }
+    end
+
     context 'dic' do
       let(:text) { 'http://dic.nicovideo.jp/a/%E5%91%89%E7%B9%94%E3%81%82%E3%81%8E%E3%82%8A' }
       subject { NicoLink.parse(text) }

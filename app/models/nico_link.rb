@@ -19,7 +19,7 @@ class NicoLink
   TIME_RE = %r{\d{1,2}:[0-5]\d}
   TIME_RE_FULLSTR = %r{\A#{TIME_RE}\z}
 
-  NICO_DOMAIN_RE = %r{(([a-z0-9\.]+\.)?nicovideo\.jp(\/watch)?|nico\.ms)\/}
+  NICO_DOMAIN_RE = %r{(([a-z0-9\.]+\.)?nicovideo\.jp(\/watch|\/user\/\d+)?|nico\.ms)\/}
 
   PREFIX_RE = %r{(?<prefix>^|[^\/\)\w])}
   SUFFIX_RE = %r{(\?(?<query>[a-zA-Z0-9_&%=]*))?(#(?<time>#{TIME_RE}))?}
