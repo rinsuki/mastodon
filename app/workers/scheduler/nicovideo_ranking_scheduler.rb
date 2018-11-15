@@ -9,7 +9,7 @@ class Scheduler::NicovideoRankingScheduler
     service = NicovideoRankingService.new
 
     logger.info 'Update niconico ranking cache'
-    tags = %w(all game sing anime vocaloid music ent jikkyo radio sport science cooking g_politics animal history nature lecture play dance draw tech imas toho are diary other nicoindies travel drive handcraft make)
+    tags = %w(all game sing anime vocaloid music ent jikkyo radio sport science cooking g_politics animal history nature lecture play dance draw tech imas toho are diary other nicoindies travel drive handcraft make asmr mmd virtual train trpg)
 
     ranking = tags.map {|tag| [tag, service.call(tag, true)]}.to_h
     Redis.current.publish('nicovideo:ranking:streaming', Oj.dump(event: 'update', payload: ranking))
