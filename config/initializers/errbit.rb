@@ -3,7 +3,7 @@ unless ENV['DISABLE_PROJECT_ID'].present?
   require 'rake'
   require 'airbrake'
 
-  IGNORE_EXCEPTIONS = %w(Mastodon::UnexpectedResponseError OpenSSL::SSL::SSLError)
+  IGNORE_EXCEPTIONS = %w(Mastodon::UnexpectedResponseError OpenSSL::SSL::SSLError Stoplight::Error::RedLight)
 
   Airbrake.configure do |config|
     config.project_key = ENV['ERRBIT_PROJECT_KEY']
