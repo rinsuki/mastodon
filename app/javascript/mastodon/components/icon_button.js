@@ -97,7 +97,7 @@ export default class IconButton extends React.PureComponent {
     }
 
     return (
-      <Motion defaultStyle={{ rotate: rotateDeg }} style={{ rotate: animate ? spring(rotateDeg : 0, { stiffness: 120, damping: 7 }) : 0 }}>
+      <Motion defaultStyle={{ rotate: rotateDeg }} style={{ rotate: animate ? spring(rotateDeg, { stiffness: 120, damping: 7 }) : 0 }}>
         {({ rotate }) => (
           <button
             aria-label={title}

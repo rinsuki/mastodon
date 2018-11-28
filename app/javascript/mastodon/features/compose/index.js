@@ -17,6 +17,7 @@ import { changeComposing } from '../../actions/compose';
 import elephantUIPlane from '../../../images/elephant_ui_plane.svg';
 import AnnouncementsContainer from './containers/announcements_container';
 import NicovideoPlayerContainer from '../nicovideo/player/containers/player_container';
+import { mascot } from '../../initial_state';
 
 const messages = defineMessages({
   start: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
@@ -34,9 +35,9 @@ const mapStateToProps = (state, ownProps) => ({
   showSearch: ownProps.multiColumn ? state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']) : ownProps.isSearchPage,
 });
 
-@connect(mapStateToProps)
+export default @connect(mapStateToProps)
 @injectIntl
-export default class Compose extends React.PureComponent {
+class Compose extends React.PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -117,7 +118,7 @@ export default class Compose extends React.PureComponent {
 
             {multiColumn && (
               <div className='drawer__inner__mastodon'>
-                <img alt='' draggable='false' src={elephantUIPlane} />
+                <img alt='' draggable='false' src={mascot || elephantUIPlane} />
               </div>
             )}
           </div>}
