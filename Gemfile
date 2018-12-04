@@ -91,6 +91,7 @@ gem 'webpush'
 gem 'airbrake', '~> 5.0'
 
 gem 'json-ld', '~> 2.2'
+gem 'json-ld-preloaded', '~> 2.2'
 gem 'rdf-normalize', '~> 0.3'
 
 group :development, :test do
