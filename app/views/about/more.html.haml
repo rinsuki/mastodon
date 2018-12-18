@@ -29,7 +29,7 @@
             %span= t 'about.user_count_after', count: @instance_presenter.niconico_associated_count
         .row__mascot
           .landing-page__mascot
-            = image_tag asset_pack_path('elephant_ui_plane.svg')
+            = image_tag @instance_presenter.mascot&.file&.url || asset_pack_path('elephant_ui_plane.svg'), alt: ''
 
   .column-2
     .landing-page__information.contact-widget
