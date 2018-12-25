@@ -36,7 +36,7 @@ class NicovideoRankingService
 
           desc.css('.nico-thumbnail img').tap do |link|
             ret[:title] = link.attr('alt').value
-            ret[:thumbnail] = "https://tn.smilevideo.jp/smile?i=#{id}"
+            ret[:thumbnail] = link.attr('src').value.gsub(/\Ahttp:/,'https:')
           end
 
           desc.css('.nico-info-date').tap do |date|
