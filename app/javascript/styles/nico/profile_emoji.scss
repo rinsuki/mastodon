@@ -1,3 +1,8 @@
+/**
+ * DO NOT EXPAND PROFILE EMOJI.
+ * this feature conflict with https://github.com/tootsuite/mastodon/pull/8205/files
+ * Uncomment this section, If you have any great solution.
+
 // Overrides 'overflow: hidden' due to display expanded emojis
 .status__content,
 .display-name__html,
@@ -23,3 +28,5 @@
     }
   }
 }
+
+ */
