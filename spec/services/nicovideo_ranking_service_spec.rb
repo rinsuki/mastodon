@@ -10,12 +10,12 @@ RSpec.describe NicovideoRankingService do
 
       fetched = service.send(:fetch, 'all')
       expect(fetched.length).to eq 100
-      item = fetched.first
-      expect(item[:title]).to eq 'うんち提案レグくん.HelloAbyss'
-      expect(item[:content_id]).to eq 'sm31891153'
-      expect(item[:url]).to eq 'http://www.nicovideo.jp/watch/sm31891153'
-      expect(item[:thumbnail]).to eq 'https://tn.smilevideo.jp/smile?i=31891153'
-      expect(item[:published]).to eq '2017年09月09日 02:00:00'
+      item = fetched[1]
+      expect(item[:title]).to eq '16歳清楚委員長、クリスマスに組曲『ニコニコ動画』を熱唱'
+      expect(item[:content_id]).to eq 'sm34371431'
+      expect(item[:url]).to eq 'http://www.nicovideo.jp/watch/sm34371431'
+      expect(item[:thumbnail]).to eq 'https://tn.smilevideo.jp/smile?i=34371431.23991'
+      expect(item[:published]).to eq '2018年12月25日 02:38:02'
     end
   end
 end
