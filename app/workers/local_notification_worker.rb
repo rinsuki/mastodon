@@ -11,8 +11,9 @@ class LocalNotificationWorker
       receiver = Account.find(receiver_account_id)
       activity = activity_class_name.constantize.find(activity_id)
     end
-
-    NotifyService.new.call(receiver, activity)
+    activity.with_lock do
+      NotifyService.new.call(receiver, activity)
+    end
   rescue ActiveRecord::RecordNotFound
     true
   end
